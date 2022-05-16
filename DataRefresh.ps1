@@ -492,7 +492,7 @@ where NETWORKALIAS not like '%@contosoax7.onmicrosoft.com'
 	$buttonRun_Click = {
 		$ErrorActionPreference = "Stop"
 		[string]$dt = get-date -Format "yyyyMMdd" #Generate the datetime stamp to make DB files unique
-		Install-D365foDbatools | Set-Content -Path $TmpFile
+		Install-D365foDbatools 
 		
 		if ($txtLink.Text -ne '')
 		{ 
