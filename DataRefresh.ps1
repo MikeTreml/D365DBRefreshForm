@@ -1,6 +1,3 @@
-
-
-
 	#----------------------------------------------
 	#region Import the Assemblies
 	#----------------------------------------------
@@ -1189,7 +1186,4 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	#Show the Form
 	return $formDatabaseRefreshFromB.ShowDialog()
 
-} #End Function
 
-#Call the form
-Show-test_psf | Out-Null
