@@ -1,358 +1,401 @@
-#----------------------------------------------
-#region Import the Assemblies
-#----------------------------------------------
-[void][reflection.assembly]::Load('System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089')
-[void][reflection.assembly]::Load('System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a')
-#endregion Import Assemblies
+function Show-test_psf {
 
-#----------------------------------------------
-#region Generated Form Objects
-#----------------------------------------------
-[System.Windows.Forms.Application]::EnableVisualStyles()
-$formDatabaseRefreshFromB = New-Object 'System.Windows.Forms.Form'
-$checkboxSetDBRecoveryModel = New-Object 'System.Windows.Forms.CheckBox'
-$checkboxTruncateBatchTables = New-Object 'System.Windows.Forms.CheckBox'
-$checkboxEnableUsersExceptGue = New-Object 'System.Windows.Forms.CheckBox'
-$buttonRun = New-Object 'System.Windows.Forms.Button'
-$checkboxListOutUserEmailAddr = New-Object 'System.Windows.Forms.CheckBox'
-$checkboxPromoteNewAdmin = New-Object 'System.Windows.Forms.CheckBox'
-$checkboxBackupNewlyCompleted = New-Object 'System.Windows.Forms.CheckBox'
-$checkboxRunDatabaseSync = New-Object 'System.Windows.Forms.CheckBox'
-$checkboxCleanUpPowerBISettin = New-Object 'System.Windows.Forms.CheckBox'
-$checkboxEnableSQLChangeTrack = New-Object 'System.Windows.Forms.CheckBox'
-$checkboxPutAllBatchJobsOnHol = New-Object 'System.Windows.Forms.CheckBox'
-$labelAdminEmailAddress = New-Object 'System.Windows.Forms.Label'
-$textboxAdminEmailAddress = New-Object 'System.Windows.Forms.TextBox'
-$buttonAddFileLocation = New-Object 'System.Windows.Forms.Button'
-$labelBacBakFileLocation = New-Object 'System.Windows.Forms.Label'
-$txtFile = New-Object 'System.Windows.Forms.TextBox'
-$labelSASLink = New-Object 'System.Windows.Forms.Label'
-$txtLink = New-Object 'System.Windows.Forms.TextBox'
-$InitialFormWindowState = New-Object 'System.Windows.Forms.FormWindowState'
-#endregion Generated Form Objects
+	#----------------------------------------------
+	#region Import the Assemblies
+	#----------------------------------------------
+	[void][reflection.assembly]::Load('System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089')
+	[void][reflection.assembly]::Load('System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a')
+	#endregion Import Assemblies
 
-#----------------------------------------------
-# User Generated Script
-#----------------------------------------------
+	#----------------------------------------------
+	#region Generated Form Objects
+	#----------------------------------------------
+	[System.Windows.Forms.Application]::EnableVisualStyles()
+	$formDatabaseRefreshFromB = New-Object 'System.Windows.Forms.Form'
+	$checkboxSetDBRecoveryModel = New-Object 'System.Windows.Forms.CheckBox'
+	$checkboxTruncateBatchTables = New-Object 'System.Windows.Forms.CheckBox'
+	$checkboxEnableUsersExceptGue = New-Object 'System.Windows.Forms.CheckBox'
+	$buttonRun = New-Object 'System.Windows.Forms.Button'
+	$checkboxListOutUserEmailAddr = New-Object 'System.Windows.Forms.CheckBox'
+	$checkboxPromoteNewAdmin = New-Object 'System.Windows.Forms.CheckBox'
+	$checkboxBackupNewlyCompleted = New-Object 'System.Windows.Forms.CheckBox'
+	$checkboxRunDatabaseSync = New-Object 'System.Windows.Forms.CheckBox'
+	$checkboxCleanUpPowerBISettin = New-Object 'System.Windows.Forms.CheckBox'
+	$checkboxEnableSQLChangeTrack = New-Object 'System.Windows.Forms.CheckBox'
+	$checkboxPutAllBatchJobsOnHol = New-Object 'System.Windows.Forms.CheckBox'
+	$labelAdminEmailAddress = New-Object 'System.Windows.Forms.Label'
+	$textboxAdminEmailAddress = New-Object 'System.Windows.Forms.TextBox'
+	$buttonAddFileLocation = New-Object 'System.Windows.Forms.Button'
+	$labelBacBakFileLocation = New-Object 'System.Windows.Forms.Label'
+	$txtFile = New-Object 'System.Windows.Forms.TextBox'
+	$labelSASLink = New-Object 'System.Windows.Forms.Label'
+	$txtLink = New-Object 'System.Windows.Forms.TextBox'
+	$InitialFormWindowState = New-Object 'System.Windows.Forms.FormWindowState'
+	#endregion Generated Form Objects
 
-$formDatabaseRefreshFromB_Load={
-	#TODO: Initialize Form Controls here
-	Set-ControlTheme $formDatabaseRefreshFromB -Theme Dark
-}
-
-
-#region Control Theme Helper Function
-
-function Set-ControlTheme
-{
-	[CmdletBinding()]
-	param
-	(
-		[Parameter(Mandatory = $true)]
-		[ValidateNotNull()]
-		[System.ComponentModel.Component]$Control,
-		[ValidateSet('Light', 'Dark')]
-		[string]$Theme = 'Dark',
-		[System.Collections.Hashtable]$CustomColor
-	)
-
-	$Font = [System.Drawing.Font]::New('Segoe UI', 9)
-
-	#Initialize the colors
-	if ($Theme -eq 'Dark')
-	{
-		$WindowColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
-		$ContainerColor = [System.Drawing.Color]::FromArgb(45, 45, 45)
-		$BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
-		$ForeColor = [System.Drawing.Color]::White
-		$BorderColor = [System.Drawing.Color]::DimGray
-		$SelectionBackColor = [System.Drawing.SystemColors]::Highlight
-		$SelectionForeColor = [System.Drawing.Color]::White
-		$MenuSelectionColor = [System.Drawing.Color]::DimGray
+	#----------------------------------------------
+	# User Generated Script
+	#----------------------------------------------
+	
+	$formDatabaseRefreshFromB_Load={
+		#TODO: Initialize Form Controls here
+		Set-ControlTheme $formDatabaseRefreshFromB -Theme Dark
 	}
-
-
-	if ($CustomColor)
+	
+	
+	#region Control Theme Helper Function
+	<#
+		.SYNOPSIS
+			Applies a theme to the control and its children.
+		
+		.PARAMETER Control
+			The control to theme. Usually the form itself.
+		
+		.PARAMETER Theme
+			The color theme:
+			Light
+			Dark
+	
+		.PARAMETER CustomColor
+			A hashtable that contains the color values.
+			Keys:
+			WindowColor
+			ContainerColor
+			BackColor
+			ForeColor
+			BorderColor
+			SelectionForeColor
+			SelectionBackColor
+			MenuSelectionColor
+		.EXAMPLE
+			PS C:\> Set-ControlTheme -Control $form1 -Theme Dark
+		
+		.EXAMPLE
+			PS C:\> Set-ControlTheme -Control $form1 -CustomColor @{ WindowColor = 'White'; ContainerBackColor = 'Gray'; BackColor... }
+		.NOTES
+			Created by SAPIEN Technologies, Inc.
+	#>
+	function Set-ControlTheme
 	{
-		#Check and Validate the custom colors:
-		$Color = $CustomColor.WindowColor -as [System.Drawing.Color]
-		if ($Color) { $WindowColor = $Color }
-		$Color = $CustomColor.ContainerColor -as [System.Drawing.Color]
-		if ($Color) { $ContainerColor = $Color }
-		$Color = $CustomColor.BackColor -as [System.Drawing.Color]
-		if ($Color) { $BackColor = $Color }
-		$Color = $CustomColor.ForeColor -as [System.Drawing.Color]
-		if ($Color) { $ForeColor = $Color }
-		$Color = $CustomColor.BorderColor -as [System.Drawing.Color]
-		if ($Color) { $BorderColor = $Color }
-		$Color = $CustomColor.SelectionBackColor -as [System.Drawing.Color]
-		if ($Color) { $SelectionBackColor = $Color }
-		$Color = $CustomColor.SelectionForeColor -as [System.Drawing.Color]
-		if ($Color) { $SelectionForeColor = $Color }
-		$Color = $CustomColor.MenuSelectionColor -as [System.Drawing.Color]
-		if ($Color) { $MenuSelectionColor = $Color }
-	}
-
-	#Define the custom renderer for the menus
-	#region Add-Type definition
-	try
-	{
-		[SAPIENTypes.SAPIENColorTable] | Out-Null
-	}
-	catch
-	{
-		if ($PSVersionTable.PSVersion.Major -ge 7)
+		[CmdletBinding()]
+		param
+		(
+			[Parameter(Mandatory = $true)]
+			[ValidateNotNull()]
+			[System.ComponentModel.Component]$Control,
+			[ValidateSet('Light', 'Dark')]
+			[string]$Theme = 'Dark',
+			[System.Collections.Hashtable]$CustomColor
+		)
+		
+		$Font = [System.Drawing.Font]::New('Segoe UI', 9)
+		
+		#Initialize the colors
+		if ($Theme -eq 'Dark')
 		{
-			$Assemblies = 'System.Windows.Forms', 'System.Drawing', 'System.Drawing.Primitives'
+			$WindowColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
+			$ContainerColor = [System.Drawing.Color]::FromArgb(45, 45, 45)
+			$BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
+			$ForeColor = [System.Drawing.Color]::White
+			$BorderColor = [System.Drawing.Color]::DimGray
+			$SelectionBackColor = [System.Drawing.SystemColors]::Highlight
+			$SelectionForeColor = [System.Drawing.Color]::White
+			$MenuSelectionColor = [System.Drawing.Color]::DimGray
 		}
-		else
+		
+		
+		if ($CustomColor)
 		{
-			$Assemblies = 'System.Windows.Forms', 'System.Drawing'
+			#Check and Validate the custom colors:
+			$Color = $CustomColor.WindowColor -as [System.Drawing.Color]
+			if ($Color) { $WindowColor = $Color }
+			$Color = $CustomColor.ContainerColor -as [System.Drawing.Color]
+			if ($Color) { $ContainerColor = $Color }
+			$Color = $CustomColor.BackColor -as [System.Drawing.Color]
+			if ($Color) { $BackColor = $Color }
+			$Color = $CustomColor.ForeColor -as [System.Drawing.Color]
+			if ($Color) { $ForeColor = $Color }
+			$Color = $CustomColor.BorderColor -as [System.Drawing.Color]
+			if ($Color) { $BorderColor = $Color }
+			$Color = $CustomColor.SelectionBackColor -as [System.Drawing.Color]
+			if ($Color) { $SelectionBackColor = $Color }
+			$Color = $CustomColor.SelectionForeColor -as [System.Drawing.Color]
+			if ($Color) { $SelectionForeColor = $Color }
+			$Color = $CustomColor.MenuSelectionColor -as [System.Drawing.Color]
+			if ($Color) { $MenuSelectionColor = $Color }
 		}
-		Add-Type -ReferencedAssemblies $Assemblies -TypeDefinition "
+		
+		#Define the custom renderer for the menus
+		#region Add-Type definition
+		try
+		{
+			[SAPIENTypes.SAPIENColorTable] | Out-Null
+		}
+		catch
+		{
+			if ($PSVersionTable.PSVersion.Major -ge 7)
+			{
+				$Assemblies = 'System.Windows.Forms', 'System.Drawing', 'System.Drawing.Primitives'
+			}
+			else
+			{
+				$Assemblies = 'System.Windows.Forms', 'System.Drawing'
+			}
+			Add-Type -ReferencedAssemblies $Assemblies -TypeDefinition "
 using System;
 using System.Windows.Forms;
 using System.Drawing;
 namespace SAPIENTypes
 {
-public class SAPIENColorTable : ProfessionalColorTable
-{
-Color ContainerBackColor;
-Color BackColor;
-Color BorderColor;
-	Color SelectBackColor;
+    public class SAPIENColorTable : ProfessionalColorTable
+    {
+        Color ContainerBackColor;
+        Color BackColor;
+        Color BorderColor;
+		Color SelectBackColor;
 
-public SAPIENColorTable(Color containerColor, Color backColor, Color borderColor, Color selectBackColor)
-{
-    ContainerBackColor = containerColor;
-    BackColor = backColor;
-    BorderColor = borderColor;
-		SelectBackColor = selectBackColor;
-} 
-	public override Color MenuStripGradientBegin { get { return ContainerBackColor; } }
-public override Color MenuStripGradientEnd { get { return ContainerBackColor; } }
-public override Color ToolStripBorder { get { return BorderColor; } }
-public override Color MenuItemBorder { get { return SelectBackColor; } }
-public override Color MenuItemSelected { get { return SelectBackColor; } }
-public override Color SeparatorDark { get { return BorderColor; } }
-public override Color ToolStripDropDownBackground { get { return BackColor; } }
-public override Color MenuBorder { get { return BorderColor; } }
-public override Color MenuItemSelectedGradientBegin { get { return SelectBackColor; } }
-public override Color MenuItemSelectedGradientEnd { get { return SelectBackColor; } }      
-public override Color MenuItemPressedGradientBegin { get { return ContainerBackColor; } }
-public override Color MenuItemPressedGradientEnd { get { return ContainerBackColor; } }
-public override Color MenuItemPressedGradientMiddle { get { return ContainerBackColor; } }
-public override Color ImageMarginGradientBegin { get { return BackColor; } }
-public override Color ImageMarginGradientEnd { get { return BackColor; } }
-public override Color ImageMarginGradientMiddle { get { return BackColor; } }
-}
+        public SAPIENColorTable(Color containerColor, Color backColor, Color borderColor, Color selectBackColor)
+        {
+            ContainerBackColor = containerColor;
+            BackColor = backColor;
+            BorderColor = borderColor;
+			SelectBackColor = selectBackColor;
+        } 
+		public override Color MenuStripGradientBegin { get { return ContainerBackColor; } }
+        public override Color MenuStripGradientEnd { get { return ContainerBackColor; } }
+        public override Color ToolStripBorder { get { return BorderColor; } }
+        public override Color MenuItemBorder { get { return SelectBackColor; } }
+        public override Color MenuItemSelected { get { return SelectBackColor; } }
+        public override Color SeparatorDark { get { return BorderColor; } }
+        public override Color ToolStripDropDownBackground { get { return BackColor; } }
+        public override Color MenuBorder { get { return BorderColor; } }
+        public override Color MenuItemSelectedGradientBegin { get { return SelectBackColor; } }
+        public override Color MenuItemSelectedGradientEnd { get { return SelectBackColor; } }      
+        public override Color MenuItemPressedGradientBegin { get { return ContainerBackColor; } }
+        public override Color MenuItemPressedGradientEnd { get { return ContainerBackColor; } }
+        public override Color MenuItemPressedGradientMiddle { get { return ContainerBackColor; } }
+        public override Color ImageMarginGradientBegin { get { return BackColor; } }
+        public override Color ImageMarginGradientEnd { get { return BackColor; } }
+        public override Color ImageMarginGradientMiddle { get { return BackColor; } }
+    }
 }"
-	}
-	#endregion
-
-	$colorTable = New-Object SAPIENTypes.SAPIENColorTable -ArgumentList $ContainerColor, $BackColor, $BorderColor, $MenuSelectionColor
-	$render = New-Object System.Windows.Forms.ToolStripProfessionalRenderer -ArgumentList $colorTable
-	[System.Windows.Forms.ToolStripManager]::Renderer = $render
-
-	#Set up our processing queue
-	$Queue = New-Object System.Collections.Generic.Queue[System.ComponentModel.Component]
-	$Queue.Enqueue($Control)
-
-	Add-Type -AssemblyName System.Core
-
-	#Only process the controls once.
-	$Processed = New-Object System.Collections.Generic.HashSet[System.ComponentModel.Component]
-
-	#Apply the colors to the controls
-	while ($Queue.Count -gt 0)
-	{
-		$target = $Queue.Dequeue()
-
-		#Skip controls we already processed
-		if ($Processed.Contains($target)) { continue }
-		$Processed.Add($target)
-
-		#Set the text color
-		$target.ForeColor = $ForeColor
-
-		#region Handle Controls
-		if ($target -is [System.Windows.Forms.Form])
-		{
-			#Set Font
-			$target.Font = $Font
-			$target.BackColor = $ContainerColor
-		}
-		elseif ($target -is [System.Windows.Forms.SplitContainer])
-		{
-			$target.BackColor = $BorderColor
-		}
-		elseif ($target -is [System.Windows.Forms.PropertyGrid])
-		{
-			$target.BackColor = $BorderColor
-			$target.ViewBackColor = $BackColor
-			$target.ViewForeColor = $ForeColor
-			$target.ViewBorderColor = $BorderColor
-			$target.CategoryForeColor = $ForeColor
-			$target.CategorySplitterColor = $ContainerColor
-			$target.HelpBackColor = $BackColor
-			$target.HelpForeColor = $ForeColor
-			$target.HelpBorderColor = $BorderColor
-			$target.CommandsBackColor = $BackColor
-			$target.CommandsBorderColor = $BorderColor
-			$target.CommandsForeColor = $ForeColor
-			$target.LineColor = $ContainerColor
-		}
-		elseif ($target -is [System.Windows.Forms.ContainerControl] -or
-			$target -is [System.Windows.Forms.Panel])
-		{
-			#Set the BackColor for the container
-			$target.BackColor = $ContainerColor
-
-		}
-		elseif ($target -is [System.Windows.Forms.GroupBox])
-		{
-			$target.FlatStyle = 'Flat'
-		}
-		elseif ($target -is [System.Windows.Forms.Button])
-		{
-			$target.FlatStyle = 'Flat'
-			$target.FlatAppearance.BorderColor = $BorderColor
-			$target.BackColor = $BackColor
-		}
-		elseif ($target -is [System.Windows.Forms.CheckBox] -or
-			$target -is [System.Windows.Forms.RadioButton] -or
-			$target -is [System.Windows.Forms.Label])
-		{
-			#$target.FlatStyle = 'Flat'
-		}
-		elseif ($target -is [System.Windows.Forms.ComboBox])
-		{
-			$target.BackColor = $BackColor
-			$target.FlatStyle = 'Flat'
-		}
-		elseif ($target -is [System.Windows.Forms.TextBox])
-		{
-			$target.BorderStyle = 'FixedSingle'
-			$target.BackColor = $BackColor
-		}
-		elseif ($target -is [System.Windows.Forms.DataGridView])
-		{
-			$target.GridColor = $BorderColor
-			$target.BackgroundColor = $ContainerColor
-			$target.DefaultCellStyle.BackColor = $WindowColor
-			$target.DefaultCellStyle.SelectionBackColor = $SelectionBackColor
-			$target.DefaultCellStyle.SelectionForeColor = $SelectionForeColor
-			$target.ColumnHeadersDefaultCellStyle.BackColor = $ContainerColor
-			$target.ColumnHeadersDefaultCellStyle.ForeColor = $ForeColor
-			$target.EnableHeadersVisualStyles = $false
-			$target.ColumnHeadersBorderStyle = 'Single'
-			$target.RowHeadersBorderStyle = 'Single'
-			$target.RowHeadersDefaultCellStyle.BackColor = $ContainerColor
-			$target.RowHeadersDefaultCellStyle.ForeColor = $ForeColor
-
-		}
-		elseif ($PSVersionTable.PSVersion.Major -le 5 -and $target -is [System.Windows.Forms.DataGrid])
-		{
-			$target.CaptionBackColor = $WindowColor
-			$target.CaptionForeColor = $ForeColor
-			$target.BackgroundColor = $ContainerColor
-			$target.BackColor = $WindowColor
-			$target.ForeColor = $ForeColor
-			$target.HeaderBackColor = $ContainerColor
-			$target.HeaderForeColor = $ForeColor
-			$target.FlatMode = $true
-			$target.BorderStyle = 'FixedSingle'
-			$target.GridLineColor = $BorderColor
-			$target.AlternatingBackColor = $ContainerColor
-			$target.SelectionBackColor = $SelectionBackColor
-			$target.SelectionForeColor = $SelectionForeColor
-		}
-		elseif ($target -is [System.Windows.Forms.ToolStrip])
-		{
-
-			$target.BackColor = $BackColor
-			$target.Renderer = $render
-
-			foreach ($item in $target.Items)
-			{
-				$Queue.Enqueue($item)
-			}
-		}
-		elseif ($target -is [System.Windows.Forms.ToolStripMenuItem] -or
-			$target -is [System.Windows.Forms.ToolStripDropDown] -or
-			$target -is [System.Windows.Forms.ToolStripDropDownItem])
-		{
-			$target.BackColor = $BackColor
-			foreach ($item in $target.DropDownItems)
-			{
-				$Queue.Enqueue($item)
-			}
-		}
-		elseif ($target -is [System.Windows.Forms.ListBox] -or
-			$target -is [System.Windows.Forms.ListView] -or
-			$target -is [System.Windows.Forms.TreeView])
-		{
-			$target.BackColor = $WindowColor
-		}
-		else
-		{
-			$target.BackColor = $BackColor
 		}
 		#endregion
-
-		if ($target -is [System.Windows.Forms.Control])
+		
+		$colorTable = New-Object SAPIENTypes.SAPIENColorTable -ArgumentList $ContainerColor, $BackColor, $BorderColor, $MenuSelectionColor
+		$render = New-Object System.Windows.Forms.ToolStripProfessionalRenderer -ArgumentList $colorTable
+		[System.Windows.Forms.ToolStripManager]::Renderer = $render
+		
+		#Set up our processing queue
+		$Queue = New-Object System.Collections.Generic.Queue[System.ComponentModel.Component]
+		$Queue.Enqueue($Control)
+		
+		Add-Type -AssemblyName System.Core
+		
+		#Only process the controls once.
+		$Processed = New-Object System.Collections.Generic.HashSet[System.ComponentModel.Component]
+		
+		#Apply the colors to the controls
+		while ($Queue.Count -gt 0)
 		{
-			#Queue all the child controls
-			foreach ($child in $target.Controls)
+			$target = $Queue.Dequeue()
+			
+			#Skip controls we already processed
+			if ($Processed.Contains($target)) { continue }
+			$Processed.Add($target)
+			
+			#Set the text color
+			$target.ForeColor = $ForeColor
+			
+			#region Handle Controls
+			if ($target -is [System.Windows.Forms.Form])
 			{
-				$Queue.Enqueue($child)
+				#Set Font
+				$target.Font = $Font
+				$target.BackColor = $ContainerColor
+			}
+			elseif ($target -is [System.Windows.Forms.SplitContainer])
+			{
+				$target.BackColor = $BorderColor
+			}
+			elseif ($target -is [System.Windows.Forms.PropertyGrid])
+			{
+				$target.BackColor = $BorderColor
+				$target.ViewBackColor = $BackColor
+				$target.ViewForeColor = $ForeColor
+				$target.ViewBorderColor = $BorderColor
+				$target.CategoryForeColor = $ForeColor
+				$target.CategorySplitterColor = $ContainerColor
+				$target.HelpBackColor = $BackColor
+				$target.HelpForeColor = $ForeColor
+				$target.HelpBorderColor = $BorderColor
+				$target.CommandsBackColor = $BackColor
+				$target.CommandsBorderColor = $BorderColor
+				$target.CommandsForeColor = $ForeColor
+				$target.LineColor = $ContainerColor
+			}
+			elseif ($target -is [System.Windows.Forms.ContainerControl] -or
+				$target -is [System.Windows.Forms.Panel])
+			{
+				#Set the BackColor for the container
+				$target.BackColor = $ContainerColor
+				
+			}
+			elseif ($target -is [System.Windows.Forms.GroupBox])
+			{
+				$target.FlatStyle = 'Flat'
+			}
+			elseif ($target -is [System.Windows.Forms.Button])
+			{
+				$target.FlatStyle = 'Flat'
+				$target.FlatAppearance.BorderColor = $BorderColor
+				$target.BackColor = $BackColor
+			}
+			elseif ($target -is [System.Windows.Forms.CheckBox] -or
+				$target -is [System.Windows.Forms.RadioButton] -or
+				$target -is [System.Windows.Forms.Label])
+			{
+				#$target.FlatStyle = 'Flat'
+			}
+			elseif ($target -is [System.Windows.Forms.ComboBox])
+			{
+				$target.BackColor = $BackColor
+				$target.FlatStyle = 'Flat'
+			}
+			elseif ($target -is [System.Windows.Forms.TextBox])
+			{
+				$target.BorderStyle = 'FixedSingle'
+				$target.BackColor = $BackColor
+			}
+			elseif ($target -is [System.Windows.Forms.DataGridView])
+			{
+				$target.GridColor = $BorderColor
+				$target.BackgroundColor = $ContainerColor
+				$target.DefaultCellStyle.BackColor = $WindowColor
+				$target.DefaultCellStyle.SelectionBackColor = $SelectionBackColor
+				$target.DefaultCellStyle.SelectionForeColor = $SelectionForeColor
+				$target.ColumnHeadersDefaultCellStyle.BackColor = $ContainerColor
+				$target.ColumnHeadersDefaultCellStyle.ForeColor = $ForeColor
+				$target.EnableHeadersVisualStyles = $false
+				$target.ColumnHeadersBorderStyle = 'Single'
+				$target.RowHeadersBorderStyle = 'Single'
+				$target.RowHeadersDefaultCellStyle.BackColor = $ContainerColor
+				$target.RowHeadersDefaultCellStyle.ForeColor = $ForeColor
+				
+			}
+			elseif ($PSVersionTable.PSVersion.Major -le 5 -and $target -is [System.Windows.Forms.DataGrid])
+			{
+				$target.CaptionBackColor = $WindowColor
+				$target.CaptionForeColor = $ForeColor
+				$target.BackgroundColor = $ContainerColor
+				$target.BackColor = $WindowColor
+				$target.ForeColor = $ForeColor
+				$target.HeaderBackColor = $ContainerColor
+				$target.HeaderForeColor = $ForeColor
+				$target.FlatMode = $true
+				$target.BorderStyle = 'FixedSingle'
+				$target.GridLineColor = $BorderColor
+				$target.AlternatingBackColor = $ContainerColor
+				$target.SelectionBackColor = $SelectionBackColor
+				$target.SelectionForeColor = $SelectionForeColor
+			}
+			elseif ($target -is [System.Windows.Forms.ToolStrip])
+			{
+				
+				$target.BackColor = $BackColor
+				$target.Renderer = $render
+				
+				foreach ($item in $target.Items)
+				{
+					$Queue.Enqueue($item)
+				}
+			}
+			elseif ($target -is [System.Windows.Forms.ToolStripMenuItem] -or
+				$target -is [System.Windows.Forms.ToolStripDropDown] -or
+				$target -is [System.Windows.Forms.ToolStripDropDownItem])
+			{
+				$target.BackColor = $BackColor
+				foreach ($item in $target.DropDownItems)
+				{
+					$Queue.Enqueue($item)
+				}
+			}
+			elseif ($target -is [System.Windows.Forms.ListBox] -or
+				$target -is [System.Windows.Forms.ListView] -or
+				$target -is [System.Windows.Forms.TreeView])
+			{
+				$target.BackColor = $WindowColor
+			}
+			else
+			{
+				$target.BackColor = $BackColor
+			}
+			#endregion
+			
+			if ($target -is [System.Windows.Forms.Control])
+			{
+				#Queue all the child controls
+				foreach ($child in $target.Controls)
+				{
+					$Queue.Enqueue($child)
+				}
 			}
 		}
 	}
-}
-#endregion
-
-$txtLink_TextChanged = {
-	$txtFile.Text = ''
-}
-
-$txtFile_TextChanged = {
-	$txtLink.Text = ''
-}
-
-$buttonAddFileLocation_Click={
-	Add-Type -AssemblyName System.Windows.Forms
-	$FileBrowser = New-Object System.Windows.Forms.OpenFileDialog -Property @{ InitialDirectory = [Environment]::GetFolderPath('Desktop') }
-	$FileBrowser.ShowDialog()
-	$txtFile.Text = $FileBrowser.FileName
-}
-
-if ($checkboxBackupNewlyCompleted.Checked)
-{
-	## Backup AxDB database
-	Write-Host "Backup AxDB" -ForegroundColor Yellow
-	Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Type Full -CompressBackup -BackupFileName "dbname-$NewDB-backuptype-timestamp.bak" -ReplaceInName -Verbose
-
-}
-if ($checkboxCleanUpPowerBISettin.Checked)
-{
-	## Clean up Power BI settings
-	Write-Host "Cleaning up Power BI settings" -ForegroundColor Yellow
-	#Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "UPDATE PowerBIConfig set CLIENTID = '', APPLICATIONKEY = '', REDIRECTURL = ''" -Verbose
-	Invoke-D365SqlScript -DatabaseServer localhost -DatabaseName AxDB -Command "UPDATE PowerBIConfig set CLIENTID = '', APPLICATIONKEY = '', REDIRECTURL = ''" -Verbose
-}
-if ($checkboxEnableSQLChangeTrack.Checked)
-{
-	## Enable SQL Change Tracking
-	Write-Host "Enabling SQL Change Tracking" -ForegroundColor Yellow
-	#Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "ALTER DATABASE AxDB SET CHANGE_TRACKING = ON (CHANGE_RETENTION = 6 DAYS, AUTO_CLEANUP = ON)" -Verbose
-	Invoke-D365SqlScript -DatabaseServer localhost -DatabaseName AxDB -Command "ALTER DATABASE AxDB SET CHANGE_TRACKING = ON (CHANGE_RETENTION = 6 DAYS, AUTO_CLEANUP = ON)" -Verbose
-}
-if ($checkboxListOutUserEmailAddr.Checked)
-{
-	## INFO: get User email address/tenant
-	<#Write-Host "Getting information about users from AxDB" -ForegroundColor Yellow
-	$sqlGetUsers = @"
+	#endregion
+	
+	$txtLink_TextChanged = {
+		$txtFile.Text = ''
+	}
+	
+	$txtFile_TextChanged = {
+		$txtLink.Text = ''
+	}
+	
+	$buttonAddFileLocation_Click={
+		Add-Type -AssemblyName System.Windows.Forms
+		$FileBrowser = New-Object System.Windows.Forms.OpenFileDialog -Property @{ InitialDirectory = [Environment]::GetFolderPath('Desktop') }
+		$FileBrowser.ShowDialog()
+		$txtFile.Text = $FileBrowser.FileName
+	}
+	
+	if ($checkboxBackupNewlyCompleted.Checked)
+	{
+		## Backup AxDB database
+		Write-Host "Backup AxDB" -ForegroundColor Yellow
+		Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Type Full -CompressBackup -BackupFileName "dbname-$NewDB-backuptype-timestamp.bak" -ReplaceInName -Verbose
+		
+	}
+	if ($checkboxCleanUpPowerBISettin.Checked)
+	{
+		## Clean up Power BI settings
+		Write-Host "Cleaning up Power BI settings" -ForegroundColor Yellow
+		#Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "UPDATE PowerBIConfig set CLIENTID = '', APPLICATIONKEY = '', REDIRECTURL = ''" -Verbose
+		Invoke-D365SqlScript -DatabaseServer localhost -DatabaseName AxDB -Command "UPDATE PowerBIConfig set CLIENTID = '', APPLICATIONKEY = '', REDIRECTURL = ''" -Verbose
+	}
+	if ($checkboxEnableSQLChangeTrack.Checked)
+	{
+		## Enable SQL Change Tracking
+		Write-Host "Enabling SQL Change Tracking" -ForegroundColor Yellow
+		#Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "ALTER DATABASE AxDB SET CHANGE_TRACKING = ON (CHANGE_RETENTION = 6 DAYS, AUTO_CLEANUP = ON)" -Verbose
+		Invoke-D365SqlScript -DatabaseServer localhost -DatabaseName AxDB -Command "ALTER DATABASE AxDB SET CHANGE_TRACKING = ON (CHANGE_RETENTION = 6 DAYS, AUTO_CLEANUP = ON)" -Verbose
+	}
+	if ($checkboxListOutUserEmailAddr.Checked)
+	{
+		## INFO: get User email address/tenant
+		<#Write-Host "Getting information about users from AxDB" -ForegroundColor Yellow
+		$sqlGetUsers = @"
+	select ID, Name, NetworkAlias, NETWORKDOMAIN, Enable from userInfo
+	where NETWORKALIAS not like '%@contosoax7.onmicrosoft.com'
+	  and NETWORKALIAS not like '%@capintegration01.onmicrosoft.com'
+	  and NETWORKALIAS not like '%@devtesttie.ccsctp.net'
+	  and NETWORKALIAS not like '%@DAXMDSRunner.com'
+	  and NETWORKALIAS not like '%@dynamics.com'
+	  and NETWORKALIAS != ''
+	"@
+		Invoke-D#>baQuery -SqlInstance localhost -Database AxDB -Query $sqlGetUsers -Verbose
+		
+		Invoke-D365SqlScript -DatabaseServer localhost -DatabaseName AxDB -Command "
 select ID, Name, NetworkAlias, NETWORKDOMAIN, Enable from userInfo
 where NETWORKALIAS not like '%@contosoax7.onmicrosoft.com'
   and NETWORKALIAS not like '%@capintegration01.onmicrosoft.com'
@@ -360,251 +403,242 @@ where NETWORKALIAS not like '%@contosoax7.onmicrosoft.com'
   and NETWORKALIAS not like '%@DAXMDSRunner.com'
   and NETWORKALIAS not like '%@dynamics.com'
   and NETWORKALIAS != ''
-"@
-	Invoke-D#>baQuery -SqlInstance localhost -Database AxDB -Query $sqlGetUsers -Verbose
-
-	Invoke-D365SqlScript -DatabaseServer localhost -DatabaseName AxDB -Command "
-select ID, Name, NetworkAlias, NETWORKDOMAIN, Enable from userInfo
-where NETWORKALIAS not like '%@contosoax7.onmicrosoft.com'
-and NETWORKALIAS not like '%@capintegration01.onmicrosoft.com'
-and NETWORKALIAS not like '%@devtesttie.ccsctp.net'
-and NETWORKALIAS not like '%@DAXMDSRunner.com'
-and NETWORKALIAS not like '%@dynamics.com'
-and NETWORKALIAS != ''
 " -Verbose
-}
-if ($checkboxPromoteNewAdmin.Checked)
-{
-	## Promote user as admin and set default tenant  (Optional)
-	Write-Host "Setting up new Admin" -ForegroundColor Yellow
-	Set-D365Admin -AdminSignInName textboxAdminEmailAddress.Text
-}
-if ($checkboxPutAllBatchJobsOnHol.Checked)
-{
-	## Put on hold all Batch Jobs
-	Write-Host "Disabling all current Batch Jobs" -ForegroundColor Yellow
-	#Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "UPDATE BatchJob SET STATUS = 0 WHERE STATUS IN (1,2,5,7)  --Set any waiting, executing, ready, or canceling batches to withhold."
-	Invoke-D365SqlScript -DatabaseServer localhost -DatabaseName AxDB -Command "UPDATE BatchJob SET STATUS = 0 WHERE STATUS IN (1,2,5,7)  --Set any waiting, executing, ready, or canceling batches to withhold." -Verbose
-}
-if ($checkboxRunDatabaseSync.Checked)
-{
-	## Run Database Sync
-	Write-Host "Executing Database Sync" -ForegroundColor Yellow
-	Invoke-D365DBSync -ShowOriginalProgress -Verbose
-}
-if ($checkboxSetDBRecoveryModel.Checked)
-{
-	## Set DB Recovery Model to Simple  (Optional)
-	Write-Host "Setting DB Recovery Model to Simple" -ForegroundColor Yellow
-	Set-DbaDbRecoveryModel -SqlInstance localhost -RecoveryModel Simple -Database AxDB -Confirm:$false
-
-}
-if ($checkboxTruncateBatchTables.Checked){
-	## Truncate System tables. Values there will be re-created after AOS start
-	Write-Host "Truncating System tables. Values there will be re-created after AOS start" -ForegroundColor Yellow
-	$sqlSysTablesTruncate = @"
-TRUNCATE TABLE SYSSERVERCONFIG
-TRUNCATE TABLE SYSSERVERSESSIONS
-TRUNCATE TABLE SYSCORPNETPRINTERS
-TRUNCATE TABLE SYSCLIENTSESSIONS
-TRUNCATE TABLE BATCHSERVERCONFIG
-TRUNCATE TABLE BATCHSERVERGROUP"@
-	Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query $sqlSysTablesTruncate -Verbose
-<#	Invoke-D365SqlScript -DatabaseServer localhost -DatabaseName AxDB -Command "TRUNCATE TABLE SYSSERVERCONFIG
-TRUNCATE TABLE SYSSERVERSESSIONS
-TRUNCATE TABLE SYSCORPNETPRINTERS
-TRUNCATE TABLE SYSCLIENTSESSIONS
-TRUNCATE TABLE BATCHSERVERCONFIG
-TRUNCATE TABLE BATCHSERVERGROUP" -Verbose#>
-}
-
-if ($checkboxEnableUsersExceptGue.Checked)
-{
-	## Enable Users except Guest
-	Write-Host "Enable all users except Guest" -ForegroundColor Yellow
-	#Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "Update USERINFO set ENABLE = 1 where ID != 'Guest'" -Verbose
-	Invoke-D365SqlScript -DatabaseServer localhost -DatabaseName AxDB -Command "Update USERINFO set ENABLE = 1 where ID != 'Guest'" -Verbose
-}
-$labelAdminEmailAddress_Click={
-	#TODO: Place custom script here
-
-}
-function Install-D365foDbatools
-{
-	#region Installing d365fo.tools and dbatools <--
-	# This is required by Find-Module, by doing it beforehand we remove some warning messages
-	Write-Host "Installing PowerShell modules d365fo.tools and dbatools" -ForegroundColor Yellow
-	Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope AllUsers
-	Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
-	$modules2Install = @('d365fo.tools', 'dbatools')
-	foreach ($module in $modules2Install)
+	}
+	if ($checkboxPromoteNewAdmin.Checked)
 	{
-		Write-Host "..working on module" $module -ForegroundColor Yellow
-		if ($null -eq $(Get-Command -Module $module))
+		## Promote user as admin and set default tenant  (Optional)
+		Write-Host "Setting up new Admin" -ForegroundColor Yellow
+		Set-D365Admin -AdminSignInName textboxAdminEmailAddress.Text
+	}
+	if ($checkboxPutAllBatchJobsOnHol.Checked)
+	{
+		## Put on hold all Batch Jobs
+		Write-Host "Disabling all current Batch Jobs" -ForegroundColor Yellow
+		#Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "UPDATE BatchJob SET STATUS = 0 WHERE STATUS IN (1,2,5,7)  --Set any waiting, executing, ready, or canceling batches to withhold."
+		Invoke-D365SqlScript -DatabaseServer localhost -DatabaseName AxDB -Command "UPDATE BatchJob SET STATUS = 0 WHERE STATUS IN (1,2,5,7)  --Set any waiting, executing, ready, or canceling batches to withhold." -Verbose
+	}
+	if ($checkboxRunDatabaseSync.Checked)
+	{
+		## Run Database Sync
+		Write-Host "Executing Database Sync" -ForegroundColor Yellow
+		Invoke-D365DBSync -ShowOriginalProgress -Verbose
+	}
+	if ($checkboxSetDBRecoveryModel.Checked)
+	{
+		## Set DB Recovery Model to Simple  (Optional)
+		Write-Host "Setting DB Recovery Model to Simple" -ForegroundColor Yellow
+		Set-DbaDbRecoveryModel -SqlInstance localhost -RecoveryModel Simple -Database AxDB -Confirm:$false
+		
+	}
+	if ($checkboxTruncateBatchTables.Checked)
+	{
+		## Truncate System tables. Values there will be re-created after AOS start
+		Write-Host "Truncating System tables. Values there will be re-created after AOS start" -ForegroundColor Yellow
+	<#	$sqlSysTablesTruncate = @"
+	TRUNCATE TABLE SYSSERVERCONFIG
+	TRUNCATE TABLE SYSSERVERSESSIONS
+	TRUNCATE TABLE SYSCORPNETPRINTERS
+	TRUNCATE TABLE SYSCLIENTSESSIONS
+	TRUNCATE TABLE BATCHSERVERCONFIG
+	TRUNCATE TABLE BATCHSERVERGROUP
+	"@
+		Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query $sqlSysTablesTruncate -Verbose#>
+		Invoke-D365SqlScript -DatabaseServer localhost -DatabaseName AxDB -Command "TRUNCATE TABLE SYSSERVERCONFIG
+																			TRUNCATE TABLE SYSSERVERSESSIONS
+																			TRUNCATE TABLE SYSCORPNETPRINTERS
+																			TRUNCATE TABLE SYSCLIENTSESSIONS
+																			TRUNCATE TABLE BATCHSERVERCONFIG
+																			TRUNCATE TABLE BATCHSERVERGROUP" -Verbose
+	}
+	
+	if ($checkboxEnableUsersExceptGue.Checked)
+	{
+		## Enable Users except Guest
+		Write-Host "Enable all users except Guest" -ForegroundColor Yellow
+		#Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "Update USERINFO set ENABLE = 1 where ID != 'Guest'" -Verbose
+		Invoke-D365SqlScript -DatabaseServer localhost -DatabaseName AxDB -Command "Update USERINFO set ENABLE = 1 where ID != 'Guest'" -Verbose
+	}
+	$labelAdminEmailAddress_Click={
+		#TODO: Place custom script here
+		
+	}
+	function Install-D365foDbatools
+	{
+		#region Installing d365fo.tools and dbatools <--
+		# This is required by Find-Module, by doing it beforehand we remove some warning messages
+		Write-Host "Installing PowerShell modules d365fo.tools and dbatools" -ForegroundColor Yellow
+		Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope AllUsers
+		Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+		$modules2Install = @('d365fo.tools', 'dbatools')
+		foreach ($module in $modules2Install)
 		{
-			Write-Host "....installing module" $module -ForegroundColor Gray
-			Install-Module -Name $module -SkipPublisherCheck -Scope AllUsers
+			Write-Host "..working on module" $module -ForegroundColor Yellow
+			if ($null -eq $(Get-Command -Module $module))
+			{
+				Write-Host "....installing module" $module -ForegroundColor Gray
+				Install-Module -Name $module -SkipPublisherCheck -Scope AllUsers
+			}
+			else
+			{
+				Write-Host "....updating module" $module -ForegroundColor Gray
+				Update-Module -Name $module
+			}
 		}
-		else
+		#endregion Installing d365fo.tools and dbatools -->
+	}
+	
+	
+	$buttonRun_Click = {
+		$ErrorActionPreference = "Stop"
+		[string]$dt = get-date -Format "yyyyMMdd" #Generate the datetime stamp to make DB files unique
+		Install-D365foDbatools | Set-Content -Path $TmpFile
+		
+		if ($txtLink.Text -ne '')
+		{ 
+			#If you are going to download BACPAC file from the LCS Asset Library, please use in this section
+			$BacpacSasLinkFromLCS = $txtLink.Text
+			$NewDB = $('AxDB_') + $dt #Database name. No spaces in the name!
+			$TempFolder = 'd:\temp\' # 'c:\temp\'  #$env:TEMP
+			#region Download bacpac from LCS
+			if ($BacpacSasLinkFromLCS.StartsWith('http'))
+			{
+				Write-Host "Downloading BACPAC from the LCS Asset library" -ForegroundColor Yellow
+				New-Item -Path $TempFolder -ItemType Directory -Force 
+				$TempFileName = Join-path $TempFolder -ChildPath "$NewDB.bacpac" -Verbose
+				
+				Write-Host "..Downloading file" $TempFileName -ForegroundColor Yellow
+				Invoke-D365InstallAzCopy -Verbose
+				Invoke-D365AzCopyTransfer -SourceUri $BacpacSasLinkFromLCS -DestinationUri $TempFileName -ShowOriginalProgress -Verbose
+				
+				$f = Get-ChildItem $TempFileName -Verbose
+				$NewDB = $($f.BaseName).Replace(' ', '_')
+			}
+		}
+		if ($txtFile.Text -ne '')
 		{
-			Write-Host "....updating module" $module -ForegroundColor Gray
-			Update-Module -Name $module
+			$f = Get-ChildItem $txtFile.Text -Verbose #Please note that this file should be accessible from SQL server service account
+			$NewDB = $($f.BaseName).Replace(' ', '_') + $dt; #'AxDB_CTS1005BU2'  #Temporary Database name for new AxDB. Use a file name or any meaningful name.
 		}
-	}
-	#endregion Installing d365fo.tools and dbatools -->
-}
-
-
-$buttonRun_Click = {
-	$ErrorActionPreference = "Stop"
-	[string]$dt = get-date -Format "yyyyMMdd" #Generate the datetime stamp to make DB files unique
-	Install-D365foDbatools | Set-Content -Path $TmpFile
-
-	if ($txtLink.Text -ne '')
-	{ 
-		#If you are going to download BACPAC file from the LCS Asset Library, please use in this section
-		$BacpacSasLinkFromLCS = $txtLink.Text
-		$NewDB = $('AxDB_') + $dt #Database name. No spaces in the name!
-		$TempFolder = 'd:\temp\' # 'c:\temp\'  #$env:TEMP
-		#region Download bacpac from LCS
-		if ($BacpacSasLinkFromLCS.StartsWith('http'))
+	
+		## Stop D365FO instance.
+		Write-Host "Stopping D365FO environment" -ForegroundColor Yellow
+		Stop-D365Environment -All -Kill -Verbose
+		Enable-D365Exception -Verbose
+		Invoke-D365InstallSqlPackage -Verbose #Installing modern SqlPackage just in case  
+		
+		## Import bacpac to SQL Database
+		If (-not (Test-DbaPath -SqlInstance localhost -Path $($f.FullName)))
 		{
-			Write-Host "Downloading BACPAC from the LCS Asset library" -ForegroundColor Yellow
-			New-Item -Path $TempFolder -ItemType Directory -Force 
-			$TempFileName = Join-path $TempFolder -ChildPath "$NewDB.bacpac" -Verbose
-
-			Write-Host "..Downloading file" $TempFileName -ForegroundColor Yellow
-			Invoke-D365InstallAzCopy -Verbose
-			Invoke-D365AzCopyTransfer -SourceUri $BacpacSasLinkFromLCS -DestinationUri $TempFileName -ShowOriginalProgress -Verbose
-
-			$f = Get-ChildItem $TempFileName -Verbose
-			$NewDB = $($f.BaseName).Replace(' ', '_')
+			Write-Warning "Database file $($f.FullName) could not be found by SQL Server. Try to move it to C:\Temp or D:\Temp"
+			throw "Database file $($f.FullName) could not be found by SQL Server. Try to move it to C:\Temp or D:\Temp"
 		}
+		$f | Unblock-File
+		Write-Host "Import BACPAC file to the SQL database" $NewDB -ForegroundColor Yellow
+		Import-D365Bacpac -ImportModeTier1 -BacpacFile $f.FullName -NewDatabaseName $NewDB -ShowOriginalProgress -Verbose
+		
+		## Removing AxDB_orig database and Switching AxDB:   NULL <-1- AxDB_original <-2- AxDB <-3- [NewDB]
+		Write-Host "Stopping D365FO environment and Switching Databases" -ForegroundColor Yellow
+		Stop-D365Environment -All -Kill -Verbose
+		Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose
+		Switch-D365ActiveDatabase -NewDatabaseName $NewDB -Verbose
+		
+		## Run Database Sync
+		Write-Host "Executing Database Sync" -ForegroundColor Yellow
+		Invoke-D365DBSync -ShowOriginalProgress -Verbose
+		
+		## Start D365FO instance
+		Write-Host "Starting D365FO environment. Then open UI and refresh Data Entities." -ForegroundColor Yellow
+		Start-D365Environment -Verbose
+		
+		#move the file
+		Stop-Service MSSQLSERVER, SQLSERVERAGENT -Force -Verbose
+		#AxDB_Primary Move the file
+		Start-Service MSSQLSERVER, SQLSERVERAGENT -Verbose
+		
+		
 	}
-	if ($txtFile.Text -ne '')
+	
+	$checkboxListOutUserEmailAddr_CheckedChanged={
+		#TODO: Place custom script here
+		
+	}
+	
+	$checkboxBackupNewlyCompleted_CheckedChanged={
+		#TODO: Place custom script here
+		
+	}
+	
+	
+	
+	
+	$progressbar1_Click={
+		#TODO: Place custom script here
+		
+	}
+	
+	# --End User Generated Script--
+	#----------------------------------------------
+	#region Generated Events
+	#----------------------------------------------
+	
+	$Form_StateCorrection_Load=
 	{
-		$f = Get-ChildItem $txtFile.Text -Verbose #Please note that this file should be accessible from SQL server service account
-		$NewDB = $($f.BaseName).Replace(' ', '_') + $dt; #'AxDB_CTS1005BU2'  #Temporary Database name for new AxDB. Use a file name or any meaningful name.
+		#Correct the initial state of the form to prevent the .Net maximized form issue
+		$formDatabaseRefreshFromB.WindowState = $InitialFormWindowState
 	}
-
-	## Stop D365FO instance.
-	Write-Host "Stopping D365FO environment" -ForegroundColor Yellow
-	Stop-D365Environment -All -Kill -Verbose
-	Enable-D365Exception -Verbose
-	Invoke-D365InstallSqlPackage -Verbose #Installing modern SqlPackage just in case  
-
-	## Import bacpac to SQL Database
-	If (-not (Test-DbaPath -SqlInstance localhost -Path $($f.FullName)))
+	
+	$Form_Cleanup_FormClosed=
 	{
-		Write-Warning "Database file $($f.FullName) could not be found by SQL Server. Try to move it to C:\Temp or D:\Temp"
-		throw "Database file $($f.FullName) could not be found by SQL Server. Try to move it to C:\Temp or D:\Temp"
+		#Remove all event handlers from the controls
+		try
+		{
+			$buttonRun.remove_Click($buttonRun_Click)
+			$checkboxListOutUserEmailAddr.remove_CheckedChanged($checkboxListOutUserEmailAddr_CheckedChanged)
+			$checkboxBackupNewlyCompleted.remove_CheckedChanged($checkboxBackupNewlyCompleted_CheckedChanged)
+			$labelAdminEmailAddress.remove_Click($labelAdminEmailAddress_Click)
+			$buttonAddFileLocation.remove_Click($buttonAddFileLocation_Click)
+			$txtFile.remove_TextChanged($txtFile_TextChanged)
+			$txtLink.remove_TextChanged($txtLink_TextChanged)
+			$formDatabaseRefreshFromB.remove_Load($formDatabaseRefreshFromB_Load)
+			$formDatabaseRefreshFromB.remove_Load($Form_StateCorrection_Load)
+			$formDatabaseRefreshFromB.remove_FormClosed($Form_Cleanup_FormClosed)
+		}
+		catch { Out-Null <# Prevent PSScriptAnalyzer warning #> }
 	}
-	$f | Unblock-File
-	Write-Host "Import BACPAC file to the SQL database" $NewDB -ForegroundColor Yellow
-	Import-D365Bacpac -ImportModeTier1 -BacpacFile $f.FullName -NewDatabaseName $NewDB -ShowOriginalProgress -Verbose
+	#endregion Generated Events
 
-	## Removing AxDB_orig database and Switching AxDB:   NULL <-1- AxDB_original <-2- AxDB <-3- [NewDB]
-	Write-Host "Stopping D365FO environment and Switching Databases" -ForegroundColor Yellow
-	Stop-D365Environment -All -Kill -Verbose
-	Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose
-	Switch-D365ActiveDatabase -NewDatabaseName $NewDB -Verbose
-
-	## Run Database Sync
-	Write-Host "Executing Database Sync" -ForegroundColor Yellow
-	Invoke-D365DBSync -ShowOriginalProgress -Verbose
-
-	## Start D365FO instance
-	Write-Host "Starting D365FO environment. Then open UI and refresh Data Entities." -ForegroundColor Yellow
-	Start-D365Environment -Verbose
-
-	#move the file
-	Stop-Service MSSQLSERVER, SQLSERVERAGENT -Force -Verbose
-	#AxDB_Primary Move the file
-	Start-Service MSSQLSERVER, SQLSERVERAGENT -Verbose
-
-
-}
-
-$checkboxListOutUserEmailAddr_CheckedChanged={
-	#TODO: Place custom script here
-
-}
-
-$checkboxBackupNewlyCompleted_CheckedChanged={
-	#TODO: Place custom script here
-
-}
-
-
-
-
-$progressbar1_Click={
-	#TODO: Place custom script here
-
-}
-
-# --End User Generated Script--
-#----------------------------------------------
-#region Generated Events
-#----------------------------------------------
-
-$Form_StateCorrection_Load=
-{
-	#Correct the initial state of the form to prevent the .Net maximized form issue
-	$formDatabaseRefreshFromB.WindowState = $InitialFormWindowState
-}
-
-$Form_Cleanup_FormClosed=
-{
-	#Remove all event handlers from the controls
-	try
-	{
-		$buttonRun.remove_Click($buttonRun_Click)
-		$checkboxListOutUserEmailAddr.remove_CheckedChanged($checkboxListOutUserEmailAddr_CheckedChanged)
-		$checkboxBackupNewlyCompleted.remove_CheckedChanged($checkboxBackupNewlyCompleted_CheckedChanged)
-		$labelAdminEmailAddress.remove_Click($labelAdminEmailAddress_Click)
-		$buttonAddFileLocation.remove_Click($buttonAddFileLocation_Click)
-		$txtFile.remove_TextChanged($txtFile_TextChanged)
-		$txtLink.remove_TextChanged($txtLink_TextChanged)
-		$formDatabaseRefreshFromB.remove_Load($formDatabaseRefreshFromB_Load)
-		$formDatabaseRefreshFromB.remove_Load($Form_StateCorrection_Load)
-		$formDatabaseRefreshFromB.remove_FormClosed($Form_Cleanup_FormClosed)
-	}
-	catch { Out-Null <# Prevent PSScriptAnalyzer warning #> }
-}
-#endregion Generated Events
-
-#----------------------------------------------
-#region Generated Form Code
-#----------------------------------------------
-$formDatabaseRefreshFromB.SuspendLayout()
-#
-# formDatabaseRefreshFromB
-#
-$formDatabaseRefreshFromB.Controls.Add($checkboxSetDBRecoveryModel)
-$formDatabaseRefreshFromB.Controls.Add($checkboxTruncateBatchTables)
-$formDatabaseRefreshFromB.Controls.Add($checkboxEnableUsersExceptGue)
-$formDatabaseRefreshFromB.Controls.Add($buttonRun)
-$formDatabaseRefreshFromB.Controls.Add($checkboxListOutUserEmailAddr)
-$formDatabaseRefreshFromB.Controls.Add($checkboxPromoteNewAdmin)
-$formDatabaseRefreshFromB.Controls.Add($checkboxBackupNewlyCompleted)
-$formDatabaseRefreshFromB.Controls.Add($checkboxRunDatabaseSync)
-$formDatabaseRefreshFromB.Controls.Add($checkboxCleanUpPowerBISettin)
-$formDatabaseRefreshFromB.Controls.Add($checkboxEnableSQLChangeTrack)
-$formDatabaseRefreshFromB.Controls.Add($checkboxPutAllBatchJobsOnHol)
-$formDatabaseRefreshFromB.Controls.Add($labelAdminEmailAddress)
-$formDatabaseRefreshFromB.Controls.Add($textboxAdminEmailAddress)
-$formDatabaseRefreshFromB.Controls.Add($buttonAddFileLocation)
-$formDatabaseRefreshFromB.Controls.Add($labelBacBakFileLocation)
-$formDatabaseRefreshFromB.Controls.Add($txtFile)
-$formDatabaseRefreshFromB.Controls.Add($labelSASLink)
-$formDatabaseRefreshFromB.Controls.Add($txtLink)
-$formDatabaseRefreshFromB.AutoScaleDimensions = New-Object System.Drawing.SizeF(10, 20)
-$formDatabaseRefreshFromB.AutoScaleMode = 'Font'
-$formDatabaseRefreshFromB.ClientSize = New-Object System.Drawing.Size(500, 459)
-#region Binary Data
-$Formatter_binaryFomatter = New-Object System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-$System_IO_MemoryStream = New-Object System.IO.MemoryStream (,[byte[]][System.Convert]::FromBase64String('
+	#----------------------------------------------
+	#region Generated Form Code
+	#----------------------------------------------
+	$formDatabaseRefreshFromB.SuspendLayout()
+	#
+	# formDatabaseRefreshFromB
+	#
+	$formDatabaseRefreshFromB.Controls.Add($checkboxSetDBRecoveryModel)
+	$formDatabaseRefreshFromB.Controls.Add($checkboxTruncateBatchTables)
+	$formDatabaseRefreshFromB.Controls.Add($checkboxEnableUsersExceptGue)
+	$formDatabaseRefreshFromB.Controls.Add($buttonRun)
+	$formDatabaseRefreshFromB.Controls.Add($checkboxListOutUserEmailAddr)
+	$formDatabaseRefreshFromB.Controls.Add($checkboxPromoteNewAdmin)
+	$formDatabaseRefreshFromB.Controls.Add($checkboxBackupNewlyCompleted)
+	$formDatabaseRefreshFromB.Controls.Add($checkboxRunDatabaseSync)
+	$formDatabaseRefreshFromB.Controls.Add($checkboxCleanUpPowerBISettin)
+	$formDatabaseRefreshFromB.Controls.Add($checkboxEnableSQLChangeTrack)
+	$formDatabaseRefreshFromB.Controls.Add($checkboxPutAllBatchJobsOnHol)
+	$formDatabaseRefreshFromB.Controls.Add($labelAdminEmailAddress)
+	$formDatabaseRefreshFromB.Controls.Add($textboxAdminEmailAddress)
+	$formDatabaseRefreshFromB.Controls.Add($buttonAddFileLocation)
+	$formDatabaseRefreshFromB.Controls.Add($labelBacBakFileLocation)
+	$formDatabaseRefreshFromB.Controls.Add($txtFile)
+	$formDatabaseRefreshFromB.Controls.Add($labelSASLink)
+	$formDatabaseRefreshFromB.Controls.Add($txtLink)
+	$formDatabaseRefreshFromB.AutoScaleDimensions = New-Object System.Drawing.SizeF(10, 20)
+	$formDatabaseRefreshFromB.AutoScaleMode = 'Font'
+	$formDatabaseRefreshFromB.ClientSize = New-Object System.Drawing.Size(500, 459)
+	#region Binary Data
+	$Formatter_binaryFomatter = New-Object System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+	$System_IO_MemoryStream = New-Object System.IO.MemoryStream (,[byte[]][System.Convert]::FromBase64String('
 AAEAAAD/////AQAAAAAAAAAMAgAAAFFTeXN0ZW0uRHJhd2luZywgVmVyc2lvbj00LjAuMC4wLCBD
 dWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWIwM2Y1ZjdmMTFkNTBhM2EFAQAAABNTeXN0
 ZW0uRHJhd2luZy5JY29uAgAAAAhJY29uRGF0YQhJY29uU2l6ZQcEAhNTeXN0ZW0uRHJhd2luZy5T
@@ -973,217 +1007,220 @@ KIrwqye80WiEzWZD/wEDMHToUAwdOhQjR47EsGHDcMWA/iGvLYkSQBBRxe8K7bjiASYAGG2Cnvai
 utEDgQBEUQQhBFarFRaLBb169UJ6ejquueYapKWlITMzE4MGDUKvPr1DXotqB1SINDVsg/n3YwMT
 AIw2I8syHA4HrrzySvTr1w8pKSkYdPXVuPrqq5GSmooBAwaE2PDBJwKiJIY4ABNlqm5X4f8D+yQ4
 TmrZ8wUAAAAASUVORK5CYIIL'))
-#endregion
-$formDatabaseRefreshFromB.Icon = $Formatter_binaryFomatter.Deserialize($System_IO_MemoryStream)
-$Formatter_binaryFomatter = $null
-$System_IO_MemoryStream = $null
-$formDatabaseRefreshFromB.Margin = '8, 8, 8, 8'
-$formDatabaseRefreshFromB.Name = 'formDatabaseRefreshFromB'
-$formDatabaseRefreshFromB.StartPosition = 'CenterScreen'
-$formDatabaseRefreshFromB.Text = 'Database Refresh from BacBak'
-$formDatabaseRefreshFromB.add_Load($formDatabaseRefreshFromB_Load)
-#
-# checkboxSetDBRecoveryModel
-#
-$checkboxSetDBRecoveryModel.Location = New-Object System.Drawing.Point(287, 313)
-$checkboxSetDBRecoveryModel.Margin = '5, 5, 5, 5'
-$checkboxSetDBRecoveryModel.Name = 'checkboxSetDBRecoveryModel'
-$checkboxSetDBRecoveryModel.Size = New-Object System.Drawing.Size(313, 37)
-$checkboxSetDBRecoveryModel.TabIndex = 24
-$checkboxSetDBRecoveryModel.Text = 'Set DB Recovery Model'
-$checkboxSetDBRecoveryModel.UseVisualStyleBackColor = $True
-#
-# checkboxTruncateBatchTables
-#
-$checkboxTruncateBatchTables.Checked = $True
-$checkboxTruncateBatchTables.CheckState = 'Checked'
-$checkboxTruncateBatchTables.Location = New-Object System.Drawing.Point(287, 219)
-$checkboxTruncateBatchTables.Margin = '5, 5, 5, 5'
-$checkboxTruncateBatchTables.Name = 'checkboxTruncateBatchTables'
-$checkboxTruncateBatchTables.Size = New-Object System.Drawing.Size(307, 37)
-$checkboxTruncateBatchTables.TabIndex = 26
-$checkboxTruncateBatchTables.Text = 'Truncate Batch tables'
-$checkboxTruncateBatchTables.UseVisualStyleBackColor = $True
-#
-# checkboxEnableUsersExceptGue
-#
-$checkboxEnableUsersExceptGue.Checked = $True
-$checkboxEnableUsersExceptGue.CheckState = 'Checked'
-$checkboxEnableUsersExceptGue.Location = New-Object System.Drawing.Point(287, 363)
-$checkboxEnableUsersExceptGue.Margin = '5, 5, 5, 5'
-$checkboxEnableUsersExceptGue.Name = 'checkboxEnableUsersExceptGue'
-$checkboxEnableUsersExceptGue.Size = New-Object System.Drawing.Size(173, 24)
-$checkboxEnableUsersExceptGue.TabIndex = 34
-$checkboxEnableUsersExceptGue.Text = 'Enable Users except Guest'
-$checkboxEnableUsersExceptGue.UseVisualStyleBackColor = $True
-#
-# buttonRun
-#
-$buttonRun.Location = New-Object System.Drawing.Point(26, 415)
-$buttonRun.Margin = '5, 5, 5, 5'
-$buttonRun.Name = 'buttonRun'
-$buttonRun.Size = New-Object System.Drawing.Size(125, 35)
-$buttonRun.TabIndex = 32
-$buttonRun.Text = 'Run'
-$buttonRun.UseVisualStyleBackColor = $True
-$buttonRun.add_Click($buttonRun_Click)
-#
-# checkboxListOutUserEmailAddr
-#
-$checkboxListOutUserEmailAddr.Checked = $True
-$checkboxListOutUserEmailAddr.CheckState = 'Checked'
-$checkboxListOutUserEmailAddr.Location = New-Object System.Drawing.Point(13, 357)
-$checkboxListOutUserEmailAddr.Margin = '5, 5, 5, 5'
-$checkboxListOutUserEmailAddr.Name = 'checkboxListOutUserEmailAddr'
-$checkboxListOutUserEmailAddr.Size = New-Object System.Drawing.Size(307, 37)
-$checkboxListOutUserEmailAddr.TabIndex = 31
-$checkboxListOutUserEmailAddr.Text = 'List out User email addresses'
-$checkboxListOutUserEmailAddr.UseVisualStyleBackColor = $True
-$checkboxListOutUserEmailAddr.add_CheckedChanged($checkboxListOutUserEmailAddr_CheckedChanged)
-#
-# checkboxPromoteNewAdmin
-#
-$checkboxPromoteNewAdmin.Location = New-Object System.Drawing.Point(287, 266)
-$checkboxPromoteNewAdmin.Margin = '5, 5, 5, 5'
-$checkboxPromoteNewAdmin.Name = 'checkboxPromoteNewAdmin'
-$checkboxPromoteNewAdmin.Size = New-Object System.Drawing.Size(280, 37)
-$checkboxPromoteNewAdmin.TabIndex = 30
-$checkboxPromoteNewAdmin.Text = 'Promote New Admin'
-$checkboxPromoteNewAdmin.UseVisualStyleBackColor = $True
-#
-# checkboxBackupNewlyCompleted
-#
-$checkboxBackupNewlyCompleted.Location = New-Object System.Drawing.Point(13, 313)
-$checkboxBackupNewlyCompleted.Margin = '5, 5, 5, 5'
-$checkboxBackupNewlyCompleted.Name = 'checkboxBackupNewlyCompleted'
-$checkboxBackupNewlyCompleted.Size = New-Object System.Drawing.Size(292, 37)
-$checkboxBackupNewlyCompleted.TabIndex = 29
-$checkboxBackupNewlyCompleted.Text = 'Backup Newly Completed AxDB'
-$checkboxBackupNewlyCompleted.UseVisualStyleBackColor = $True
-$checkboxBackupNewlyCompleted.add_CheckedChanged($checkboxBackupNewlyCompleted_CheckedChanged)
-#
-# checkboxRunDatabaseSync
-#
-$checkboxRunDatabaseSync.Checked = $True
-$checkboxRunDatabaseSync.CheckState = 'Checked'
-$checkboxRunDatabaseSync.Location = New-Object System.Drawing.Point(287, 174)
-$checkboxRunDatabaseSync.Margin = '5, 5, 5, 5'
-$checkboxRunDatabaseSync.Name = 'checkboxRunDatabaseSync'
-$checkboxRunDatabaseSync.Size = New-Object System.Drawing.Size(292, 37)
-$checkboxRunDatabaseSync.TabIndex = 28
-$checkboxRunDatabaseSync.Text = 'Run Database Sync'
-$checkboxRunDatabaseSync.UseVisualStyleBackColor = $True
-#
-# checkboxCleanUpPowerBISettin
-#
-$checkboxCleanUpPowerBISettin.Location = New-Object System.Drawing.Point(13, 219)
-$checkboxCleanUpPowerBISettin.Margin = '5, 5, 5, 5'
-$checkboxCleanUpPowerBISettin.Name = 'checkboxCleanUpPowerBISettin'
-$checkboxCleanUpPowerBISettin.Size = New-Object System.Drawing.Size(292, 37)
-$checkboxCleanUpPowerBISettin.TabIndex = 27
-$checkboxCleanUpPowerBISettin.Text = 'Clean up Power BI settings'
-$checkboxCleanUpPowerBISettin.UseVisualStyleBackColor = $True
-#
-# checkboxEnableSQLChangeTrack
-#
-$checkboxEnableSQLChangeTrack.Location = New-Object System.Drawing.Point(13, 266)
-$checkboxEnableSQLChangeTrack.Margin = '5, 5, 5, 5'
-$checkboxEnableSQLChangeTrack.Name = 'checkboxEnableSQLChangeTrack'
-$checkboxEnableSQLChangeTrack.Size = New-Object System.Drawing.Size(307, 37)
-$checkboxEnableSQLChangeTrack.TabIndex = 25
-$checkboxEnableSQLChangeTrack.Text = 'Enable SQL Change Tracking '
-$checkboxEnableSQLChangeTrack.UseVisualStyleBackColor = $True
-#
-# checkboxPutAllBatchJobsOnHol
-#
-$checkboxPutAllBatchJobsOnHol.Location = New-Object System.Drawing.Point(14, 175)
-$checkboxPutAllBatchJobsOnHol.Margin = '5, 5, 5, 5'
-$checkboxPutAllBatchJobsOnHol.Name = 'checkboxPutAllBatchJobsOnHol'
-$checkboxPutAllBatchJobsOnHol.Size = New-Object System.Drawing.Size(369, 37)
-$checkboxPutAllBatchJobsOnHol.TabIndex = 23
-$checkboxPutAllBatchJobsOnHol.Text = 'Put all Batch Jobs on hold'
-$checkboxPutAllBatchJobsOnHol.UseVisualStyleBackColor = $True
-#
-# labelAdminEmailAddress
-#
-$labelAdminEmailAddress.AutoSize = $True
-$labelAdminEmailAddress.Location = New-Object System.Drawing.Point(14, 115)
-$labelAdminEmailAddress.Margin = '5, 0, 5, 0'
-$labelAdminEmailAddress.Name = 'labelAdminEmailAddress'
-$labelAdminEmailAddress.Size = New-Object System.Drawing.Size(170, 20)
-$labelAdminEmailAddress.TabIndex = 22
-$labelAdminEmailAddress.Text = 'Admin Email Address'
-$labelAdminEmailAddress.add_Click($labelAdminEmailAddress_Click)
-#
-# textboxAdminEmailAddress
-#
-$textboxAdminEmailAddress.Location = New-Object System.Drawing.Point(14, 140)
-$textboxAdminEmailAddress.Margin = '5, 5, 5, 5'
-$textboxAdminEmailAddress.Name = 'textboxAdminEmailAddress'
-$textboxAdminEmailAddress.Size = New-Object System.Drawing.Size(306, 26)
-$textboxAdminEmailAddress.TabIndex = 21
-#
-# buttonAddFileLocation
-#
-$buttonAddFileLocation.Location = New-Object System.Drawing.Point(330, 84)
-$buttonAddFileLocation.Margin = '5, 5, 5, 5'
-$buttonAddFileLocation.Name = 'buttonAddFileLocation'
-$buttonAddFileLocation.Size = New-Object System.Drawing.Size(156, 26)
-$buttonAddFileLocation.TabIndex = 19
-$buttonAddFileLocation.Text = 'Add File location'
-$buttonAddFileLocation.UseVisualStyleBackColor = $True
-$buttonAddFileLocation.add_Click($buttonAddFileLocation_Click)
-#
-# labelBacBakFileLocation
-#
-$labelBacBakFileLocation.AutoSize = $True
-$labelBacBakFileLocation.Location = New-Object System.Drawing.Point(14, 64)
-$labelBacBakFileLocation.Margin = '5, 0, 5, 0'
-$labelBacBakFileLocation.Name = 'labelBacBakFileLocation'
-$labelBacBakFileLocation.Size = New-Object System.Drawing.Size(163, 20)
-$labelBacBakFileLocation.TabIndex = 18
-$labelBacBakFileLocation.Text = 'bacbak File Location'
-#
-# txtFile
-#
-$txtFile.Location = New-Object System.Drawing.Point(14, 84)
-$txtFile.Margin = '5, 5, 5, 5'
-$txtFile.Name = 'txtFile'
-$txtFile.Size = New-Object System.Drawing.Size(306, 26)
-$txtFile.TabIndex = 17
-$txtFile.Text = 'test'
-$txtFile.add_TextChanged($txtFile_TextChanged)
-#
-# labelSASLink
-#
-$labelSASLink.AutoSize = $True
-$labelSASLink.Location = New-Object System.Drawing.Point(14, 9)
-$labelSASLink.Margin = '5, 0, 5, 0'
-$labelSASLink.Name = 'labelSASLink'
-$labelSASLink.Size = New-Object System.Drawing.Size(78, 20)
-$labelSASLink.TabIndex = 16
-$labelSASLink.Text = 'SAS Link'
-#
-# txtLink
-#
-$txtLink.Location = New-Object System.Drawing.Point(14, 29)
-$txtLink.Margin = '5, 5, 5, 5'
-$txtLink.Name = 'txtLink'
-$txtLink.Size = New-Object System.Drawing.Size(306, 26)
-$txtLink.TabIndex = 15
-$txtLink.add_TextChanged($txtLink_TextChanged)
-$formDatabaseRefreshFromB.ResumeLayout()
-#endregion Generated Form Code
+	#endregion
+	$formDatabaseRefreshFromB.Icon = $Formatter_binaryFomatter.Deserialize($System_IO_MemoryStream)
+	$Formatter_binaryFomatter = $null
+	$System_IO_MemoryStream = $null
+	$formDatabaseRefreshFromB.Margin = '8, 8, 8, 8'
+	$formDatabaseRefreshFromB.Name = 'formDatabaseRefreshFromB'
+	$formDatabaseRefreshFromB.StartPosition = 'CenterScreen'
+	$formDatabaseRefreshFromB.Text = 'Database Refresh from BacBak'
+	$formDatabaseRefreshFromB.add_Load($formDatabaseRefreshFromB_Load)
+	#
+	# checkboxSetDBRecoveryModel
+	#
+	$checkboxSetDBRecoveryModel.Location = New-Object System.Drawing.Point(287, 313)
+	$checkboxSetDBRecoveryModel.Margin = '5, 5, 5, 5'
+	$checkboxSetDBRecoveryModel.Name = 'checkboxSetDBRecoveryModel'
+	$checkboxSetDBRecoveryModel.Size = New-Object System.Drawing.Size(313, 37)
+	$checkboxSetDBRecoveryModel.TabIndex = 24
+	$checkboxSetDBRecoveryModel.Text = 'Set DB Recovery Model'
+	$checkboxSetDBRecoveryModel.UseVisualStyleBackColor = $True
+	#
+	# checkboxTruncateBatchTables
+	#
+	$checkboxTruncateBatchTables.Checked = $True
+	$checkboxTruncateBatchTables.CheckState = 'Checked'
+	$checkboxTruncateBatchTables.Location = New-Object System.Drawing.Point(287, 219)
+	$checkboxTruncateBatchTables.Margin = '5, 5, 5, 5'
+	$checkboxTruncateBatchTables.Name = 'checkboxTruncateBatchTables'
+	$checkboxTruncateBatchTables.Size = New-Object System.Drawing.Size(307, 37)
+	$checkboxTruncateBatchTables.TabIndex = 26
+	$checkboxTruncateBatchTables.Text = 'Truncate Batch tables'
+	$checkboxTruncateBatchTables.UseVisualStyleBackColor = $True
+	#
+	# checkboxEnableUsersExceptGue
+	#
+	$checkboxEnableUsersExceptGue.Checked = $True
+	$checkboxEnableUsersExceptGue.CheckState = 'Checked'
+	$checkboxEnableUsersExceptGue.Location = New-Object System.Drawing.Point(287, 363)
+	$checkboxEnableUsersExceptGue.Margin = '5, 5, 5, 5'
+	$checkboxEnableUsersExceptGue.Name = 'checkboxEnableUsersExceptGue'
+	$checkboxEnableUsersExceptGue.Size = New-Object System.Drawing.Size(173, 24)
+	$checkboxEnableUsersExceptGue.TabIndex = 34
+	$checkboxEnableUsersExceptGue.Text = 'Enable Users except Guest'
+	$checkboxEnableUsersExceptGue.UseVisualStyleBackColor = $True
+	#
+	# buttonRun
+	#
+	$buttonRun.Location = New-Object System.Drawing.Point(26, 415)
+	$buttonRun.Margin = '5, 5, 5, 5'
+	$buttonRun.Name = 'buttonRun'
+	$buttonRun.Size = New-Object System.Drawing.Size(125, 35)
+	$buttonRun.TabIndex = 32
+	$buttonRun.Text = 'Run'
+	$buttonRun.UseVisualStyleBackColor = $True
+	$buttonRun.add_Click($buttonRun_Click)
+	#
+	# checkboxListOutUserEmailAddr
+	#
+	$checkboxListOutUserEmailAddr.Checked = $True
+	$checkboxListOutUserEmailAddr.CheckState = 'Checked'
+	$checkboxListOutUserEmailAddr.Location = New-Object System.Drawing.Point(13, 357)
+	$checkboxListOutUserEmailAddr.Margin = '5, 5, 5, 5'
+	$checkboxListOutUserEmailAddr.Name = 'checkboxListOutUserEmailAddr'
+	$checkboxListOutUserEmailAddr.Size = New-Object System.Drawing.Size(307, 37)
+	$checkboxListOutUserEmailAddr.TabIndex = 31
+	$checkboxListOutUserEmailAddr.Text = 'List out User email addresses'
+	$checkboxListOutUserEmailAddr.UseVisualStyleBackColor = $True
+	$checkboxListOutUserEmailAddr.add_CheckedChanged($checkboxListOutUserEmailAddr_CheckedChanged)
+	#
+	# checkboxPromoteNewAdmin
+	#
+	$checkboxPromoteNewAdmin.Location = New-Object System.Drawing.Point(287, 266)
+	$checkboxPromoteNewAdmin.Margin = '5, 5, 5, 5'
+	$checkboxPromoteNewAdmin.Name = 'checkboxPromoteNewAdmin'
+	$checkboxPromoteNewAdmin.Size = New-Object System.Drawing.Size(280, 37)
+	$checkboxPromoteNewAdmin.TabIndex = 30
+	$checkboxPromoteNewAdmin.Text = 'Promote New Admin'
+	$checkboxPromoteNewAdmin.UseVisualStyleBackColor = $True
+	#
+	# checkboxBackupNewlyCompleted
+	#
+	$checkboxBackupNewlyCompleted.Location = New-Object System.Drawing.Point(13, 313)
+	$checkboxBackupNewlyCompleted.Margin = '5, 5, 5, 5'
+	$checkboxBackupNewlyCompleted.Name = 'checkboxBackupNewlyCompleted'
+	$checkboxBackupNewlyCompleted.Size = New-Object System.Drawing.Size(292, 37)
+	$checkboxBackupNewlyCompleted.TabIndex = 29
+	$checkboxBackupNewlyCompleted.Text = 'Backup Newly Completed AxDB'
+	$checkboxBackupNewlyCompleted.UseVisualStyleBackColor = $True
+	$checkboxBackupNewlyCompleted.add_CheckedChanged($checkboxBackupNewlyCompleted_CheckedChanged)
+	#
+	# checkboxRunDatabaseSync
+	#
+	$checkboxRunDatabaseSync.Checked = $True
+	$checkboxRunDatabaseSync.CheckState = 'Checked'
+	$checkboxRunDatabaseSync.Location = New-Object System.Drawing.Point(287, 174)
+	$checkboxRunDatabaseSync.Margin = '5, 5, 5, 5'
+	$checkboxRunDatabaseSync.Name = 'checkboxRunDatabaseSync'
+	$checkboxRunDatabaseSync.Size = New-Object System.Drawing.Size(292, 37)
+	$checkboxRunDatabaseSync.TabIndex = 28
+	$checkboxRunDatabaseSync.Text = 'Run Database Sync'
+	$checkboxRunDatabaseSync.UseVisualStyleBackColor = $True
+	#
+	# checkboxCleanUpPowerBISettin
+	#
+	$checkboxCleanUpPowerBISettin.Location = New-Object System.Drawing.Point(13, 219)
+	$checkboxCleanUpPowerBISettin.Margin = '5, 5, 5, 5'
+	$checkboxCleanUpPowerBISettin.Name = 'checkboxCleanUpPowerBISettin'
+	$checkboxCleanUpPowerBISettin.Size = New-Object System.Drawing.Size(292, 37)
+	$checkboxCleanUpPowerBISettin.TabIndex = 27
+	$checkboxCleanUpPowerBISettin.Text = 'Clean up Power BI settings'
+	$checkboxCleanUpPowerBISettin.UseVisualStyleBackColor = $True
+	#
+	# checkboxEnableSQLChangeTrack
+	#
+	$checkboxEnableSQLChangeTrack.Location = New-Object System.Drawing.Point(13, 266)
+	$checkboxEnableSQLChangeTrack.Margin = '5, 5, 5, 5'
+	$checkboxEnableSQLChangeTrack.Name = 'checkboxEnableSQLChangeTrack'
+	$checkboxEnableSQLChangeTrack.Size = New-Object System.Drawing.Size(307, 37)
+	$checkboxEnableSQLChangeTrack.TabIndex = 25
+	$checkboxEnableSQLChangeTrack.Text = 'Enable SQL Change Tracking '
+	$checkboxEnableSQLChangeTrack.UseVisualStyleBackColor = $True
+	#
+	# checkboxPutAllBatchJobsOnHol
+	#
+	$checkboxPutAllBatchJobsOnHol.Location = New-Object System.Drawing.Point(14, 175)
+	$checkboxPutAllBatchJobsOnHol.Margin = '5, 5, 5, 5'
+	$checkboxPutAllBatchJobsOnHol.Name = 'checkboxPutAllBatchJobsOnHol'
+	$checkboxPutAllBatchJobsOnHol.Size = New-Object System.Drawing.Size(369, 37)
+	$checkboxPutAllBatchJobsOnHol.TabIndex = 23
+	$checkboxPutAllBatchJobsOnHol.Text = 'Put all Batch Jobs on hold'
+	$checkboxPutAllBatchJobsOnHol.UseVisualStyleBackColor = $True
+	#
+	# labelAdminEmailAddress
+	#
+	$labelAdminEmailAddress.AutoSize = $True
+	$labelAdminEmailAddress.Location = New-Object System.Drawing.Point(14, 115)
+	$labelAdminEmailAddress.Margin = '5, 0, 5, 0'
+	$labelAdminEmailAddress.Name = 'labelAdminEmailAddress'
+	$labelAdminEmailAddress.Size = New-Object System.Drawing.Size(170, 20)
+	$labelAdminEmailAddress.TabIndex = 22
+	$labelAdminEmailAddress.Text = 'Admin Email Address'
+	$labelAdminEmailAddress.add_Click($labelAdminEmailAddress_Click)
+	#
+	# textboxAdminEmailAddress
+	#
+	$textboxAdminEmailAddress.Location = New-Object System.Drawing.Point(14, 140)
+	$textboxAdminEmailAddress.Margin = '5, 5, 5, 5'
+	$textboxAdminEmailAddress.Name = 'textboxAdminEmailAddress'
+	$textboxAdminEmailAddress.Size = New-Object System.Drawing.Size(306, 26)
+	$textboxAdminEmailAddress.TabIndex = 21
+	#
+	# buttonAddFileLocation
+	#
+	$buttonAddFileLocation.Location = New-Object System.Drawing.Point(330, 84)
+	$buttonAddFileLocation.Margin = '5, 5, 5, 5'
+	$buttonAddFileLocation.Name = 'buttonAddFileLocation'
+	$buttonAddFileLocation.Size = New-Object System.Drawing.Size(156, 26)
+	$buttonAddFileLocation.TabIndex = 19
+	$buttonAddFileLocation.Text = 'Add File location'
+	$buttonAddFileLocation.UseVisualStyleBackColor = $True
+	$buttonAddFileLocation.add_Click($buttonAddFileLocation_Click)
+	#
+	# labelBacBakFileLocation
+	#
+	$labelBacBakFileLocation.AutoSize = $True
+	$labelBacBakFileLocation.Location = New-Object System.Drawing.Point(14, 64)
+	$labelBacBakFileLocation.Margin = '5, 0, 5, 0'
+	$labelBacBakFileLocation.Name = 'labelBacBakFileLocation'
+	$labelBacBakFileLocation.Size = New-Object System.Drawing.Size(163, 20)
+	$labelBacBakFileLocation.TabIndex = 18
+	$labelBacBakFileLocation.Text = 'bacbak File Location'
+	#
+	# txtFile
+	#
+	$txtFile.Location = New-Object System.Drawing.Point(14, 84)
+	$txtFile.Margin = '5, 5, 5, 5'
+	$txtFile.Name = 'txtFile'
+	$txtFile.Size = New-Object System.Drawing.Size(306, 26)
+	$txtFile.TabIndex = 17
+	$txtFile.Text = 'test'
+	$txtFile.add_TextChanged($txtFile_TextChanged)
+	#
+	# labelSASLink
+	#
+	$labelSASLink.AutoSize = $True
+	$labelSASLink.Location = New-Object System.Drawing.Point(14, 9)
+	$labelSASLink.Margin = '5, 0, 5, 0'
+	$labelSASLink.Name = 'labelSASLink'
+	$labelSASLink.Size = New-Object System.Drawing.Size(78, 20)
+	$labelSASLink.TabIndex = 16
+	$labelSASLink.Text = 'SAS Link'
+	#
+	# txtLink
+	#
+	$txtLink.Location = New-Object System.Drawing.Point(14, 29)
+	$txtLink.Margin = '5, 5, 5, 5'
+	$txtLink.Name = 'txtLink'
+	$txtLink.Size = New-Object System.Drawing.Size(306, 26)
+	$txtLink.TabIndex = 15
+	$txtLink.add_TextChanged($txtLink_TextChanged)
+	$formDatabaseRefreshFromB.ResumeLayout()
+	#endregion Generated Form Code
 
-#----------------------------------------------
+	#----------------------------------------------
 
-#Save the initial state of the form
-$InitialFormWindowState = $formDatabaseRefreshFromB.WindowState
-#Init the OnLoad event to correct the initial state of the form
-$formDatabaseRefreshFromB.add_Load($Form_StateCorrection_Load)
-#Clean up the control events
-$formDatabaseRefreshFromB.add_FormClosed($Form_Cleanup_FormClosed)
-#Show the Form
-return $formDatabaseRefreshFromB.ShowDialog()
+	#Save the initial state of the form
+	$InitialFormWindowState = $formDatabaseRefreshFromB.WindowState
+	#Init the OnLoad event to correct the initial state of the form
+	$formDatabaseRefreshFromB.add_Load($Form_StateCorrection_Load)
+	#Clean up the control events
+	$formDatabaseRefreshFromB.add_FormClosed($Form_Cleanup_FormClosed)
+	#Show the Form
+	return $formDatabaseRefreshFromB.ShowDialog()
 
+} #End Function
 
+#Call the form
+Show-test_psf | Out-Null
