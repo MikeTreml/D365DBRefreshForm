@@ -490,8 +490,11 @@ where NETWORKALIAS not like '%@contosoax7.onmicrosoft.com'
 	
 	
 	$buttonRun_Click = {
-		$ErrorActionPreference = "Stop"
+		$ErrorActionPreference = 'Inquire'
 		[string]$dt = get-date -Format "yyyyMMdd" #Generate the datetime stamp to make DB files unique
+		$oldFile = Get-Item –path G:\MSSQL_DATA\AxDB*Primary.mdf
+		$renameOldFile = $('G:\MSSQL_DATA\AxDB_PrimaryOld_') + $dt + $('.mdf')
+		
 		Install-D365foDbatools 
 		$NewDB = $('AxDB_') + $dt #Database name. No spaces in the name!
 		
@@ -554,7 +557,8 @@ where NETWORKALIAS not like '%@contosoax7.onmicrosoft.com'
 		
 		#move the file
 		Stop-Service MSSQLSERVER, SQLSERVERAGENT -Force -Verbose
-		#AxDB_Primary Move the file
+		Move-Item –Path $oldFile -Destination $renameOldFile
+		
 		Start-Service MSSQLSERVER, SQLSERVERAGENT -Verbose
 		
 		
