@@ -493,12 +493,13 @@ where NETWORKALIAS not like '%@contosoax7.onmicrosoft.com'
 		$ErrorActionPreference = "Stop"
 		[string]$dt = get-date -Format "yyyyMMdd" #Generate the datetime stamp to make DB files unique
 		Install-D365foDbatools 
+		$NewDB = $('AxDB_') + $dt #Database name. No spaces in the name!
 		
 		if ($txtLink.Text -ne '')
 		{ 
 			#If you are going to download BACPAC file from the LCS Asset Library, please use in this section
 			$BacpacSasLinkFromLCS = $txtLink.Text
-			$NewDB = $('AxDB_') + $dt #Database name. No spaces in the name!
+			
 			$TempFolder = 'd:\temp\' # 'c:\temp\'  #$env:TEMP
 			#region Download bacpac from LCS
 			if ($BacpacSasLinkFromLCS.StartsWith('http'))
@@ -515,7 +516,7 @@ where NETWORKALIAS not like '%@contosoax7.onmicrosoft.com'
 				$NewDB = $($f.BaseName).Replace(' ', '_')
 			}
 		}
-		if ($txtFile.Text -ne '')
+		elseif ($txtFile.Text -ne '')
 		{
 			$f = Get-ChildItem $txtFile.Text -Verbose #Please note that this file should be accessible from SQL server service account
 			$NewDB = $($f.BaseName).Replace(' ', '_') + $dt; #'AxDB_CTS1005BU2'  #Temporary Database name for new AxDB. Use a file name or any meaningful name.
