@@ -492,7 +492,7 @@ where NETWORKALIAS not like '%@contosoax7.onmicrosoft.com'
 	$buttonRun_Click = {
 		$ErrorActionPreference = 'Inquire'
 		[string]$dt = get-date -Format "yyyyMMdd" #Generate the datetime stamp to make DB files unique
-		$oldFile = Get-Item –path G:\MSSQL_DATA\AxDB*Primary.mdf
+		$oldFile = Get-Item G:\MSSQL_DATA\AxDB*Primary.mdf
 		$renameOldFile = $('G:\MSSQL_DATA\AxDB_PrimaryOld_') + $dt + $('.mdf')
 		
 		Install-D365foDbatools 
