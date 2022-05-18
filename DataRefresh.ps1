@@ -496,7 +496,7 @@ where NETWORKALIAS not like '%@contosoax7.onmicrosoft.com'
 		$renameOldFile = $('G:\MSSQL_DATA\AxDB_PrimaryOld_') + $dt + $('.mdf')
 		
 		Install-D365foDbatools 
-		$NewDB = $('AxDB_') + $dt #Database name. No spaces in the name!
+		$NewDB = $('AxDB_Primary') #Database name. No spaces in the name!
 		
 		if ($txtLink.Text -ne '')
 		{ 
