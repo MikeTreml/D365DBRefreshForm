@@ -496,7 +496,7 @@ where NETWORKALIAS not like '%@contosoax7.onmicrosoft.com'
 		$renameOldFile = $('G:\MSSQL_DATA\AxDB_PrimaryOld_') + $dt + $('.mdf')
 		
 		Install-D365foDbatools 
-		$NewDB = $('AxDB_Primary') #Database name. No spaces in the name!
+		$NewDB = 'AxDB' #Database name. No spaces in the name!
 		
 		if ($txtLink.Text -ne '')
 		{ 
@@ -516,15 +516,15 @@ where NETWORKALIAS not like '%@contosoax7.onmicrosoft.com'
 				Invoke-D365AzCopyTransfer -SourceUri $BacpacSasLinkFromLCS -DestinationUri $TempFileName -ShowOriginalProgress -Verbose
 				
 				$f = Get-ChildItem $TempFileName -Verbose
-				$NewDB = $($f.BaseName).Replace(' ', '_')
+				$NewDB = $($f.BaseName).Replace(' ', '_') + $('_') +$dt
 			}
 		}
 		elseif ($txtFile.Text -ne '')
 		{
 			$f = Get-ChildItem $txtFile.Text -Verbose #Please note that this file should be accessible from SQL server service account
-			$NewDB = $($f.BaseName).Replace(' ', '_') + $dt; #'AxDB_CTS1005BU2'  #Temporary Database name for new AxDB. Use a file name or any meaningful name.
+			$NewDB = $($f.BaseName).Replace(' ', '_') + $('_') + $dt; #'AxDB_CTS1005BU2'  #Temporary Database name for new AxDB. Use a file name or any meaningful name.
 		}
-	
+		
 		## Stop D365FO instance.
 		Write-Host "Stopping D365FO environment" -ForegroundColor Yellow
 		Stop-D365Environment -All -Kill -Verbose
@@ -538,6 +538,7 @@ where NETWORKALIAS not like '%@contosoax7.onmicrosoft.com'
 			throw "Database file $($f.FullName) could not be found by SQL Server. Try to move it to C:\Temp or D:\Temp"
 		}
 		$f | Unblock-File
+		
 		Write-Host "Import BACPAC file to the SQL database" $NewDB -ForegroundColor Yellow
 		Import-D365Bacpac -ImportModeTier1 -BacpacFile $f.FullName -NewDatabaseName $NewDB -ShowOriginalProgress -Verbose
 		
