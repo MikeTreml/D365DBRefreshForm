@@ -1,37 +1,36 @@
-
-#----------------------------------------------
-# Generated Form Function
-#----------------------------------------------
-function Show-dbRefreshv2_psf {
-
+function Show-dbRefreshv2_psf
+{
+	
 	#----------------------------------------------
 	#region Import the Assemblies
 	#----------------------------------------------
+	
 	[void][reflection.assembly]::Load('System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a')
 	[void][reflection.assembly]::Load('System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089')
 	#endregion Import Assemblies
-
+	
 	#----------------------------------------------
 	#region Define SAPIEN Types
 	#----------------------------------------------
-	try{
+	try
+	{
 		[ProgressBarOverlay] | Out-Null
 	}
 	catch
 	{
-        if ($PSVersionTable.PSVersion.Major -ge 7)
+		if ($PSVersionTable.PSVersion.Major -ge 7)
 		{
 			$Assemblies = 'System.Windows.Forms', 'System.Drawing', 'System.Drawing.Primitives', 'System.ComponentModel.Primitives', 'System.Drawing.Common', 'System.Runtime'
-            if ($PSVersionTable.PSVersion.Minor -ge 1)
+			if ($PSVersionTable.PSVersion.Minor -ge 1)
 			{
 				$Assemblies += 'System.Windows.Forms.Primitives'
 			}
 		}
 		else
 		{
-			$Assemblies = 'System.Windows.Forms', 'System.Drawing'  
-
-        }
+			$Assemblies = 'System.Windows.Forms', 'System.Drawing'
+			
+		}
 		Add-Type -ReferencedAssemblies $Assemblies -TypeDefinition @"
 		using System;
 		using System.Windows.Forms;
@@ -84,7 +83,7 @@ function Show-dbRefreshv2_psf {
 "@ -IgnoreWarnings | Out-Null
 	}
 	#endregion Define SAPIEN Types
-
+	
 	#----------------------------------------------
 	#region Generated Form Objects
 	#----------------------------------------------
@@ -112,12 +111,12 @@ function Show-dbRefreshv2_psf {
 	$txtLink = New-Object 'System.Windows.Forms.TextBox'
 	$InitialFormWindowState = New-Object 'System.Windows.Forms.FormWindowState'
 	#endregion Generated Form Objects
-
+	
 	#----------------------------------------------
 	# User Generated Script
 	#----------------------------------------------
 	
-	$formDatabaseRefreshFromB_Load={
+	$formDatabaseRefreshFromB_Load = {
 		#TODO: Initialize Form Controls here
 		Set-ControlTheme $formDatabaseRefreshFromB -Theme Dark
 	}
@@ -233,7 +232,6 @@ namespace SAPIENTypes
         Color BackColor;
         Color BorderColor;
 		Color SelectBackColor;
-
         public SAPIENColorTable(Color containerColor, Color backColor, Color borderColor, Color selectBackColor)
         {
             ContainerBackColor = containerColor;
@@ -432,20 +430,13 @@ namespace SAPIENTypes
 		$txtLink.Text = ''
 	}
 	
-	
-	
-	$buttonAddFileLocation_Click={
+	$buttonAddFileLocation_Click = {
 		Add-Type -AssemblyName System.Windows.Forms
 		$FileBrowser = New-Object System.Windows.Forms.OpenFileDialog -Property @{ InitialDirectory = [Environment]::GetFolderPath('Desktop') }
 		$FileBrowser.ShowDialog()
 		$txtFile.Text = $FileBrowser.FileName
 	}
 	
-	
-	$labelAdminEmailAddress_Click={
-		#TODO: Place custom script here
-		
-	}
 	function Install-D365foDbatools
 	{
 		#region Installing d365fo.tools and dbatools <--
@@ -478,7 +469,6 @@ namespace SAPIENTypes
 		$sqlprogressbaroverlay.Maximum = (Get-Item $Ofile).length/1MB
 		$sqlprogressbaroverlay.Step = 1
 		$sqlprogressbaroverlay.Value = 0
-		
 		while ($sqlprogressbaroverlay.Value -lt $sqlprogressbaroverlay.Maximum)
 		{
 			$sqlprogressbaroverlay.Value = (Get-Item $f).length/1MB
@@ -495,32 +485,38 @@ namespace SAPIENTypes
 		if ($checkboxListOutUserEmailAddr.Checked) { $mainprogressbaroverlay.Maximum += 1 }
 		if ($checkboxPromoteNewAdmin.Checked) { $mainprogressbaroverlay.Maximum += 1 }
 		if ($checkboxPutAllBatchJobsOnHol.Checked) { $mainprogressbaroverlay.Maximum += 1 }
-		if ($checkboxRunDatabaseSync.Checked) { $mainprogressbaroverlay.Maximum += 1  }
+		if ($checkboxRunDatabaseSync.Checked) { $mainprogressbaroverlay.Maximum += 1 }
 		if ($checkboxSetDBRecoveryModel.Checked) { $mainprogressbaroverlay.Maximum += 1 }
 		if ($checkboxTruncateBatchTables.Checked) { $mainprogressbaroverlay.Maximum += 1 }
 		
 	}
 	
 	$buttonRun_Click = {
-		$ErrorActionPreference = "Stop"
+		$ErrorActionPreference = 'Inquire'
+		$mainprogressbaroverlay.Visible = $True
+
 		[string]$dt = get-date -Format "yyyyMMdd" #Generate the datetime stamp to make DB files unique
-		Install-D365foDbatools | Set-Content -Path $TmpFile
+		$oldFile = Get-Item G:\MSSQL_DATA\AxDB*Primary.mdf
+		$renameOldFile = $('G:\MSSQL_DATA\AxDB_PrimaryOld_') + $dt + $('.mdf')
+		
+		Install-D365foDbatools
+		$NewDB = 'AxDB' #Database name. No spaces in the name!
 		$mainprogressbaroverlay.Maximum = 12
 		$mainprogressbaroverlay.Step = 1
 		$mainprogressbaroverlay.Value = 0
 		count-checkbox
 		
 		if ($txtLink.Text -ne '')
-		{ 
+		{
 			#If you are going to download BACPAC file from the LCS Asset Library, please use in this section
 			$BacpacSasLinkFromLCS = $txtLink.Text
-			$NewDB = $('AxDB_') + $dt #Database name. No spaces in the name!
+			
 			$TempFolder = 'd:\temp\' # 'c:\temp\'  #$env:TEMP
 			#region Download bacpac from LCS
 			if ($BacpacSasLinkFromLCS.StartsWith('http'))
 			{
 				Write-Host "Downloading BACPAC from the LCS Asset library" -ForegroundColor Yellow
-				New-Item -Path $TempFolder -ItemType Directory -Force 
+				New-Item -Path $TempFolder -ItemType Directory -Force
 				$TempFileName = Join-path $TempFolder -ChildPath "$NewDB.bacpac" -Verbose
 				
 				Write-Host "..Downloading file" $TempFileName -ForegroundColor Yellow
@@ -528,13 +524,13 @@ namespace SAPIENTypes
 				Invoke-D365AzCopyTransfer -SourceUri $BacpacSasLinkFromLCS -DestinationUri $TempFileName -ShowOriginalProgress -Verbose
 				
 				$f = Get-ChildItem $TempFileName -Verbose
-				$NewDB = $($f.BaseName).Replace(' ', '_')
+				$NewDB = $($f.BaseName).Replace(' ', '_') + $('_') + $dt
 			}
 		}
-		if ($txtFile.Text -ne '')
+		elseif ($txtFile.Text -ne '')
 		{
 			$f = Get-ChildItem $txtFile.Text -Verbose #Please note that this file should be accessible from SQL server service account
-			$NewDB = $($f.BaseName).Replace(' ', '_') + $dt; #'AxDB_CTS1005BU2'  #Temporary Database name for new AxDB. Use a file name or any meaningful name.
+			$NewDB = $($f.BaseName).Replace(' ', '_') + $('_') + $dt; #'AxDB_CTS1005BU2'  #Temporary Database name for new AxDB. Use a file name or any meaningful name.
 		}
 		$mainprogressbaroverlay.PerformStep()
 		
@@ -554,12 +550,14 @@ namespace SAPIENTypes
 		}
 		$mainprogressbaroverlay.PerformStep()
 		$f | Unblock-File
+		
 		Write-Host "Import BACPAC file to the SQL database" $NewDB -ForegroundColor Yellow
-		$Ofile = 'C:\Users\MichaelTreml\Downloads\SPS22Setup_5.8.205_042622_x64.exe'
+		$Ofile = get-item 'G:\MSSQL_DATA\Axdb*Prima'
+		$sqlprogressbaroverlay.Visible = $True
 		$sqlprogressbaroverlay.Maximum = (Get-Item $Ofile).length/1MB
 		$sqlprogressbaroverlay.Value = 0
 		
-	
+		
 		#TODO: Place custom script here
 		while ($sqlprogressbaroverlay.Value -lt $sqlprogressbaroverlay.Maximum)
 		{
@@ -567,7 +565,7 @@ namespace SAPIENTypes
 			$sqlprogressbaroverlay.TextOverlay = [String][int]$($($sqlprogressbaroverlay.Value * 100) /$sqlprogressbaroverlay.Maximum) + $('%')
 			start-sleep-seconds 10
 		}
-		Start-Job -ScriptBlock{ run-sqlbar }
+		Start-Job -ScriptBlock { run-sqlbar }
 		
 		$mainprogressbaroverlay.PerformStep()
 		Import-D365Bacpac -ImportModeTier1 -BacpacFile $f.FullName -NewDatabaseName $NewDB -ShowOriginalProgress -Verbose
@@ -580,7 +578,6 @@ namespace SAPIENTypes
 		Switch-D365ActiveDatabase -NewDatabaseName $NewDB -Verbose
 		$mainprogressbaroverlay.PerformStep()
 		
-		
 		## Start D365FO instance
 		Write-Host "Starting D365FO environment. Then open UI and refresh Data Entities." -ForegroundColor Yellow
 		Start-D365Environment -Verbose
@@ -588,9 +585,10 @@ namespace SAPIENTypes
 		#move the file
 		Stop-Service MSSQLSERVER, SQLSERVERAGENT -Force -Verbose
 		#AxDB_Primary Move the file
+		
 		Start-Service MSSQLSERVER, SQLSERVERAGENT -Verbose
 		$mainprogressbaroverlay.PerformStep()
-	
+		
 		if ($checkboxBackupNewlyCompleted.Checked)
 		{
 			## Backup AxDB database
@@ -687,248 +685,24 @@ namespace SAPIENTypes
 			$mainprogressbaroverlay.PerformStep()
 		}
 		
-	}
-	
-	$checkboxListOutUserEmailAddr_CheckedChanged={
-		#TODO: Place custom script here
-		
-	}
-	
-	$checkboxBackupNewlyCompleted_CheckedChanged={
-		#TODO: Place custom script here
 		
 	}
 	
 	
 	
-	
-	$progressbar1_Click={
-		#TODO: Place custom script here
-		
-	}
-	
-	#region Control Helper Functions
-	function Update-DataGridView
-	{
-		<#
-		.SYNOPSIS
-			This functions helps you load items into a DataGridView.
-	
-		.DESCRIPTION
-			Use this function to dynamically load items into the DataGridView control.
-	
-		.PARAMETER  DataGridView
-			The DataGridView control you want to add items to.
-	
-		.PARAMETER  Item
-			The object or objects you wish to load into the DataGridView's items collection.
-		
-		.PARAMETER  DataMember
-			Sets the name of the list or table in the data source for which the DataGridView is displaying data.
-	
-		.PARAMETER AutoSizeColumns
-		    Resizes DataGridView control's columns after loading the items.
-		#>
-		Param (
-			[ValidateNotNull()]
-			[Parameter(Mandatory=$true)]
-			[System.Windows.Forms.DataGridView]$DataGridView,
-			[ValidateNotNull()]
-			[Parameter(Mandatory=$true)]
-			$Item,
-		    [Parameter(Mandatory=$false)]
-			[string]$DataMember,
-			[System.Windows.Forms.DataGridViewAutoSizeColumnsMode]$AutoSizeColumns = 'None'
-		)
-		$DataGridView.SuspendLayout()
-		$DataGridView.DataMember = $DataMember
-		
-		if ($null -eq $Item)
-		{
-			$DataGridView.DataSource = $null
-		}
-		elseif ($Item -is [System.Data.DataSet] -and $Item.Tables.Count -gt 0)
-		{
-			$DataGridView.DataSource = $Item.Tables[0]
-		}
-		elseif ($Item -is [System.ComponentModel.IListSource]`
-		-or $Item -is [System.ComponentModel.IBindingList] -or $Item -is [System.ComponentModel.IBindingListView] )
-		{
-			$DataGridView.DataSource = $Item
-		}
-		else
-		{
-			$array = New-Object System.Collections.ArrayList
-			
-			if ($Item -is [System.Collections.IList])
-			{
-				$array.AddRange($Item)
-			}
-			else
-			{
-				$array.Add($Item)
-			}
-			$DataGridView.DataSource = $array
-		}
-		
-		if ($AutoSizeColumns -ne 'None')
-		{
-			$DataGridView.AutoResizeColumns($AutoSizeColumns)
-		}
-		
-		$DataGridView.ResumeLayout()
-	}
-	
-	
-	
-	function ConvertTo-DataTable
-	{
-		<#
-			.SYNOPSIS
-				Converts objects into a DataTable.
-		
-			.DESCRIPTION
-				Converts objects into a DataTable, which are used for DataBinding.
-		
-			.PARAMETER  InputObject
-				The input to convert into a DataTable.
-		
-			.PARAMETER  Table
-				The DataTable you wish to load the input into.
-		
-			.PARAMETER RetainColumns
-				This switch tells the function to keep the DataTable's existing columns.
-			
-			.PARAMETER FilterCIMProperties
-				This switch removes CIM properties that start with an underline.
-		
-			.EXAMPLE
-				$DataTable = ConvertTo-DataTable -InputObject (Get-Process)
-		#>
-		[OutputType([System.Data.DataTable])]
-		param(
-		$InputObject, 
-		[ValidateNotNull()]
-		[System.Data.DataTable]$Table,
-		[switch]$RetainColumns,
-		[switch]$FilterCIMProperties)
-		
-		if($null -eq $Table)
-		{
-			$Table = New-Object System.Data.DataTable
-		}
-		
-		if ($null -eq $InputObject)
-		{
-			$Table.Clear()
-			return @( ,$Table)
-		}
-		
-		if ($InputObject -is [System.Data.DataTable])
-		{
-			$Table = $InputObject
-		}
-		elseif ($InputObject -is [System.Data.DataSet] -and $InputObject.Tables.Count -gt 0)
-		{
-			$Table = $InputObject.Tables[0]
-		}
-		else
-		{
-			if (-not $RetainColumns -or $Table.Columns.Count -eq 0)
-			{
-				#Clear out the Table Contents
-				$Table.Clear()
-				
-				if ($null -eq $InputObject) { return } #Empty Data
-				
-				$object = $null
-				#find the first non null value
-				foreach ($item in $InputObject)
-				{
-					if ($null -ne $item)
-					{
-						$object = $item
-						break
-					}
-				}
-				
-				if ($null -eq $object) { return } #All null then empty
-				
-				#Get all the properties in order to create the columns
-				foreach ($prop in $object.PSObject.Get_Properties())
-				{
-					if (-not $FilterCIMProperties -or -not $prop.Name.StartsWith('__')) #filter out CIM properties
-					{
-						#Get the type from the Definition string
-						$type = $null
-						
-						if ($null -ne $prop.Value)
-						{
-							try { $type = $prop.Value.GetType() }
-							catch { Out-Null }
-						}
-						
-						if ($null -ne $type) # -and [System.Type]::GetTypeCode($type) -ne 'Object')
-						{
-							[void]$table.Columns.Add($prop.Name, $type)
-						}
-						else #Type info not found
-						{
-							[void]$table.Columns.Add($prop.Name)
-						}
-					}
-				}
-				
-				if ($object -is [System.Data.DataRow])
-				{
-					foreach ($item in $InputObject)
-					{
-						$Table.Rows.Add($item)
-					}
-					return @( ,$Table)
-				}
-			}
-			else
-			{
-				$Table.Rows.Clear()
-			}
-			
-			foreach ($item in $InputObject)
-			{
-				$row = $table.NewRow()
-				
-				if ($item)
-				{
-					foreach ($prop in $item.PSObject.Get_Properties())
-					{
-						if ($table.Columns.Contains($prop.Name))
-						{
-							$row.Item($prop.Name) = $prop.Value
-						}
-					}
-				}
-				[void]$table.Rows.Add($row)
-			}
-		}
-		
-		return @(,$Table)
-	}
-	
-	
-	#endregion
 	
 	# --End User Generated Script--
 	#----------------------------------------------
 	#region Generated Events
 	#----------------------------------------------
 	
-	$Form_StateCorrection_Load=
+	$Form_StateCorrection_Load =
 	{
 		#Correct the initial state of the form to prevent the .Net maximized form issue
 		$formDatabaseRefreshFromB.WindowState = $InitialFormWindowState
 	}
 	
-	$Form_Cleanup_FormClosed=
+	$Form_Cleanup_FormClosed =
 	{
 		#Remove all event handlers from the controls
 		try
@@ -947,7 +721,7 @@ namespace SAPIENTypes
 		catch { Out-Null <# Prevent PSScriptAnalyzer warning #> }
 	}
 	#endregion Generated Events
-
+	
 	#----------------------------------------------
 	#region Generated Form Code
 	#----------------------------------------------
@@ -980,7 +754,7 @@ namespace SAPIENTypes
 	$formDatabaseRefreshFromB.ClientSize = New-Object System.Drawing.Size(300, 368)
 	#region Binary Data
 	$Formatter_binaryFomatter = New-Object System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-	$System_IO_MemoryStream = New-Object System.IO.MemoryStream (,[byte[]][System.Convert]::FromBase64String('
+	$System_IO_MemoryStream = New-Object System.IO.MemoryStream ( ,[byte[]][System.Convert]::FromBase64String('
 AAEAAAD/////AQAAAAAAAAAMAgAAAFFTeXN0ZW0uRHJhd2luZywgVmVyc2lvbj00LjAuMC4wLCBD
 dWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWIwM2Y1ZjdmMTFkNTBhM2EFAQAAABNTeXN0
 ZW0uRHJhd2luZy5JY29uAgAAAAhJY29uRGF0YQhJY29uU2l6ZQcEAhNTeXN0ZW0uRHJhd2luZy5T
@@ -1365,7 +1139,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	$sqlprogressbaroverlay.Name = 'sqlprogressbaroverlay'
 	$sqlprogressbaroverlay.Size = New-Object System.Drawing.Size(284, 23)
 	$sqlprogressbaroverlay.TabIndex = 36
-	$sqlprogressbaroverlay.Visible = $True
+	$sqlprogressbaroverlay.Visible = $False
 	#
 	# mainprogressbaroverlay
 	#
@@ -1373,11 +1147,12 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	$mainprogressbaroverlay.Name = 'mainprogressbaroverlay'
 	$mainprogressbaroverlay.Size = New-Object System.Drawing.Size(284, 19)
 	$mainprogressbaroverlay.TabIndex = 35
-	$mainprogressbaroverlay.Visible = $True
+	$mainprogressbaroverlay.Visible = $False
 	#
 	# checkboxSetDBRecoveryModel
 	#
 	$checkboxSetDBRecoveryModel.Location = New-Object System.Drawing.Point(172, 207)
+	
 	$checkboxSetDBRecoveryModel.Name = 'checkboxSetDBRecoveryModel'
 	$checkboxSetDBRecoveryModel.Size = New-Object System.Drawing.Size(188, 24)
 	$checkboxSetDBRecoveryModel.TabIndex = 24
@@ -1389,6 +1164,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	$checkboxTruncateBatchTables.Checked = $True
 	$checkboxTruncateBatchTables.CheckState = 'Checked'
 	$checkboxTruncateBatchTables.Location = New-Object System.Drawing.Point(172, 146)
+	
 	$checkboxTruncateBatchTables.Name = 'checkboxTruncateBatchTables'
 	$checkboxTruncateBatchTables.Size = New-Object System.Drawing.Size(184, 24)
 	$checkboxTruncateBatchTables.TabIndex = 26
@@ -1400,6 +1176,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	$checkboxEnableUsersExceptGue.Checked = $True
 	$checkboxEnableUsersExceptGue.CheckState = 'Checked'
 	$checkboxEnableUsersExceptGue.Location = New-Object System.Drawing.Point(172, 240)
+	
 	$checkboxEnableUsersExceptGue.Name = 'checkboxEnableUsersExceptGue'
 	$checkboxEnableUsersExceptGue.Size = New-Object System.Drawing.Size(104, 16)
 	$checkboxEnableUsersExceptGue.TabIndex = 34
@@ -1409,6 +1186,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	# buttonRun
 	#
 	$buttonRun.Location = New-Object System.Drawing.Point(16, 272)
+	
 	$buttonRun.Name = 'buttonRun'
 	$buttonRun.Size = New-Object System.Drawing.Size(75, 23)
 	$buttonRun.TabIndex = 32
@@ -1421,6 +1199,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	$checkboxListOutUserEmailAddr.Checked = $True
 	$checkboxListOutUserEmailAddr.CheckState = 'Checked'
 	$checkboxListOutUserEmailAddr.Location = New-Object System.Drawing.Point(8, 236)
+	
 	$checkboxListOutUserEmailAddr.Name = 'checkboxListOutUserEmailAddr'
 	$checkboxListOutUserEmailAddr.Size = New-Object System.Drawing.Size(184, 24)
 	$checkboxListOutUserEmailAddr.TabIndex = 31
@@ -1431,6 +1210,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	# checkboxPromoteNewAdmin
 	#
 	$checkboxPromoteNewAdmin.Location = New-Object System.Drawing.Point(172, 177)
+	
 	$checkboxPromoteNewAdmin.Name = 'checkboxPromoteNewAdmin'
 	$checkboxPromoteNewAdmin.Size = New-Object System.Drawing.Size(168, 24)
 	$checkboxPromoteNewAdmin.TabIndex = 30
@@ -1440,6 +1220,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	# checkboxBackupNewlyCompleted
 	#
 	$checkboxBackupNewlyCompleted.Location = New-Object System.Drawing.Point(8, 207)
+	
 	$checkboxBackupNewlyCompleted.Name = 'checkboxBackupNewlyCompleted'
 	$checkboxBackupNewlyCompleted.Size = New-Object System.Drawing.Size(175, 24)
 	$checkboxBackupNewlyCompleted.TabIndex = 29
@@ -1452,6 +1233,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	$checkboxRunDatabaseSync.Checked = $True
 	$checkboxRunDatabaseSync.CheckState = 'Checked'
 	$checkboxRunDatabaseSync.Location = New-Object System.Drawing.Point(172, 117)
+	
 	$checkboxRunDatabaseSync.Name = 'checkboxRunDatabaseSync'
 	$checkboxRunDatabaseSync.Size = New-Object System.Drawing.Size(175, 24)
 	$checkboxRunDatabaseSync.TabIndex = 28
@@ -1461,6 +1243,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	# checkboxCleanUpPowerBISettin
 	#
 	$checkboxCleanUpPowerBISettin.Location = New-Object System.Drawing.Point(8, 146)
+	
 	$checkboxCleanUpPowerBISettin.Name = 'checkboxCleanUpPowerBISettin'
 	$checkboxCleanUpPowerBISettin.Size = New-Object System.Drawing.Size(175, 24)
 	$checkboxCleanUpPowerBISettin.TabIndex = 27
@@ -1470,6 +1253,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	# checkboxEnableSQLChangeTrack
 	#
 	$checkboxEnableSQLChangeTrack.Location = New-Object System.Drawing.Point(8, 177)
+	
 	$checkboxEnableSQLChangeTrack.Name = 'checkboxEnableSQLChangeTrack'
 	$checkboxEnableSQLChangeTrack.Size = New-Object System.Drawing.Size(184, 24)
 	$checkboxEnableSQLChangeTrack.TabIndex = 25
@@ -1479,6 +1263,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	# checkboxPutAllBatchJobsOnHol
 	#
 	$checkboxPutAllBatchJobsOnHol.Location = New-Object System.Drawing.Point(8, 118)
+	
 	$checkboxPutAllBatchJobsOnHol.Name = 'checkboxPutAllBatchJobsOnHol'
 	$checkboxPutAllBatchJobsOnHol.Size = New-Object System.Drawing.Size(221, 24)
 	$checkboxPutAllBatchJobsOnHol.TabIndex = 23
@@ -1507,6 +1292,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	# buttonAddFileLocation
 	#
 	$buttonAddFileLocation.Location = New-Object System.Drawing.Point(198, 57)
+	
 	$buttonAddFileLocation.Name = 'buttonAddFileLocation'
 	$buttonAddFileLocation.Size = New-Object System.Drawing.Size(94, 20)
 	$buttonAddFileLocation.TabIndex = 19
@@ -1554,9 +1340,9 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	$txtLink.add_TextChanged($txtLink_TextChanged)
 	$formDatabaseRefreshFromB.ResumeLayout()
 	#endregion Generated Form Code
-
+	
 	#----------------------------------------------
-
+	
 	#Save the initial state of the form
 	$InitialFormWindowState = $formDatabaseRefreshFromB.WindowState
 	#Init the OnLoad event to correct the initial state of the form
@@ -1565,7 +1351,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	$formDatabaseRefreshFromB.add_FormClosed($Form_Cleanup_FormClosed)
 	#Show the Form
 	return $formDatabaseRefreshFromB.ShowDialog()
-
+	
 } #End Function
 
 #Call the form
