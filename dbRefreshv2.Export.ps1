@@ -467,6 +467,7 @@ namespace SAPIENTypes
 	{
 		$Ofile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf'
 		$sqlprogressbaroverlay.Maximum = (Get-Item $Ofile).length/1MB
+		$sqlprogressbaroverlay.Visible = $True
 		$sqlprogressbaroverlay.Step = 1
 		$sqlprogressbaroverlay.Value = 0
 		while ($sqlprogressbaroverlay.Value -lt $sqlprogressbaroverlay.Maximum)
