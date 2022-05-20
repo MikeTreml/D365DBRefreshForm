@@ -474,7 +474,7 @@ namespace SAPIENTypes
 		{
 			$sqlprogressbaroverlay.Value = (Get-Item $f).length/1MB
 			#$sqlprogressbaroverlay.TextOverlay = [String][int]$($($sqlprogressbaroverlay.Value * 100) / $sqlprogressbaroverlay.Maximum) + $('%')
-			start-sleep-seconds 10
+			start-sleep -seconds 10
 		}
 	}
 	function count-checkbox
