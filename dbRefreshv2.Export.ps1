@@ -515,7 +515,8 @@ namespace SAPIENTypes
 		[string]$dt = get-date -Format "yyyyMMdd" #Generate the datetime stamp to make DB files unique
 		$oldFile = Get-Item G:\MSSQL_DATA\AxDB*Primary.mdf
 		$renameOldFile = $('G:\MSSQL_DATA\AxDB_PrimaryOld_') + $dt + $('.mdf')
-		
+		Start-Job -ScriptBlock { run-sqlbar }
+		run-sqlbar &
 		Install-D365foDbatools
 		$NewDB = 'AxDB' #Database name. No spaces in the name!
 		
@@ -567,8 +568,8 @@ namespace SAPIENTypes
 		$f | Unblock-File
 		
 		Write-Host "Import BACPAC file to the SQL database" $NewDB -ForegroundColor Yellow
-		Write-Host $f
-		Start-Job -ScriptBlock { run-sqlbar };
+		
+		
 		
 		$mainprogressbaroverlay.PerformStep()
 		Import-D365Bacpac -ImportModeTier1 -BacpacFile $f.FullName -NewDatabaseName $NewDB -ShowOriginalProgress -Verbose
