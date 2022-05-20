@@ -556,8 +556,9 @@ namespace SAPIENTypes
 		$f | Unblock-File
 		
 		Write-Host "Import BACPAC file to the SQL database" $NewDB -ForegroundColor Yellow
+		Write-Host $f
 		Start-Job -ScriptBlock { run-sqlbar }
-		run-sqlbar
+		
 		$mainprogressbaroverlay.PerformStep()
 		Import-D365Bacpac -ImportModeTier1 -BacpacFile $f.FullName -NewDatabaseName $NewDB -ShowOriginalProgress -Verbose
 		
