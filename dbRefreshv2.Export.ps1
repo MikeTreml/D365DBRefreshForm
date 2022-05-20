@@ -472,7 +472,7 @@ namespace SAPIENTypes
 		while ($sqlprogressbaroverlay.Value -lt $sqlprogressbaroverlay.Maximum)
 		{
 			$sqlprogressbaroverlay.Value = (Get-Item $f).length/1MB
-			$sqlprogressbaroverlay.TextOverlay = [String][int]$($($sqlprogressbaroverlay.Value * 100) / $sqlprogressbaroverlay.Maximum) + $('%')
+			#$sqlprogressbaroverlay.TextOverlay = [String][int]$($($sqlprogressbaroverlay.Value * 100) / $sqlprogressbaroverlay.Maximum) + $('%')
 			start-sleep-seconds 10
 		}
 	}
@@ -493,18 +493,20 @@ namespace SAPIENTypes
 	
 	$buttonRun_Click = {
 		$ErrorActionPreference = 'Inquire'
+		$mainprogressbaroverlay.Maximum = 12
+		$mainprogressbaroverlay.Step = 1
+		$mainprogressbaroverlay.Value = 0
 		$mainprogressbaroverlay.Visible = $True
-
+		count-checkbox
+		
 		[string]$dt = get-date -Format "yyyyMMdd" #Generate the datetime stamp to make DB files unique
 		$oldFile = Get-Item G:\MSSQL_DATA\AxDB*Primary.mdf
 		$renameOldFile = $('G:\MSSQL_DATA\AxDB_PrimaryOld_') + $dt + $('.mdf')
 		
 		Install-D365foDbatools
 		$NewDB = 'AxDB' #Database name. No spaces in the name!
-		$mainprogressbaroverlay.Maximum = 12
-		$mainprogressbaroverlay.Step = 1
-		$mainprogressbaroverlay.Value = 0
-		count-checkbox
+		
+		
 		
 		if ($txtLink.Text -ne '')
 		{
@@ -524,7 +526,7 @@ namespace SAPIENTypes
 				Invoke-D365AzCopyTransfer -SourceUri $BacpacSasLinkFromLCS -DestinationUri $TempFileName -ShowOriginalProgress -Verbose
 				
 				$f = Get-ChildItem $TempFileName -Verbose
-				$NewDB = $($f.BaseName).Replace(' ', '_') + $('_') + $dt
+				$NewDB = $($f.BaseName).Replace(' ', '_')
 			}
 		}
 		elseif ($txtFile.Text -ne '')
