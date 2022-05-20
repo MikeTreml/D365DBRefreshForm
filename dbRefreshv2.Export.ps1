@@ -470,9 +470,20 @@ namespace SAPIENTypes
 		$sqlprogressbaroverlay.Visible = $True
 		$sqlprogressbaroverlay.Step = 1
 		$sqlprogressbaroverlay.Value = 0
+		$newFile = $('G:\MSSQL_DATA\AxDB_')+ $dt +('_Primary') + $('.mdf')
+		Write-Host "Strated" $sqlprogressbaroverlay.Value -ForegroundColor Gray
 		while ($sqlprogressbaroverlay.Value -lt $sqlprogressbaroverlay.Maximum)
-		{
-			$sqlprogressbaroverlay.Value = (Get-Item $f).length/1MB
+		{	
+			if (Test-Path -Path $newFile)
+			{
+				$sqlprogressbaroverlay.Value = (Get-Item $newFile).length/1MB
+			}
+			else
+			{
+				Write-Host "....updating module" $module -ForegroundColor Gray
+				$sqlprogressbaroverlay.Value = 1000
+				Write-Host "Value" $sqlprogressbaroverlay.Value -ForegroundColor Gray
+			}
 			#$sqlprogressbaroverlay.TextOverlay = [String][int]$($($sqlprogressbaroverlay.Value * 100) / $sqlprogressbaroverlay.Maximum) + $('%')
 			start-sleep -seconds 10
 		}
@@ -557,7 +568,7 @@ namespace SAPIENTypes
 		
 		Write-Host "Import BACPAC file to the SQL database" $NewDB -ForegroundColor Yellow
 		Write-Host $f
-		Start-Job -ScriptBlock { run-sqlbar }
+		Start-Job -ScriptBlock { run-sqlbar };
 		
 		$mainprogressbaroverlay.PerformStep()
 		Import-D365Bacpac -ImportModeTier1 -BacpacFile $f.FullName -NewDatabaseName $NewDB -ShowOriginalProgress -Verbose
