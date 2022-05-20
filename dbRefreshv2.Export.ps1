@@ -493,6 +493,7 @@ namespace SAPIENTypes
 	
 	$buttonRun_Click = {
 		$ErrorActionPreference = 'Inquire'
+		
 		$mainprogressbaroverlay.Maximum = 12
 		$mainprogressbaroverlay.Step = 1
 		$mainprogressbaroverlay.Value = 0
@@ -554,19 +555,6 @@ namespace SAPIENTypes
 		$f | Unblock-File
 		
 		Write-Host "Import BACPAC file to the SQL database" $NewDB -ForegroundColor Yellow
-		$Ofile = get-item 'G:\MSSQL_DATA\Axdb*Prima'
-		$sqlprogressbaroverlay.Visible = $True
-		$sqlprogressbaroverlay.Maximum = (Get-Item $Ofile).length/1MB
-		$sqlprogressbaroverlay.Value = 0
-		
-		
-		#TODO: Place custom script here
-		while ($sqlprogressbaroverlay.Value -lt $sqlprogressbaroverlay.Maximum)
-		{
-			$sqlprogressbaroverlay.Value = (Get-Item $f).length/1MB
-			$sqlprogressbaroverlay.TextOverlay = [String][int]$($($sqlprogressbaroverlay.Value * 100) /$sqlprogressbaroverlay.Maximum) + $('%')
-			start-sleep-seconds 10
-		}
 		Start-Job -ScriptBlock { run-sqlbar }
 		
 		$mainprogressbaroverlay.PerformStep()
