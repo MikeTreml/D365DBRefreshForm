@@ -698,7 +698,7 @@ namespace SAPIENTypes
 	$formDatabaseRefreshFromB.Controls.Add($txtLink)
 	$formDatabaseRefreshFromB.AutoScaleDimensions = New-Object System.Drawing.SizeF(6, 13)
 	$formDatabaseRefreshFromB.AutoScaleMode = 'Font'
-	$formDatabaseRefreshFromB.ClientSize = New-Object System.Drawing.Size(300, 368)
+	$formDatabaseRefreshFromB.ClientSize = New-Object System.Drawing.Size(300, 348)
 	#region Binary Data
 	$Formatter_binaryFomatter = New-Object System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
 	$System_IO_MemoryStream = New-Object System.IO.MemoryStream ( ,[byte[]][System.Convert]::FromBase64String('
@@ -1224,7 +1224,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	$labelAdminEmailAddress.Margin = '0, 0, 0, 0'
 	$labelAdminEmailAddress.Name = 'labelAdminEmailAddress'
 	$labelAdminEmailAddress.Size = New-Object System.Drawing.Size(105, 13)
-	$labelAdminEmailAddress.TabIndex = 22
+	$labelAdminEmailAddress.TabIndex = 21
 	$labelAdminEmailAddress.Text = 'Admin Email Address'
 	$labelAdminEmailAddress.add_Click($labelAdminEmailAddress_Click)
 	#
@@ -1234,7 +1234,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	$textboxAdminEmailAddress.Margin = '2, 2, 2, 2'
 	$textboxAdminEmailAddress.Name = 'textboxAdminEmailAddress'
 	$textboxAdminEmailAddress.Size = New-Object System.Drawing.Size(185, 20)
-	$textboxAdminEmailAddress.TabIndex = 21
+	$textboxAdminEmailAddress.TabIndex = 22
 	#
 	# buttonAddFileLocation
 	#
@@ -1254,7 +1254,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	$labelBacBakFileLocation.Margin = '0, 0, 0, 0'
 	$labelBacBakFileLocation.Name = 'labelBacBakFileLocation'
 	$labelBacBakFileLocation.Size = New-Object System.Drawing.Size(106, 13)
-	$labelBacBakFileLocation.TabIndex = 18
+	$labelBacBakFileLocation.TabIndex = 17
 	$labelBacBakFileLocation.Text = 'bacbak File Location'
 	#
 	# txtFile
@@ -1263,7 +1263,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	$txtFile.Margin = '2, 2, 2, 2'
 	$txtFile.Name = 'txtFile'
 	$txtFile.Size = New-Object System.Drawing.Size(185, 20)
-	$txtFile.TabIndex = 17
+	$txtFile.TabIndex = 18
 	$txtFile.Text = 'test'
 	$txtFile.add_TextChanged($txtFile_TextChanged)
 	#
@@ -1274,7 +1274,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	$labelSASLink.Margin = '0, 0, 0, 0'
 	$labelSASLink.Name = 'labelSASLink'
 	$labelSASLink.Size = New-Object System.Drawing.Size(51, 13)
-	$labelSASLink.TabIndex = 16
+	$labelSASLink.TabIndex = 15
 	$labelSASLink.Text = 'SAS Link'
 	#
 	# txtLink
@@ -1283,7 +1283,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	$txtLink.Margin = '2, 2, 2, 2'
 	$txtLink.Name = 'txtLink'
 	$txtLink.Size = New-Object System.Drawing.Size(284, 20)
-	$txtLink.TabIndex = 15
+	$txtLink.TabIndex = 16
 	$txtLink.add_TextChanged($txtLink_TextChanged)
 	$formDatabaseRefreshFromB.ResumeLayout()
 	#endregion Generated Form Code
