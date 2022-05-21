@@ -93,7 +93,7 @@ function Show-bar_psf {
 
 	$formSQLProgress_Load={
 		#TODO: Initialize Form Controls here
-		Set-ControlTheme $formSQLProgress -Theme Dark
+		#Set-ControlTheme $formSQLProgress -Theme Dark
 	}
 	
 	
