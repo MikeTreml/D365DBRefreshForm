@@ -531,8 +531,15 @@ namespace SAPIENTypes
 		$mainprogressbaroverlay.PerformStep()
 		#move the file
 		Stop-Service MSSQLSERVER, SQLSERVERAGENT -Force -Verbose
-		#AxDB_Primary Move the file
 		
+		[string]$dt = get-date -Format "yyyyMMdd"
+		$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
+		[string]$oldFile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf' -Exclude AxDB*$dt*Primary.mdf
+		if ($oldFile -ne '')
+		{
+		    Move-Item -Path $oldFile -Destination G:\MSSQL_DATA\AxDB_Primaryold_$dt.mdf
+		    #Remove-D365Database -DatabaseName 'AxDB_Original'
+		}
 		Start-Service MSSQLSERVER, SQLSERVERAGENT -Verbose
 		$mainprogressbaroverlay.PerformStep()
 		
