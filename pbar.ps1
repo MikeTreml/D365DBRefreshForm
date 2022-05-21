@@ -175,14 +175,14 @@ function Show-bar_psf {
 	$sqlprogressbaroverlay.Value = 0
 	#[System.Windows.MessageBox]::Show($oldFile)
 	#[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Maximum)
-	[System.Windows.MessageBox]::Show(("G:\MSSQL_DATA\AxDB_20220521_Primary.mdf").length/1MB)
+	[System.Windows.MessageBox]::Show(($newFile).length/1MB)
 	
 	while ($sqlprogressbaroverlay.Value -lt $sqlprogressbaroverlay.Maximum)
 	{
 		
 		if (Test-Path -Path $newFile)
 		{
-			$sqlprogressbaroverlay.Value = ("G:\MSSQL_DATA\AxDB_20220521_Primary.mdf").length/1MB
+			$sqlprogressbaroverlay.Value = ($newFile).length/1MB
 		}
 		Start-Sleep -Seconds 8;
 	}
