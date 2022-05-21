@@ -123,37 +123,6 @@ function Show-dbRefreshv2_psf
 	
 	
 	#region Control Theme Helper Function
-	<#
-		.SYNOPSIS
-			Applies a theme to the control and its children.
-		
-		.PARAMETER Control
-			The control to theme. Usually the form itself.
-		
-		.PARAMETER Theme
-			The color theme:
-			Light
-			Dark
-	
-		.PARAMETER CustomColor
-			A hashtable that contains the color values.
-			Keys:
-			WindowColor
-			ContainerColor
-			BackColor
-			ForeColor
-			BorderColor
-			SelectionForeColor
-			SelectionBackColor
-			MenuSelectionColor
-		.EXAMPLE
-			PS C:\> Set-ControlTheme -Control $form1 -Theme Dark
-		
-		.EXAMPLE
-			PS C:\> Set-ControlTheme -Control $form1 -CustomColor @{ WindowColor = 'White'; ContainerBackColor = 'Gray'; BackColor... }
-		.NOTES
-			Created by SAPIEN Technologies, Inc.
-	#>
 	function Set-ControlTheme
 	{
 		[CmdletBinding()]
@@ -530,6 +499,8 @@ namespace SAPIENTypes
 		$mainprogressbaroverlay.PerformStep()
 		Enable-D365Exception -Verbose
 		$mainprogressbaroverlay.PerformStep()
+		Start-Job -ScriptBlock { Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/pbar.ps1) }
+		start-sleep -seconds 10
 		Invoke-D365InstallSqlPackage -Verbose #Installing modern SqlPackage just in case  
 		$mainprogressbaroverlay.PerformStep()
 		## Import bacpac to SQL Database
@@ -542,7 +513,7 @@ namespace SAPIENTypes
 		$f | Unblock-File
 		
 		Write-Host "Import BACPAC file to the SQL database" $NewDB -ForegroundColor Yellow
-		Start-Job -ScriptBlock { Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/pbar.ps1) }
+		
 		$mainprogressbaroverlay.PerformStep()
 		Import-D365Bacpac -ImportModeTier1 -BacpacFile $f.FullName -NewDatabaseName $NewDB -ShowOriginalProgress -Verbose
 		
@@ -1249,8 +1220,8 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	# labelAdminEmailAddress
 	#
 	$labelAdminEmailAddress.AutoSize = $True
-	$labelAdminEmailAddress.Location = New-Object System.Drawing.Point(8, 79)
-	$labelAdminEmailAddress.Margin = '2, 0, 2, 0'
+	$labelAdminEmailAddress.Location = New-Object System.Drawing.Point(8, 82)
+	$labelAdminEmailAddress.Margin = '0, 0, 0, 0'
 	$labelAdminEmailAddress.Name = 'labelAdminEmailAddress'
 	$labelAdminEmailAddress.Size = New-Object System.Drawing.Size(105, 13)
 	$labelAdminEmailAddress.TabIndex = 22
@@ -1279,8 +1250,8 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	# labelBacBakFileLocation
 	#
 	$labelBacBakFileLocation.AutoSize = $True
-	$labelBacBakFileLocation.Location = New-Object System.Drawing.Point(8, 41)
-	$labelBacBakFileLocation.Margin = '2, 0, 2, 0'
+	$labelBacBakFileLocation.Location = New-Object System.Drawing.Point(8, 44)
+	$labelBacBakFileLocation.Margin = '0, 0, 0, 0'
 	$labelBacBakFileLocation.Name = 'labelBacBakFileLocation'
 	$labelBacBakFileLocation.Size = New-Object System.Drawing.Size(106, 13)
 	$labelBacBakFileLocation.TabIndex = 18
@@ -1299,8 +1270,8 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	# labelSASLink
 	#
 	$labelSASLink.AutoSize = $True
-	$labelSASLink.Location = New-Object System.Drawing.Point(8, 3)
-	$labelSASLink.Margin = '2, 0, 2, 0'
+	$labelSASLink.Location = New-Object System.Drawing.Point(8, 6)
+	$labelSASLink.Margin = '0, 0, 0, 0'
 	$labelSASLink.Name = 'labelSASLink'
 	$labelSASLink.Size = New-Object System.Drawing.Size(51, 13)
 	$labelSASLink.TabIndex = 16
