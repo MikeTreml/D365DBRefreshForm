@@ -163,7 +163,7 @@ function Show-bar_psf {
 	#Show the Form
 	$formSQLProgress.Show()
 	
-	start-sleep -seconds 5
+	Start-Sleep -Seconds 5;
 	[string]$dt = get-date -Format "yyyyMMdd"
 	#$oldFile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf'
 	$oldFile = Get-Item G:\MSSQL_DATA\AxDB_20220517_Primary.mdf
@@ -174,17 +174,15 @@ function Show-bar_psf {
 	$sqlprogressbaroverlay.Value = 0
 	[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Maximum)
 	[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Value)
-	start-sleep -seconds 2
+	Start-Sleep -Seconds 2;
 	while ($sqlprogressbaroverlay.Value -lt $sqlprogressbaroverlay.Maximum)
 	{
 		[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Value)
 		if (Test-Path -Path $newFile)
 		{
-			
 			$sqlprogressbaroverlay.Value = (Get-Item $newFile).length/1MB
-			
 		}
-		start-sleep -seconds 10
+		Start-Sleep -Seconds 5;
 	}
 	
 } #End Function
