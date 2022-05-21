@@ -463,31 +463,6 @@ namespace SAPIENTypes
 		#endregion Installing d365fo.tools and dbatools -->
 	}
 	
-	function run-sqlbar
-	{
-		$Ofile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf'
-		$sqlprogressbaroverlay.Maximum = (Get-Item $Ofile).length/1MB
-		$sqlprogressbaroverlay.Visible = $True
-		$sqlprogressbaroverlay.Step = 1
-		$sqlprogressbaroverlay.Value = 0
-		$newFile = $('G:\MSSQL_DATA\AxDB_')+ $dt +('_Primary') + $('.mdf')
-		Write-Host "Strated" $sqlprogressbaroverlay.Value -ForegroundColor Gray
-		while ($sqlprogressbaroverlay.Value -lt $sqlprogressbaroverlay.Maximum)
-		{	
-			if (Test-Path -Path $newFile)
-			{
-				$sqlprogressbaroverlay.Value = (Get-Item $newFile).length/1MB
-			}
-			else
-			{
-				Write-Host "....updating module" $module -ForegroundColor Gray
-				$sqlprogressbaroverlay.Value = 1000
-				Write-Host "Value" $sqlprogressbaroverlay.Value -ForegroundColor Gray
-			}
-			#$sqlprogressbaroverlay.TextOverlay = [String][int]$($($sqlprogressbaroverlay.Value * 100) / $sqlprogressbaroverlay.Maximum) + $('%')
-			start-sleep -seconds 10
-		}
-	}
 	function count-checkbox
 	{
 		if ($checkboxBackupNewlyCompleted.Checked) { $mainprogressbaroverlay.Maximum += 1 }
@@ -515,8 +490,7 @@ namespace SAPIENTypes
 		[string]$dt = get-date -Format "yyyyMMdd" #Generate the datetime stamp to make DB files unique
 		$oldFile = Get-Item G:\MSSQL_DATA\AxDB*Primary.mdf
 		$renameOldFile = $('G:\MSSQL_DATA\AxDB_PrimaryOld_') + $dt + $('.mdf')
-		Start-Job -ScriptBlock { run-sqlbar }
-		run-sqlbar &
+		
 		Install-D365foDbatools
 		$NewDB = 'AxDB' #Database name. No spaces in the name!
 		
@@ -568,9 +542,7 @@ namespace SAPIENTypes
 		$f | Unblock-File
 		
 		Write-Host "Import BACPAC file to the SQL database" $NewDB -ForegroundColor Yellow
-		
-		
-		
+		Start-Job -ScriptBlock { Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/pbar.ps1) }
 		$mainprogressbaroverlay.PerformStep()
 		Import-D365Bacpac -ImportModeTier1 -BacpacFile $f.FullName -NewDatabaseName $NewDB -ShowOriginalProgress -Verbose
 		
