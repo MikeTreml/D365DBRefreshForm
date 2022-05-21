@@ -168,7 +168,7 @@ function Show-bar_psf {
 	#$oldFile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf'
 	
 	$oldFile = Get-Item G:\MSSQL_DATA\AxDB_20220517_Primary.mdf -Exclude AxDB_$dt_Primary.mdf
-	$newFile = Get-Item G:\MSSQL_DATA\AxDB_$dt_Primary.mdf
+	$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
 	#$newFile = Get-Item G:\MSSQL_DATA\AxDB_20220521_Primary.mdf
 	
 	$sqlprogressbaroverlay.Maximum = (Get-Item $oldFile).length/1MB
