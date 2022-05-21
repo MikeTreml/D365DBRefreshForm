@@ -175,7 +175,7 @@ function Show-bar_psf {
 	$sqlprogressbaroverlay.Value = 0
 	#[System.Windows.MessageBox]::Show($oldFile)
 	#[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Maximum)
-	[System.Windows.MessageBox]::Show("G:\MSSQL_DATA\AxDB_20220521_Primary.mdf")
+	[System.Windows.MessageBox]::Show(("G:\MSSQL_DATA\AxDB_20220521_Primary.mdf").length/1MB)
 	
 	while ($sqlprogressbaroverlay.Value -lt $sqlprogressbaroverlay.Maximum)
 	{
