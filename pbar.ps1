@@ -166,11 +166,11 @@ function Show-bar_psf {
 	start-sleep -seconds 5
 	[string]$dt = get-date -Format "yyyyMMdd"
 	#$oldFile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf'
-	$oldFile = Get-Item AxDB_20220517_Primary.mdf
+	$oldFile = Get-Item G:\MSSQL_DATA\AxDB_20220517_Primary.mdf
 	#$newFile = Get-Item $('G:\MSSQL_DATA\*') + $dt + $('*')
-	$newFile = Get-Item AxDB_20220521_Primary.mdf
+	$newFile = Get-Item G:\MSSQL_DATA\AxDB_20220521_Primary.mdf
 	
-	$sqlprogressbaroverlay.Maximum = (Get-Item $Ofile).length/1MB
+	$sqlprogressbaroverlay.Maximum = (Get-Item $oldFile).length/1MB
 	$sqlprogressbaroverlay.Value = 0
 	[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Maximum)
 	[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Value)
@@ -182,8 +182,9 @@ function Show-bar_psf {
 		{
 			
 			$sqlprogressbaroverlay.Value = (Get-Item $newFile).length/1MB
-			start-sleep -seconds 10
+			
 		}
+		start-sleep -seconds 10
 	}
 	
 } #End Function
