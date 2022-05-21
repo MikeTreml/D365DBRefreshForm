@@ -174,17 +174,16 @@ function Show-bar_psf {
 	$sqlprogressbaroverlay.Value = 0
 	[System.Windows.MessageBox]::Show($oldFile)
 	[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Maximum)
-	#[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Value)
 	[System.Windows.MessageBox]::Show($newFile)
 	
 	while ($sqlprogressbaroverlay.Value -lt $sqlprogressbaroverlay.Maximum)
 	{
-		#[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Value)
+		
 		if (Test-Path -Path $newFile)
 		{
 			$sqlprogressbaroverlay.Value = (Get-Item $newFile).length/1MB
 		}
-		Start-Sleep -Seconds 10;
+		Start-Sleep -Seconds 8;
 	}
 	
 } #End Function
