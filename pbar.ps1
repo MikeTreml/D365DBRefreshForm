@@ -91,6 +91,11 @@ function Show-bar_psf {
 	$InitialFormWindowState = New-Object 'System.Windows.Forms.FormWindowState'
 	#endregion Generated Form Objects
 
+	$formSQLProgress_Load={
+		#TODO: Initialize Form Controls here
+		Set-ControlTheme $formSQLProgress -Theme Dark
+	}
+	
 	
 	$Form_StateCorrection_Load=
 	{
