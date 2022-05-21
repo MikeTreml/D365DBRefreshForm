@@ -153,7 +153,7 @@ function Show-bar_psf {
 	#endregion Generated Form Code
 
 	#----------------------------------------------
-
+	Add-Type -AssemblyName PresentationCore,PresentationFramework
 	#Save the initial state of the form
 	$InitialFormWindowState = $formSQLProgress.WindowState
 	#Init the OnLoad event to correct the initial state of the form
@@ -163,20 +163,26 @@ function Show-bar_psf {
 	#Show the Form
 	$formSQLProgress.Show()
 	
-	
+	start-sleep -seconds 5
 	[string]$dt = get-date -Format "yyyyMMdd"
-	$oldFile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf'
-	$newFile = Get-Item $('G:\MSSQL_DATA\*') + $dt + $('*')
+	#$oldFile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf'
+	$oldFile = Get-Item AxDB_20220517_Primary.mdf
+	#$newFile = Get-Item $('G:\MSSQL_DATA\*') + $dt + $('*')
+	$newFile = Get-Item AxDB_20220521_Primary.mdf
 	
 	$sqlprogressbaroverlay.Maximum = (Get-Item $Ofile).length/1MB
 	$sqlprogressbaroverlay.Value = 0
-	
+	[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Maximum)
+	[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Value)
+	start-sleep -seconds 2
 	while ($sqlprogressbaroverlay.Value -lt $sqlprogressbaroverlay.Maximum)
 	{
+		[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Value)
 		if (Test-Path -Path $newFile)
 		{
+			
 			$sqlprogressbaroverlay.Value = (Get-Item $newFile).length/1MB
-			start-sleep -seconds 5
+			start-sleep -seconds 10
 		}
 	}
 	
