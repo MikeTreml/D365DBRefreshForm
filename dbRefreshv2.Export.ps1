@@ -752,7 +752,7 @@ namespace SAPIENTypes
 	$formDatabaseRefreshFromB.Controls.Add($txtLink)
 	$formDatabaseRefreshFromB.AutoScaleDimensions = New-Object System.Drawing.SizeF(6, 13)
 	$formDatabaseRefreshFromB.AutoScaleMode = 'Font'
-	$formDatabaseRefreshFromB.ClientSize = New-Object System.Drawing.Size(300, 348)
+	$formDatabaseRefreshFromB.ClientSize = New-Object System.Drawing.Size(300, 358)
 	#region Binary Data
 	$Formatter_binaryFomatter = New-Object System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
 	$System_IO_MemoryStream = New-Object System.IO.MemoryStream ( ,[byte[]][System.Convert]::FromBase64String('
