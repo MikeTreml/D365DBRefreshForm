@@ -89,7 +89,7 @@ function Show-dbRefreshv2_psf
 	#----------------------------------------------
 	[System.Windows.Forms.Application]::EnableVisualStyles()
 	$formDatabaseRefreshFromB = New-Object 'System.Windows.Forms.Form'
-	$sqlprogressbaroverlay = New-Object 'SAPIENTypes.ProgressBarOverlay'
+	
 	$mainprogressbaroverlay = New-Object 'SAPIENTypes.ProgressBarOverlay'
 	$checkboxSetDBRecoveryModel = New-Object 'System.Windows.Forms.CheckBox'
 	$checkboxTruncateBatchTables = New-Object 'System.Windows.Forms.CheckBox'
@@ -455,39 +455,13 @@ namespace SAPIENTypes
 		$mainprogressbaroverlay.Value = 0
 		$mainprogressbaroverlay.Visible = $True
 		count-checkbox
-		Start-ThreadJob -ScriptBlock{
-			Add-Type -AssemblyName PresentationCore,PresentationFramework
-			[string]$dt = get-date -Format "yyyyMMdd"
-			#$oldFile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf' -Exclude AxDB*$dt*Primary.mdf
-			#$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
-			#$sqlprogressbaroverlay.Maximum = (Get-Item $oldFile).length/1MB
-			$sqlprogressbaroverlay.Maximum = 100
-			$sqlprogressbaroverlay.Value = 0
-			#[System.Windows.MessageBox]::Show($oldFile)
-			[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Maximum)
-			#[System.Windows.MessageBox]::Show(($newFile).length/1MB)
-
-			while ($sqlprogressbaroverlay.Value -lt $sqlprogressbaroverlay.Maximum)
-			{
-				if (Test-Path -Path $newFile)
-				{
-					$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
-					#$sqlprogressbaroverlay.Value = ($newFile).length/1MB
-					[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Value)
-					$sqlprogressbaroverlay.Value += 10
-				}
-				Start-Sleep -Seconds 2;
-			}
-		}
-		
+				
 		[string]$dt = get-date -Format "yyyyMMdd" #Generate the datetime stamp to make DB files unique
 		$oldFile = Get-Item G:\MSSQL_DATA\AxDB*Primary.mdf
 		$renameOldFile = $('G:\MSSQL_DATA\AxDB_PrimaryOld_') + $dt + $('.mdf')
 		Start-Sleep -Seconds 60;
 		Install-D365foDbatools
 		$NewDB = 'AxDB' #Database name. No spaces in the name!
-		
-		
 		
 		if ($txtLink.Text -ne '')
 		{
@@ -523,33 +497,8 @@ namespace SAPIENTypes
 		$mainprogressbaroverlay.PerformStep()
 		Enable-D365Exception -Verbose
 		$mainprogressbaroverlay.PerformStep()
-		Start-ThreadJob
-		#Start-Job -ScriptBlock { Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/pbar.ps1) }
 		
-		Start-ThreadJob -ScriptBlock{
-			Add-Type -AssemblyName PresentationCore,PresentationFramework
-			[string]$dt = get-date -Format "yyyyMMdd"
-			#$oldFile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf' -Exclude AxDB*$dt*Primary.mdf
-			#$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
-			#$sqlprogressbaroverlay.Maximum = (Get-Item $oldFile).length/1MB
-			$sqlprogressbaroverlay.Maximum = 100
-			$sqlprogressbaroverlay.Value = 0
-			#[System.Windows.MessageBox]::Show($oldFile)
-			[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Maximum)
-			#[System.Windows.MessageBox]::Show(($newFile).length/1MB)
-
-			while ($sqlprogressbaroverlay.Value -lt $sqlprogressbaroverlay.Maximum)
-			{
-				if (Test-Path -Path $newFile)
-				{
-					$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
-					#$sqlprogressbaroverlay.Value = ($newFile).length/1MB
-					[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Value)
-					$sqlprogressbaroverlay.Value += 10
-				}
-				Start-Sleep -Seconds 2;
-			}
-		}
+		Start-ThreadJob -ScriptBlock { Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/pbar.ps1) }
 		
 		start-sleep -seconds 10
 		Invoke-D365InstallSqlPackage -Verbose #Installing modern SqlPackage just in case  
@@ -588,8 +537,8 @@ namespace SAPIENTypes
 		[string]$oldFile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf' -Exclude AxDB*$dt*Primary.mdf
 		if ($oldFile -ne '')
 		{
-		    Move-Item -Path $oldFile -Destination G:\MSSQL_DATA\AxDB_Primaryold_$dt.mdf
-		    #Remove-D365Database -DatabaseName 'AxDB_Original'
+			Move-Item -Path $oldFile -Destination G:\MSSQL_DATA\AxDB_Primaryold_$dt.mdf
+			#Remove-D365Database -DatabaseName 'AxDB_Original'
 		}
 		Start-Service MSSQLSERVER, SQLSERVERAGENT -Verbose
 		$mainprogressbaroverlay.PerformStep()
@@ -690,8 +639,6 @@ namespace SAPIENTypes
 			and NETWORKALIAS != ''" -Verbose
 			$mainprogressbaroverlay.PerformStep()
 		}
-		
-		
 	}
 	# --End User Generated Script--
 	#----------------------------------------------
@@ -731,7 +678,7 @@ namespace SAPIENTypes
 	#
 	# formDatabaseRefreshFromB
 	#
-	$formDatabaseRefreshFromB.Controls.Add($sqlprogressbaroverlay)
+	
 	$formDatabaseRefreshFromB.Controls.Add($mainprogressbaroverlay)
 	$formDatabaseRefreshFromB.Controls.Add($checkboxSetDBRecoveryModel)
 	$formDatabaseRefreshFromB.Controls.Add($checkboxTruncateBatchTables)
@@ -1136,14 +1083,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	$formDatabaseRefreshFromB.StartPosition = 'CenterScreen'
 	$formDatabaseRefreshFromB.Text = 'Database Refresh from BacBak'
 	$formDatabaseRefreshFromB.add_Load($formDatabaseRefreshFromB_Load)
-	#
-	# sqlprogressbaroverlay
-	#
-	$sqlprogressbaroverlay.Location = New-Object System.Drawing.Point(8, 333)
-	$sqlprogressbaroverlay.Name = 'sqlprogressbaroverlay'
-	$sqlprogressbaroverlay.Size = New-Object System.Drawing.Size(284, 23)
-	$sqlprogressbaroverlay.TabIndex = 36
-	$sqlprogressbaroverlay.Visible = $True
+	
 	#
 	# mainprogressbaroverlay
 	#
@@ -1346,7 +1286,6 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	#endregion Generated Form Code
 	
 	#----------------------------------------------
-	
 	#Save the initial state of the form
 	$InitialFormWindowState = $formDatabaseRefreshFromB.WindowState
 	#Init the OnLoad event to correct the initial state of the form
@@ -1360,3 +1299,4 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 
 #Call the form
 Show-dbRefreshv2_psf | Out-Null
+
