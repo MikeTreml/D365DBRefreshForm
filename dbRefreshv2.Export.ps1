@@ -455,6 +455,30 @@ namespace SAPIENTypes
 		$mainprogressbaroverlay.Value = 0
 		$mainprogressbaroverlay.Visible = $True
 		count-checkbox
+		Start-ThreadJob -ScriptBlock
+			{
+			Add-Type -AssemblyName PresentationCore,PresentationFramework
+			[string]$dt = get-date -Format "yyyyMMdd"
+			#$oldFile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf' -Exclude AxDB*$dt*Primary.mdf
+			#$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
+			#$sqlprogressbaroverlay.Maximum = (Get-Item $oldFile).length/1MB
+			$sqlprogressbaroverlay.Maximum = 100
+			$sqlprogressbaroverlay.Value = 0
+			#[System.Windows.MessageBox]::Show($oldFile)
+			#[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Maximum)
+			#[System.Windows.MessageBox]::Show(($newFile).length/1MB)
+
+			while ($sqlprogressbaroverlay.Value -lt $sqlprogressbaroverlay.Maximum)
+			{
+				if (Test-Path -Path $newFile)
+				{
+					$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
+					#$sqlprogressbaroverlay.Value = ($newFile).length/1MB
+					$sqlprogressbaroverlay.Value += 10
+				}
+				Start-Sleep -Seconds 2;
+			}
+		}
 		
 		[string]$dt = get-date -Format "yyyyMMdd" #Generate the datetime stamp to make DB files unique
 		$oldFile = Get-Item G:\MSSQL_DATA\AxDB*Primary.mdf
@@ -499,7 +523,33 @@ namespace SAPIENTypes
 		$mainprogressbaroverlay.PerformStep()
 		Enable-D365Exception -Verbose
 		$mainprogressbaroverlay.PerformStep()
-		Start-Job -ScriptBlock { Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/pbar.ps1) }
+		Start-ThreadJob
+		#Start-Job -ScriptBlock { Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/pbar.ps1) }
+		
+		Start-ThreadJob -ScriptBlock{
+			Add-Type -AssemblyName PresentationCore,PresentationFramework
+			[string]$dt = get-date -Format "yyyyMMdd"
+			#$oldFile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf' -Exclude AxDB*$dt*Primary.mdf
+			#$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
+			#$sqlprogressbaroverlay.Maximum = (Get-Item $oldFile).length/1MB
+			$sqlprogressbaroverlay.Maximum = 100
+			$sqlprogressbaroverlay.Value = 0
+			#[System.Windows.MessageBox]::Show($oldFile)
+			#[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Maximum)
+			#[System.Windows.MessageBox]::Show(($newFile).length/1MB)
+
+			while ($sqlprogressbaroverlay.Value -lt $sqlprogressbaroverlay.Maximum)
+			{
+				if (Test-Path -Path $newFile)
+				{
+					$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
+					#$sqlprogressbaroverlay.Value = ($newFile).length/1MB
+					$sqlprogressbaroverlay.Value += 10
+				}
+				Start-Sleep -Seconds 8;
+			}
+		}
+		
 		start-sleep -seconds 10
 		Invoke-D365InstallSqlPackage -Verbose #Installing modern SqlPackage just in case  
 		$mainprogressbaroverlay.PerformStep()
