@@ -455,8 +455,7 @@ namespace SAPIENTypes
 		$mainprogressbaroverlay.Value = 0
 		$mainprogressbaroverlay.Visible = $True
 		count-checkbox
-		Start-ThreadJob -ScriptBlock
-			{
+		Start-ThreadJob -ScriptBlock {
 			Add-Type -AssemblyName PresentationCore,PresentationFramework
 			[string]$dt = get-date -Format "yyyyMMdd"
 			#$oldFile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf' -Exclude AxDB*$dt*Primary.mdf
@@ -1274,7 +1273,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	# labelAdminEmailAddress
 	#
 	$labelAdminEmailAddress.AutoSize = $True
-	$labelAdminEmailAddress.Location = New-Object System.Drawing.Point(8, 82)
+	$labelAdminEmailAddress.Location = New-Object System.Drawing.Point(8, 80)
 	$labelAdminEmailAddress.Margin = '0, 0, 0, 0'
 	$labelAdminEmailAddress.Name = 'labelAdminEmailAddress'
 	$labelAdminEmailAddress.Size = New-Object System.Drawing.Size(105, 13)
@@ -1304,7 +1303,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	# labelBacBakFileLocation
 	#
 	$labelBacBakFileLocation.AutoSize = $True
-	$labelBacBakFileLocation.Location = New-Object System.Drawing.Point(8, 44)
+	$labelBacBakFileLocation.Location = New-Object System.Drawing.Point(8, 42)
 	$labelBacBakFileLocation.Margin = '0, 0, 0, 0'
 	$labelBacBakFileLocation.Name = 'labelBacBakFileLocation'
 	$labelBacBakFileLocation.Size = New-Object System.Drawing.Size(106, 13)
@@ -1323,7 +1322,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	#
 	# labelSASLink
 	#
-	$labelSASLink.AutoSize = $True
+	$labelSASLink.AutoSize = $False
 	$labelSASLink.Location = New-Object System.Drawing.Point(8, 6)
 	$labelSASLink.Margin = '0, 0, 0, 0'
 	$labelSASLink.Name = 'labelSASLink'
