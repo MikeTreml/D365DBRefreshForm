@@ -628,6 +628,7 @@ namespace SAPIENTypes
 		
 		if ($checkboxListOutUserEmailAddr.Checked)
 		{
+			Write-Host "List Out User Email Addresses" -ForegroundColor Yellow
 			Invoke-D365SqlScript -DatabaseServer localhost -DatabaseName AxDB -Command "
 			select ID, Name, NetworkAlias, NETWORKDOMAIN, Enable from userInfo
 			where NETWORKALIAS not like '%@contosoax7.onmicrosoft.com'
@@ -641,10 +642,6 @@ namespace SAPIENTypes
 		
 		
 	}
-	
-	
-	
-	
 	# --End User Generated Script--
 	#----------------------------------------------
 	#region Generated Events
