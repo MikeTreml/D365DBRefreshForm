@@ -455,7 +455,7 @@ namespace SAPIENTypes
 		$mainprogressbaroverlay.Value = 0
 		$mainprogressbaroverlay.Visible = $True
 		count-checkbox
-		Start-ThreadJob -ScriptBlock {
+		Start-ThreadJob -ScriptBlock{
 			Add-Type -AssemblyName PresentationCore,PresentationFramework
 			[string]$dt = get-date -Format "yyyyMMdd"
 			#$oldFile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf' -Exclude AxDB*$dt*Primary.mdf
@@ -464,7 +464,7 @@ namespace SAPIENTypes
 			$sqlprogressbaroverlay.Maximum = 100
 			$sqlprogressbaroverlay.Value = 0
 			#[System.Windows.MessageBox]::Show($oldFile)
-			#[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Maximum)
+			[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Maximum)
 			#[System.Windows.MessageBox]::Show(($newFile).length/1MB)
 
 			while ($sqlprogressbaroverlay.Value -lt $sqlprogressbaroverlay.Maximum)
@@ -473,6 +473,7 @@ namespace SAPIENTypes
 				{
 					$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
 					#$sqlprogressbaroverlay.Value = ($newFile).length/1MB
+					[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Value)
 					$sqlprogressbaroverlay.Value += 10
 				}
 				Start-Sleep -Seconds 2;
@@ -482,7 +483,7 @@ namespace SAPIENTypes
 		[string]$dt = get-date -Format "yyyyMMdd" #Generate the datetime stamp to make DB files unique
 		$oldFile = Get-Item G:\MSSQL_DATA\AxDB*Primary.mdf
 		$renameOldFile = $('G:\MSSQL_DATA\AxDB_PrimaryOld_') + $dt + $('.mdf')
-		
+		Start-Sleep -Seconds 60;
 		Install-D365foDbatools
 		$NewDB = 'AxDB' #Database name. No spaces in the name!
 		
@@ -534,7 +535,7 @@ namespace SAPIENTypes
 			$sqlprogressbaroverlay.Maximum = 100
 			$sqlprogressbaroverlay.Value = 0
 			#[System.Windows.MessageBox]::Show($oldFile)
-			#[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Maximum)
+			[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Maximum)
 			#[System.Windows.MessageBox]::Show(($newFile).length/1MB)
 
 			while ($sqlprogressbaroverlay.Value -lt $sqlprogressbaroverlay.Maximum)
@@ -543,9 +544,10 @@ namespace SAPIENTypes
 				{
 					$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
 					#$sqlprogressbaroverlay.Value = ($newFile).length/1MB
+					[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Value)
 					$sqlprogressbaroverlay.Value += 10
 				}
-				Start-Sleep -Seconds 8;
+				Start-Sleep -Seconds 2;
 			}
 		}
 		
