@@ -742,13 +742,15 @@ namespace SAPIENTypes
 	$formDatabaseRefreshFromB.Controls.Add($checkboxCleanUpPowerBISettin)
 	$formDatabaseRefreshFromB.Controls.Add($checkboxEnableSQLChangeTrack)
 	$formDatabaseRefreshFromB.Controls.Add($checkboxPutAllBatchJobsOnHol)
-	$formDatabaseRefreshFromB.Controls.Add($labelAdminEmailAddress)
+	
 	$formDatabaseRefreshFromB.Controls.Add($textboxAdminEmailAddress)
+	$formDatabaseRefreshFromB.Controls.Add($labelAdminEmailAddress)
 	$formDatabaseRefreshFromB.Controls.Add($buttonAddFileLocation)
-	$formDatabaseRefreshFromB.Controls.Add($labelBacBakFileLocation)
+	
 	$formDatabaseRefreshFromB.Controls.Add($txtFile)
-	$formDatabaseRefreshFromB.Controls.Add($labelSASLink)
+	$formDatabaseRefreshFromB.Controls.Add($labelBacBakFileLocation)
 	$formDatabaseRefreshFromB.Controls.Add($txtLink)
+	$formDatabaseRefreshFromB.Controls.Add($labelSASLink)
 	$formDatabaseRefreshFromB.AutoScaleDimensions = New-Object System.Drawing.SizeF(6, 13)
 	$formDatabaseRefreshFromB.AutoScaleMode = 'Font'
 	$formDatabaseRefreshFromB.ClientSize = New-Object System.Drawing.Size(300, 358)
@@ -1139,7 +1141,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	$sqlprogressbaroverlay.Name = 'sqlprogressbaroverlay'
 	$sqlprogressbaroverlay.Size = New-Object System.Drawing.Size(284, 23)
 	$sqlprogressbaroverlay.TabIndex = 36
-	$sqlprogressbaroverlay.Visible = $False
+	$sqlprogressbaroverlay.Visible = $True
 	#
 	# mainprogressbaroverlay
 	#
@@ -1272,8 +1274,8 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	#
 	# labelAdminEmailAddress
 	#
-	$labelAdminEmailAddress.AutoSize = $True
-	$labelAdminEmailAddress.Location = New-Object System.Drawing.Point(8, 80)
+	$labelAdminEmailAddress.AutoSize = $False
+	$labelAdminEmailAddress.Location = New-Object System.Drawing.Point(8, 82)
 	$labelAdminEmailAddress.Margin = '0, 0, 0, 0'
 	$labelAdminEmailAddress.Name = 'labelAdminEmailAddress'
 	$labelAdminEmailAddress.Size = New-Object System.Drawing.Size(105, 13)
@@ -1302,8 +1304,8 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	#
 	# labelBacBakFileLocation
 	#
-	$labelBacBakFileLocation.AutoSize = $True
-	$labelBacBakFileLocation.Location = New-Object System.Drawing.Point(8, 42)
+	$labelBacBakFileLocation.AutoSize = $False
+	$labelBacBakFileLocation.Location = New-Object System.Drawing.Point(8, 44)
 	$labelBacBakFileLocation.Margin = '0, 0, 0, 0'
 	$labelBacBakFileLocation.Name = 'labelBacBakFileLocation'
 	$labelBacBakFileLocation.Size = New-Object System.Drawing.Size(106, 13)
