@@ -165,11 +165,12 @@ function Show-bar_psf {
 	
 	
 	[string]$dt = get-date -Format "yyyyMMdd"
-	$oldFile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf' -Exclude AxDB*$dt*Primary.mdf
+	$oldFile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf' -Exclude *$dt*
 	$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
 	$sqlprogressbaroverlay.Maximum = (Get-Item $oldFile).length/1MB
 	$sqlprogressbaroverlay.Value = 0
-	#[System.Windows.MessageBox]::Show($oldFile)
+	[System.Windows.MessageBox]::Show($oldFile)
+	[System.Windows.MessageBox]::Show($newFile)
 	#[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Maximum)
 	#[System.Windows.MessageBox]::Show(($newFile).length/1MB)
 	$counter = 0
