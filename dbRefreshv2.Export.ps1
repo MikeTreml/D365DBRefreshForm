@@ -501,7 +501,7 @@ namespace SAPIENTypes
 		Enable-D365Exception 
 		$mainprogressbaroverlay.PerformStep()
 		Install-Module -Name ThreadJob
-		Start-ThreadJob -ScriptBlock { Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/pbar.ps1) }
+		Start-Job -ScriptBlock { Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/pbar.ps1) }
 		
 		start-sleep -seconds 10
 		Invoke-D365InstallSqlPackage  #Installing modern SqlPackage just in case  
