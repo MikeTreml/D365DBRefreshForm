@@ -474,34 +474,34 @@ namespace SAPIENTypes
 			{
 				Write-Host "Downloading BACPAC from the LCS Asset library" -ForegroundColor Yellow
 				New-Item -Path $TempFolder -ItemType Directory -Force
-				$TempFileName = Join-path $TempFolder -ChildPath "$NewDB.bacpac" -Verbose
+				$TempFileName = Join-path $TempFolder -ChildPath "$NewDB.bacpac" 
 				
 				Write-Host "..Downloading file" $TempFileName -ForegroundColor Yellow
-				Invoke-D365InstallAzCopy -Verbose
-				Invoke-D365AzCopyTransfer -SourceUri $BacpacSasLinkFromLCS -DestinationUri $TempFileName -ShowOriginalProgress -Verbose
+				Invoke-D365InstallAzCopy 
+				Invoke-D365AzCopyTransfer -SourceUri $BacpacSasLinkFromLCS -DestinationUri $TempFileName -ShowOriginalProgress 
 				
-				$f = Get-ChildItem $TempFileName -Verbose
+				$f = Get-ChildItem $TempFileName 
 				$NewDB = $($f.BaseName).Replace(' ', '_')
 			}
 		}
 		elseif ($txtFile.Text -ne '')
 		{
-			$f = Get-ChildItem $txtFile.Text -Verbose #Please note that this file should be accessible from SQL server service account
+			$f = Get-ChildItem $txtFile.Text  #Please note that this file should be accessible from SQL server service account
 			$NewDB = $($f.BaseName).Replace(' ', '_') + $('_') + $dt; #'AxDB_CTS1005BU2'  #Temporary Database name for new AxDB. Use a file name or any meaningful name.
 		}
 		$mainprogressbaroverlay.PerformStep()
 		
 		## Stop D365FO instance.
 		Write-Host "Stopping D365FO environment" -ForegroundColor Yellow
-		Stop-D365Environment -All -Kill -Verbose
+		Stop-D365Environment -All -Kill 
 		$mainprogressbaroverlay.PerformStep()
-		Enable-D365Exception -Verbose
+		Enable-D365Exception 
 		$mainprogressbaroverlay.PerformStep()
 		
 		Start-ThreadJob -ScriptBlock { Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/pbar.ps1) }
 		
 		start-sleep -seconds 10
-		Invoke-D365InstallSqlPackage -Verbose #Installing modern SqlPackage just in case  
+		Invoke-D365InstallSqlPackage  #Installing modern SqlPackage just in case  
 		$mainprogressbaroverlay.PerformStep()
 		## Import bacpac to SQL Database
 		If (-not (Test-DbaPath -SqlInstance localhost -Path $($f.FullName)))
@@ -515,22 +515,22 @@ namespace SAPIENTypes
 		Write-Host "Import BACPAC file to the SQL database" $NewDB -ForegroundColor Yellow
 		
 		$mainprogressbaroverlay.PerformStep()
-		Import-D365Bacpac -ImportModeTier1 -BacpacFile $f.FullName -NewDatabaseName $NewDB -ShowOriginalProgress -Verbose
+		Import-D365Bacpac -ImportModeTier1 -BacpacFile $f.FullName -NewDatabaseName $NewDB -ShowOriginalProgress 
 		
 		## Removing AxDB_orig database and Switching AxDB:   NULL <-1- AxDB_original <-2- AxDB <-3- [NewDB]
 		Write-Host "Stopping D365FO environment and Switching Databases" -ForegroundColor Yellow
-		Stop-D365Environment -All -Kill -Verbose
-		Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose
+		Stop-D365Environment -All -Kill 
+		Remove-D365Database -DatabaseName 'AxDB_Original' 
 		$mainprogressbaroverlay.PerformStep()
-		Switch-D365ActiveDatabase -NewDatabaseName $NewDB -Verbose
+		Switch-D365ActiveDatabase -NewDatabaseName $NewDB 
 		$mainprogressbaroverlay.PerformStep()
 		
 		## Start D365FO instance
 		Write-Host "Starting D365FO environment. Then open UI and refresh Data Entities." -ForegroundColor Yellow
-		Start-D365Environment -Verbose
+		Start-D365Environment 
 		$mainprogressbaroverlay.PerformStep()
 		#move the file
-		Stop-Service MSSQLSERVER, SQLSERVERAGENT -Force -Verbose
+		Stop-Service MSSQLSERVER, SQLSERVERAGENT -Force
 		
 		[string]$dt = get-date -Format "yyyyMMdd"
 		$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
@@ -540,7 +540,7 @@ namespace SAPIENTypes
 			Move-Item -Path $oldFile -Destination G:\MSSQL_DATA\AxDB_Primaryold_$dt.mdf
 			#Remove-D365Database -DatabaseName 'AxDB_Original'
 		}
-		Start-Service MSSQLSERVER, SQLSERVERAGENT -Verbose
+		Start-Service MSSQLSERVER, SQLSERVERAGENT 
 		$mainprogressbaroverlay.PerformStep()
 		
 		if ($checkboxBackupNewlyCompleted.Checked)
@@ -548,7 +548,7 @@ namespace SAPIENTypes
 			## Backup AxDB database
 			
 			Write-Host "Backup AxDB" -ForegroundColor Yellow
-			Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Type Full -CompressBackup -BackupFileName "dbname-$NewDB-backuptype-timestamp.bak" -ReplaceInName -Verbose
+			Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Type Full -CompressBackup -BackupFileName "dbname-$NewDB-backuptype-timestamp.bak" -ReplaceInName 
 			$mainprogressbaroverlay.PerformStep()
 		}
 		
@@ -557,8 +557,8 @@ namespace SAPIENTypes
 			## Clean up Power BI settings
 			
 			Write-Host "Cleaning up Power BI settings" -ForegroundColor Yellow
-			#Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "UPDATE PowerBIConfig set CLIENTID = '', APPLICATIONKEY = '', REDIRECTURL = ''" -Verbose
-			Invoke-D365SqlScript -DatabaseServer localhost -DatabaseName AxDB -Command "UPDATE PowerBIConfig set CLIENTID = '', APPLICATIONKEY = '', REDIRECTURL = ''" -Verbose
+			#Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "UPDATE PowerBIConfig set CLIENTID = '', APPLICATIONKEY = '', REDIRECTURL = ''" 
+			Invoke-D365SqlScript -DatabaseServer localhost -DatabaseName AxDB -Command "UPDATE PowerBIConfig set CLIENTID = '', APPLICATIONKEY = '', REDIRECTURL = ''" 
 			$mainprogressbaroverlay.PerformStep()
 		}
 		
@@ -566,8 +566,8 @@ namespace SAPIENTypes
 		{
 			## Enable SQL Change Tracking
 			Write-Host "Enabling SQL Change Tracking" -ForegroundColor Yellow
-			#Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "ALTER DATABASE AxDB SET CHANGE_TRACKING = ON (CHANGE_RETENTION = 6 DAYS, AUTO_CLEANUP = ON)" -Verbose
-			Invoke-D365SqlScript -DatabaseServer localhost -DatabaseName AxDB -Command "ALTER DATABASE AxDB SET CHANGE_TRACKING = ON (CHANGE_RETENTION = 6 DAYS, AUTO_CLEANUP = ON)" -Verbose
+			#Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "ALTER DATABASE AxDB SET CHANGE_TRACKING = ON (CHANGE_RETENTION = 6 DAYS, AUTO_CLEANUP = ON)" 
+			Invoke-D365SqlScript -DatabaseServer localhost -DatabaseName AxDB -Command "ALTER DATABASE AxDB SET CHANGE_TRACKING = ON (CHANGE_RETENTION = 6 DAYS, AUTO_CLEANUP = ON)" 
 			$mainprogressbaroverlay.PerformStep()
 		}
 		
@@ -587,7 +587,7 @@ namespace SAPIENTypes
 			TRUNCATE TABLE SYSCORPNETPRINTERS
 			TRUNCATE TABLE SYSCLIENTSESSIONS
 			TRUNCATE TABLE BATCHSERVERCONFIG
-			TRUNCATE TABLE BATCHSERVERGROUP" -Verbose
+			TRUNCATE TABLE BATCHSERVERGROUP" 
 			$mainprogressbaroverlay.PerformStep()
 		}
 		
@@ -596,7 +596,7 @@ namespace SAPIENTypes
 			## Put on hold all Batch Jobs
 			Write-Host "Disabling all current Batch Jobs" -ForegroundColor Yellow
 			#Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "UPDATE BatchJob SET STATUS = 0 WHERE STATUS IN (1,2,5,7)  --Set any waiting, executing, ready, or canceling batches to withhold."
-			Invoke-D365SqlScript -DatabaseServer localhost -DatabaseName AxDB -Command "UPDATE BatchJob SET STATUS = 0 WHERE STATUS IN (1,2,5,7)  --Set any waiting, executing, ready, or canceling batches to withhold." -Verbose
+			Invoke-D365SqlScript -DatabaseServer localhost -DatabaseName AxDB -Command "UPDATE BatchJob SET STATUS = 0 WHERE STATUS IN (1,2,5,7)  --Set any waiting, executing, ready, or canceling batches to withhold." 
 			$mainprogressbaroverlay.PerformStep()
 		}
 		
@@ -604,7 +604,7 @@ namespace SAPIENTypes
 		{
 			## Run Database Sync
 			Write-Host "Executing Database Sync" -ForegroundColor Yellow
-			Invoke-D365DBSync -ShowOriginalProgress -Verbose
+			Invoke-D365DBSync -ShowOriginalProgress 
 			$mainprogressbaroverlay.PerformStep()
 		}
 		
@@ -621,8 +621,8 @@ namespace SAPIENTypes
 		{
 			## Enable Users except Guest
 			Write-Host "Enable all users except Guest" -ForegroundColor Yellow
-			#Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "Update USERINFO set ENABLE = 1 where ID != 'Guest'" -Verbose
-			Invoke-D365SqlScript -DatabaseServer localhost -DatabaseName AxDB -Command "Update USERINFO set ENABLE = 1 where ID != 'Guest'" -Verbose
+			#Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "Update USERINFO set ENABLE = 1 where ID != 'Guest'"
+			Invoke-D365SqlScript -DatabaseServer localhost -DatabaseName AxDB -Command "Update USERINFO set ENABLE = 1 where ID != 'Guest'" 
 			$mainprogressbaroverlay.PerformStep()
 		}
 		
@@ -636,7 +636,7 @@ namespace SAPIENTypes
 			and NETWORKALIAS not like '%@devtesttie.ccsctp.net'
 		 	and NETWORKALIAS not like '%@DAXMDSRunner.com'
 			and NETWORKALIAS not like '%@dynamics.com'
-			and NETWORKALIAS != ''" -Verbose
+			and NETWORKALIAS != ''" 
 			$mainprogressbaroverlay.PerformStep()
 		}
 	}
@@ -702,7 +702,7 @@ namespace SAPIENTypes
 	$formDatabaseRefreshFromB.Controls.Add($labelSASLink)
 	$formDatabaseRefreshFromB.AutoScaleDimensions = New-Object System.Drawing.SizeF(6, 13)
 	$formDatabaseRefreshFromB.AutoScaleMode = 'Font'
-	$formDatabaseRefreshFromB.ClientSize = New-Object System.Drawing.Size(300, 358)
+	$formDatabaseRefreshFromB.ClientSize = New-Object System.Drawing.Size(300, 345)
 	#region Binary Data
 	$Formatter_binaryFomatter = New-Object System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
 	$System_IO_MemoryStream = New-Object System.IO.MemoryStream ( ,[byte[]][System.Convert]::FromBase64String('
@@ -1261,7 +1261,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	$txtFile.Name = 'txtFile'
 	$txtFile.Size = New-Object System.Drawing.Size(185, 20)
 	$txtFile.TabIndex = 18
-	$txtFile.Text = 'test'
+	$txtFile.Text = ''
 	$txtFile.add_TextChanged($txtFile_TextChanged)
 	#
 	# labelSASLink
