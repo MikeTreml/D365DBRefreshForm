@@ -172,10 +172,11 @@ function Show-bar_psf {
 	#[System.Windows.MessageBox]::Show($oldFile)
 	#[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Maximum)
 	#[System.Windows.MessageBox]::Show(($newFile).length/1MB)
-	
+	$counter = 0
 	while ($sqlprogressbaroverlay.Value -lt $sqlprogressbaroverlay.Maximum)
 	{
-		
+		$counter += 1
+		$label1.Text = $counter
 		if (Test-Path -Path $newFile)
 		{
 			$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
