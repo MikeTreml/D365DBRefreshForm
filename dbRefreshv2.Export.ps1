@@ -457,8 +457,11 @@ namespace SAPIENTypes
 		count-checkbox
 				
 		[string]$dt = get-date -Format "yyyyMMdd" #Generate the datetime stamp to make DB files unique
+		
 		$oldFile = Get-Item G:\MSSQL_DATA\AxDB*Primary.mdf
 		$renameOldFile = $('G:\MSSQL_DATA\AxDB_PrimaryOld_') + $dt + $('.mdf')
+		Write-Host $oldFile -ForegroundColor Yellow
+		Write-Host $renameOldFile -ForegroundColor Yellow
 		Start-Sleep -Seconds 60;
 		Install-D365foDbatools
 		$NewDB = 'AxDB' #Database name. No spaces in the name!
@@ -520,9 +523,10 @@ namespace SAPIENTypes
 		## Removing AxDB_orig database and Switching AxDB:   NULL <-1- AxDB_original <-2- AxDB <-3- [NewDB]
 		Write-Host "Stopping D365FO environment and Switching Databases" -ForegroundColor Yellow
 		Stop-D365Environment -All -Kill 
+		Switch-D365ActiveDatabase -NewDatabaseName $NewDB 
 		Remove-D365Database -DatabaseName 'AxDB_Original' 
 		$mainprogressbaroverlay.PerformStep()
-		Switch-D365ActiveDatabase -NewDatabaseName $NewDB 
+		
 		$mainprogressbaroverlay.PerformStep()
 		
 		## Start D365FO instance
