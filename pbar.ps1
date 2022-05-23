@@ -140,7 +140,7 @@ function Show-bar_psf {
 	$label1.Name = 'label1'
 	$label1.Size = New-Object System.Drawing.Size(53, 20)
 	$label1.TabIndex = 1
-	$label1.Text = 'label1'
+	$label1.Text = ''
 	#
 	# sqlprogressbaroverlay
 	#
