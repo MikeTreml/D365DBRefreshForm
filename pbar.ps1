@@ -177,7 +177,7 @@ function Show-bar_psf {
 	{
 		$counter += 1
 		$label1.Text = $counter
-		if (Test-Path -Path $newFile)
+		if ($newFile -ne '')
 		{
 			$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
 			$sqlprogressbaroverlay.Value = ($newFile).length/1MB
