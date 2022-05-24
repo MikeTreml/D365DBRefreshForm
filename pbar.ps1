@@ -89,7 +89,7 @@ function Show-dd_psf {
 	
 	
 	[string]$dt = get-date -Format "yyyyMMdd"
-	$oldFile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf' -Exclude *$dt*
+	$oldFile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf' -Exclude AxDB*$dt*Primary.mdf
 	$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
 	$sqlprogressbaroverlay.Maximum = (Get-Item $oldFile).length/1MB
 	$sqlprogressbaroverlay.Value = 0
