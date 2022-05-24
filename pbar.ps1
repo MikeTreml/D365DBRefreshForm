@@ -14,7 +14,6 @@ function Show-dd_psf {
 	[System.Windows.Forms.Application]::EnableVisualStyles()
 	$form1 = New-Object 'System.Windows.Forms.Form'
 	$label1 = New-Object 'System.Windows.Forms.Label'
-	
 	$progressbar1 = New-Object 'System.Windows.Forms.ProgressBar'
 	$InitialFormWindowState = New-Object 'System.Windows.Forms.FormWindowState'
 	#endregion Generated Form Objects
@@ -35,7 +34,6 @@ function Show-dd_psf {
 		#Remove all event handlers from the controls
 		try
 		{
-			
 			$form1.remove_Load($form1_Load)
 			$form1.remove_Load($Form_StateCorrection_Load)
 			$form1.remove_FormClosed($Form_Cleanup_FormClosed)
@@ -51,8 +49,7 @@ function Show-dd_psf {
 	#
 	# form1
 	#
-	#$form1.Controls.Add($label1)
-	
+	$form1.Controls.Add($label1)
 	$form1.Controls.Add($progressbar1)
 	$form1.AutoScaleDimensions = New-Object System.Drawing.SizeF(6, 13)
 	$form1.AutoScaleMode = 'Font'
@@ -61,9 +58,8 @@ function Show-dd_psf {
 	$form1.Name = 'form1'
 	$form1.Text = 'Form'
 	$form1.add_Load($form1_Load)
-	#
+	
 	# label1
-	#
 	$label1.AutoSize = $True
 	$label1.Location = New-Object System.Drawing.Point(351, 37)
 	$label1.Margin = '0, 0, 0, 0'
@@ -72,9 +68,7 @@ function Show-dd_psf {
 	$label1.TabIndex = 2
 	$label1.Text = ''
 	
-	#
 	# progressbar1
-	#
 	$progressbar1.Location = New-Object System.Drawing.Point(8, 8)
 	$progressbar1.Name = 'progressbar1'
 	$progressbar1.Size = New-Object System.Drawing.Size(413, 23)
