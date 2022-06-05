@@ -1628,10 +1628,10 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	# checkboxNewAdmin
 	#
 	$checkboxNewAdmin.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
-	$checkboxNewAdmin.Location = New-Object System.Drawing.Point(485, 172)
+	$checkboxNewAdmin.Location = New-Object System.Drawing.Point(483, 172)
 	$checkboxNewAdmin.Margin = '5, 5, 5, 5'
 	$checkboxNewAdmin.Name = 'checkboxNewAdmin'
-	$checkboxNewAdmin.Size = New-Object System.Drawing.Size(133, 26)
+	$checkboxNewAdmin.Size = New-Object System.Drawing.Size(147, 26)
 	$checkboxNewAdmin.TabIndex = 30
 	$checkboxNewAdmin.Text = 'New Admin'
 	$checkboxNewAdmin.UseVisualStyleBackColor = $True
@@ -1704,7 +1704,6 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	$textboxAdminEmailAddress.Name = 'textboxAdminEmailAddress'
 	$textboxAdminEmailAddress.Size = New-Object System.Drawing.Size(461, 30)
 	$textboxAdminEmailAddress.TabIndex = 21
-	$textboxAdminEmailAddress.Visible = $False
 	$textboxAdminEmailAddress.add_TextChanged($textboxAdminEmailAddress_TextChanged)
 	#
 	# buttonAddFile
@@ -1727,7 +1726,6 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	$txtFile.Name = 'txtFile'
 	$txtFile.Size = New-Object System.Drawing.Size(501, 30)
 	$txtFile.TabIndex = 17
-	$txtFile.Visible = $False
 	$txtFile.add_TextChanged($txtFile_TextChanged)
 	#
 	# txtLink
@@ -1743,7 +1741,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	# labelBacBakFileLocation
 	#
 	$labelBacBakFileLocation.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
-	$labelBacBakFileLocation.Location = New-Object System.Drawing.Point(13, 71)
+	$labelBacBakFileLocation.Location = New-Object System.Drawing.Point(13, 74)
 	$labelBacBakFileLocation.Margin = '0, 0, 0, 0'
 	$labelBacBakFileLocation.Name = 'labelBacBakFileLocation'
 	$labelBacBakFileLocation.Size = New-Object System.Drawing.Size(175, 31)
@@ -1755,7 +1753,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	# labelSASLink
 	#
 	$labelSASLink.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
-	$labelSASLink.Location = New-Object System.Drawing.Point(13, 3)
+	$labelSASLink.Location = New-Object System.Drawing.Point(13, 7)
 	$labelSASLink.Margin = '0, 0, 0, 0'
 	$labelSASLink.Name = 'labelSASLink'
 	$labelSASLink.Size = New-Object System.Drawing.Size(130, 31)
@@ -1765,7 +1763,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	# labelAdminEmailAddress
 	#
 	$labelAdminEmailAddress.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
-	$labelAdminEmailAddress.Location = New-Object System.Drawing.Point(13, 140)
+	$labelAdminEmailAddress.Location = New-Object System.Drawing.Point(13, 144)
 	$labelAdminEmailAddress.Margin = '0, 0, 0, 0'
 	$labelAdminEmailAddress.Name = 'labelAdminEmailAddress'
 	$labelAdminEmailAddress.Size = New-Object System.Drawing.Size(283, 31)
