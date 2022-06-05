@@ -1101,7 +1101,6 @@ namespace SAPIENTypes
 	$formDatabaseRefreshFromB.Controls.Add($labelAdminEmailAddress)
 	$formDatabaseRefreshFromB.AutoScaleMode = 'None'
 	$formDatabaseRefreshFromB.ClientSize = New-Object System.Drawing.Size(635, 661)
-	$formDatabaseRefreshFromB.Enabled = $False
 	#region Binary Data
 	$Formatter_binaryFomatter = New-Object System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
 	$System_IO_MemoryStream = New-Object System.IO.MemoryStream (,[byte[]][System.Convert]::FromBase64String('
