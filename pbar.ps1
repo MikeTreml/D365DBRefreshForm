@@ -191,7 +191,6 @@ namespace SAPIENTypes
         Color BackColor;
         Color BorderColor;
 		Color SelectBackColor;
-
         public SAPIENColorTable(Color containerColor, Color backColor, Color borderColor, Color selectBackColor)
         {
             ContainerBackColor = containerColor;
@@ -422,7 +421,7 @@ namespace SAPIENTypes
 	$formSQL.ControlBox = $False
 	$formSQL.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
 	$formSQL.FormBorderStyle = 'None'
-	$formSQL.Margin = '10, 10, 10, 10'
+	$formSQL.Margin = '0, 0, 0, 0'
 	$formSQL.MaximizeBox = $False
 	$formSQL.MinimizeBox = $False
 	$formSQL.Name = 'formSQL'
@@ -464,7 +463,7 @@ namespace SAPIENTypes
 	$progressbaroverlay1.Location = New-Object System.Drawing.Point(0, 0)
 	$progressbaroverlay1.Margin = '0, 0, 0, 0'
 	$progressbaroverlay1.Name = 'progressbaroverlay1'
-	$progressbaroverlay1.Size = New-Object System.Drawing.Size(562, 37)
+	$progressbaroverlay1.Size = New-Object System.Drawing.Size(562, 50)
 	$progressbaroverlay1.Step = 20
 	$progressbaroverlay1.TabIndex = 0
 	$progressbaroverlay1.UseWaitCursor = $True
