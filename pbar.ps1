@@ -3,8 +3,9 @@ function Show-bar_psf {
 	#----------------------------------------------
 	#region Import the Assemblies
 	#----------------------------------------------
-	[void][reflection.assembly]::Load('System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a')
 	[void][reflection.assembly]::Load('System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089')
+	[void][reflection.assembly]::Load('System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a')
+	[void][reflection.assembly]::Load('System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a')
 	#endregion Import Assemblies
 
 	#----------------------------------------------
@@ -85,22 +86,311 @@ function Show-bar_psf {
 	#region Generated Form Objects
 	#----------------------------------------------
 	[System.Windows.Forms.Application]::EnableVisualStyles()
-	$formSQLProgress = New-Object 'System.Windows.Forms.Form'
-	$label1 = New-Object 'System.Windows.Forms.Label'
-	$sqlprogressbaroverlay = New-Object 'SAPIENTypes.ProgressBarOverlay'
+	$formSQL = New-Object 'System.Windows.Forms.Form'
+	$label1000 = New-Object 'System.Windows.Forms.Label'
+	$SQL = New-Object 'System.Windows.Forms.Label'
+	$progressbaroverlay1 = New-Object 'SAPIENTypes.ProgressBarOverlay'
 	$InitialFormWindowState = New-Object 'System.Windows.Forms.FormWindowState'
 	#endregion Generated Form Objects
 
-	$formSQLProgress_Load={
+	#----------------------------------------------
+	# User Generated Script
+	#----------------------------------------------
+	
+	$formSQL_Load={
 		#TODO: Initialize Form Controls here
-		#Set-ControlTheme $formSQLProgress -Theme Dark
+		Set-ControlTheme $formSQL -Theme Dark
 	}
 	
+	
+	function Set-ControlTheme
+	{
+		[CmdletBinding()]
+		param
+		(
+			[Parameter(Mandatory = $true)]
+			[ValidateNotNull()]
+			[System.ComponentModel.Component]$Control,
+			[ValidateSet('Light', 'Dark')]
+			[string]$Theme = 'Dark',
+			[System.Collections.Hashtable]$CustomColor
+		)
+		
+		$Font = [System.Drawing.Font]::New('Segoe UI', 9)
+		
+		#Initialize the colors
+		if ($Theme -eq 'Dark')
+		{
+			$WindowColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
+			$ContainerColor = [System.Drawing.Color]::FromArgb(45, 45, 45)
+			$BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
+			$ForeColor = [System.Drawing.Color]::White
+			$BorderColor = [System.Drawing.Color]::DimGray
+			$SelectionBackColor = [System.Drawing.SystemColors]::Highlight
+			$SelectionForeColor = [System.Drawing.Color]::White
+			$MenuSelectionColor = [System.Drawing.Color]::DimGray
+		}
+		else
+		{
+			$WindowColor = [System.Drawing.Color]::White
+			$ContainerColor = [System.Drawing.Color]::WhiteSmoke
+			$BackColor = [System.Drawing.Color]::Gainsboro
+			$ForeColor = [System.Drawing.Color]::Black
+			$BorderColor = [System.Drawing.Color]::DimGray
+			$SelectionBackColor = [System.Drawing.SystemColors]::Highlight
+			$SelectionForeColor = [System.Drawing.Color]::White
+			$MenuSelectionColor = [System.Drawing.Color]::LightSteelBlue
+		}
+		
+		if ($CustomColor)
+		{
+			#Check and Validate the custom colors:
+			$Color = $CustomColor.WindowColor -as [System.Drawing.Color]
+			if ($Color) { $WindowColor = $Color }
+			$Color = $CustomColor.ContainerColor -as [System.Drawing.Color]
+			if ($Color) { $ContainerColor = $Color }
+			$Color = $CustomColor.BackColor -as [System.Drawing.Color]
+			if ($Color) { $BackColor = $Color }
+			$Color = $CustomColor.ForeColor -as [System.Drawing.Color]
+			if ($Color) { $ForeColor = $Color }
+			$Color = $CustomColor.BorderColor -as [System.Drawing.Color]
+			if ($Color) { $BorderColor = $Color }
+			$Color = $CustomColor.SelectionBackColor -as [System.Drawing.Color]
+			if ($Color) { $SelectionBackColor = $Color }
+			$Color = $CustomColor.SelectionForeColor -as [System.Drawing.Color]
+			if ($Color) { $SelectionForeColor = $Color }
+			$Color = $CustomColor.MenuSelectionColor -as [System.Drawing.Color]
+			if ($Color) { $MenuSelectionColor = $Color }
+		}
+		
+		#Define the custom renderer for the menus
+		#region Add-Type definition
+		try
+		{
+			[SAPIENTypes.SAPIENColorTable] | Out-Null
+		}
+		catch
+		{
+			if ($PSVersionTable.PSVersion.Major -ge 7)
+			{
+				$Assemblies = 'System.Windows.Forms', 'System.Drawing', 'System.Drawing.Primitives'
+			}
+			else
+			{
+				$Assemblies = 'System.Windows.Forms', 'System.Drawing'
+			}
+			Add-Type -ReferencedAssemblies $Assemblies -TypeDefinition "
+using System;
+using System.Windows.Forms;
+using System.Drawing;
+namespace SAPIENTypes
+{
+    public class SAPIENColorTable : ProfessionalColorTable
+    {
+        Color ContainerBackColor;
+        Color BackColor;
+        Color BorderColor;
+		Color SelectBackColor;
+
+        public SAPIENColorTable(Color containerColor, Color backColor, Color borderColor, Color selectBackColor)
+        {
+            ContainerBackColor = containerColor;
+            BackColor = backColor;
+            BorderColor = borderColor;
+			SelectBackColor = selectBackColor;
+        } 
+		public override Color MenuStripGradientBegin { get { return ContainerBackColor; } }
+        public override Color MenuStripGradientEnd { get { return ContainerBackColor; } }
+        public override Color ToolStripBorder { get { return BorderColor; } }
+        public override Color MenuItemBorder { get { return SelectBackColor; } }
+        public override Color MenuItemSelected { get { return SelectBackColor; } }
+        public override Color SeparatorDark { get { return BorderColor; } }
+        public override Color ToolStripDropDownBackground { get { return BackColor; } }
+        public override Color MenuBorder { get { return BorderColor; } }
+        public override Color MenuItemSelectedGradientBegin { get { return SelectBackColor; } }
+        public override Color MenuItemSelectedGradientEnd { get { return SelectBackColor; } }      
+        public override Color MenuItemPressedGradientBegin { get { return ContainerBackColor; } }
+        public override Color MenuItemPressedGradientEnd { get { return ContainerBackColor; } }
+        public override Color MenuItemPressedGradientMiddle { get { return ContainerBackColor; } }
+        public override Color ImageMarginGradientBegin { get { return BackColor; } }
+        public override Color ImageMarginGradientEnd { get { return BackColor; } }
+        public override Color ImageMarginGradientMiddle { get { return BackColor; } }
+    }
+}"
+		}
+		#endregion
+		
+		$colorTable = New-Object SAPIENTypes.SAPIENColorTable -ArgumentList $ContainerColor, $BackColor, $BorderColor, $MenuSelectionColor
+		$render = New-Object System.Windows.Forms.ToolStripProfessionalRenderer -ArgumentList $colorTable
+		[System.Windows.Forms.ToolStripManager]::Renderer = $render
+		
+		#Set up our processing queue
+		$Queue = New-Object System.Collections.Generic.Queue[System.ComponentModel.Component]
+		$Queue.Enqueue($Control)
+		
+		Add-Type -AssemblyName System.Core
+		
+		#Only process the controls once.
+		$Processed = New-Object System.Collections.Generic.HashSet[System.ComponentModel.Component]
+		
+		#Apply the colors to the controls
+		while ($Queue.Count -gt 0)
+		{
+			$target = $Queue.Dequeue()
+			
+			#Skip controls we already processed
+			if ($Processed.Contains($target)) { continue }
+			$Processed.Add($target)
+			
+			#Set the text color
+			$target.ForeColor = $ForeColor
+			
+			#region Handle Controls
+			if ($target -is [System.Windows.Forms.Form])
+			{
+				#Set Font
+				$target.Font = $Font
+				$target.BackColor = $ContainerColor
+			}
+			elseif ($target -is [System.Windows.Forms.SplitContainer])
+			{
+				$target.BackColor = $BorderColor
+			}
+			elseif ($target -is [System.Windows.Forms.PropertyGrid])
+			{
+				$target.BackColor = $BorderColor
+				$target.ViewBackColor = $BackColor
+				$target.ViewForeColor = $ForeColor
+				$target.ViewBorderColor = $BorderColor
+				$target.CategoryForeColor = $ForeColor
+				$target.CategorySplitterColor = $ContainerColor
+				$target.HelpBackColor = $BackColor
+				$target.HelpForeColor = $ForeColor
+				$target.HelpBorderColor = $BorderColor
+				$target.CommandsBackColor = $BackColor
+				$target.CommandsBorderColor = $BorderColor
+				$target.CommandsForeColor = $ForeColor
+				$target.LineColor = $ContainerColor
+			}
+			elseif ($target -is [System.Windows.Forms.ContainerControl] -or
+				$target -is [System.Windows.Forms.Panel])
+			{
+				#Set the BackColor for the container
+				$target.BackColor = $ContainerColor
+				
+			}
+			elseif ($target -is [System.Windows.Forms.GroupBox])
+			{
+				$target.FlatStyle = 'Flat'
+			}
+			elseif ($target -is [System.Windows.Forms.Button])
+			{
+				$target.FlatStyle = 'Flat'
+				$target.FlatAppearance.BorderColor = $BorderColor
+				$target.BackColor = $BackColor
+			}
+			elseif ($target -is [System.Windows.Forms.CheckBox] -or
+				$target -is [System.Windows.Forms.RadioButton] -or
+				$target -is [System.Windows.Forms.Label])
+			{
+				#$target.FlatStyle = 'Flat'
+			}
+			elseif ($target -is [System.Windows.Forms.ComboBox])
+			{
+				$target.BackColor = $BackColor
+				$target.FlatStyle = 'Flat'
+			}
+			elseif ($target -is [System.Windows.Forms.TextBox])
+			{
+				$target.BorderStyle = 'FixedSingle'
+				$target.BackColor = $BackColor
+			}
+			elseif ($target -is [System.Windows.Forms.DataGridView])
+			{
+				$target.GridColor = $BorderColor
+				$target.BackgroundColor = $ContainerColor
+				$target.DefaultCellStyle.BackColor = $WindowColor
+				$target.DefaultCellStyle.SelectionBackColor = $SelectionBackColor
+				$target.DefaultCellStyle.SelectionForeColor = $SelectionForeColor
+				$target.ColumnHeadersDefaultCellStyle.BackColor = $ContainerColor
+				$target.ColumnHeadersDefaultCellStyle.ForeColor = $ForeColor
+				$target.EnableHeadersVisualStyles = $false
+				$target.ColumnHeadersBorderStyle = 'Single'
+				$target.RowHeadersBorderStyle = 'Single'
+				$target.RowHeadersDefaultCellStyle.BackColor = $ContainerColor
+				$target.RowHeadersDefaultCellStyle.ForeColor = $ForeColor
+				
+			}
+			elseif ($PSVersionTable.PSVersion.Major -le 5 -and $target -is [System.Windows.Forms.DataGrid])
+			{
+				$target.CaptionBackColor = $WindowColor
+				$target.CaptionForeColor = $ForeColor
+				$target.BackgroundColor = $ContainerColor
+				$target.BackColor = $WindowColor
+				$target.ForeColor = $ForeColor
+				$target.HeaderBackColor = $ContainerColor
+				$target.HeaderForeColor = $ForeColor
+				$target.FlatMode = $true
+				$target.BorderStyle = 'FixedSingle'
+				$target.GridLineColor = $BorderColor
+				$target.AlternatingBackColor = $ContainerColor
+				$target.SelectionBackColor = $SelectionBackColor
+				$target.SelectionForeColor = $SelectionForeColor
+			}
+			elseif ($target -is [System.Windows.Forms.ToolStrip])
+			{
+				
+				$target.BackColor = $BackColor
+				$target.Renderer = $render
+				
+				foreach ($item in $target.Items)
+				{
+					$Queue.Enqueue($item)
+				}
+			}
+			elseif ($target -is [System.Windows.Forms.ToolStripMenuItem] -or
+				$target -is [System.Windows.Forms.ToolStripDropDown] -or
+				$target -is [System.Windows.Forms.ToolStripDropDownItem])
+			{
+				$target.BackColor = $BackColor
+				foreach ($item in $target.DropDownItems)
+				{
+					$Queue.Enqueue($item)
+				}
+			}
+			elseif ($target -is [System.Windows.Forms.ListBox] -or
+				$target -is [System.Windows.Forms.ListView] -or
+				$target -is [System.Windows.Forms.TreeView])
+			{
+				$target.BackColor = $WindowColor
+			}
+			else
+			{
+				$target.BackColor = $BackColor
+			}
+			#endregion
+			
+			if ($target -is [System.Windows.Forms.Control])
+			{
+				#Queue all the child controls
+				foreach ($child in $target.Controls)
+				{
+					$Queue.Enqueue($child)
+				}
+			}
+		}
+	}
+	#endregion
+	
+	# --End User Generated Script--
+	#----------------------------------------------
+	#region Generated Events
+	#----------------------------------------------
 	
 	$Form_StateCorrection_Load=
 	{
 		#Correct the initial state of the form to prevent the .Net maximized form issue
-		$formSQLProgress.WindowState = $InitialFormWindowState
+		$formSQL.WindowState = $InitialFormWindowState
 	}
 	
 	$Form_Cleanup_FormClosed=
@@ -108,9 +398,9 @@ function Show-bar_psf {
 		#Remove all event handlers from the controls
 		try
 		{
-			$formSQLProgress.remove_Load($formSQLProgress_Load)
-			$formSQLProgress.remove_Load($Form_StateCorrection_Load)
-			$formSQLProgress.remove_FormClosed($Form_Cleanup_FormClosed)
+			$formSQL.remove_Load($formSQL_Load)
+			$formSQL.remove_Load($Form_StateCorrection_Load)
+			$formSQL.remove_FormClosed($Form_Cleanup_FormClosed)
 		}
 		catch { Out-Null <# Prevent PSScriptAnalyzer warning #> }
 	}
@@ -119,49 +409,79 @@ function Show-bar_psf {
 	#----------------------------------------------
 	#region Generated Form Code
 	#----------------------------------------------
-	$formSQLProgress.SuspendLayout()
+	$formSQL.SuspendLayout()
 	#
-	# formSQLProgress
+	# formSQL
 	#
-	$formSQLProgress.Controls.Add($label1)
-	$formSQLProgress.Controls.Add($sqlprogressbaroverlay)
-	$formSQLProgress.AutoScaleDimensions = New-Object System.Drawing.SizeF(10, 20)
-	$formSQLProgress.AutoScaleMode = 'Font'
-	$formSQLProgress.ClientSize = New-Object System.Drawing.Size(684, 60)
-	$formSQLProgress.Name = 'formSQLProgress'
-	$formSQLProgress.Text = 'SQL Progress'
-	$formSQLProgress.add_Load($formSQLProgress_Load)
+	$formSQL.Controls.Add($label1000)
+	$formSQL.Controls.Add($SQL)
+	$formSQL.Controls.Add($progressbaroverlay1)
+	$formSQL.AutoScaleDimensions = New-Object System.Drawing.SizeF(12, 25)
+	$formSQL.AutoScaleMode = 'Font'
+	$formSQL.ClientSize = New-Object System.Drawing.Size(563, 37)
+	$formSQL.ControlBox = $False
+	$formSQL.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
+	$formSQL.FormBorderStyle = 'None'
+	$formSQL.Margin = '10, 10, 10, 10'
+	$formSQL.MaximizeBox = $False
+	$formSQL.MinimizeBox = $False
+	$formSQL.Name = 'formSQL'
+	$formSQL.Opacity = 0.8
+	$formSQL.ShowIcon = $False
+	$formSQL.ShowInTaskbar = $False
+	$formSQL.SizeGripStyle = 'Hide'
+	$formSQL.StartPosition = 'CenterScreen'
+	$formSQL.Text = 'SQL'
+	$formSQL.add_Load($formSQL_Load)
 	#
-	# label1
+	# label1000
 	#
-	$label1.AutoSize = $True
-	$label1.Location = New-Object System.Drawing.Point(622, 21)
-	$label1.Margin = '5, 0, 5, 0'
-	$label1.Name = 'label1'
-	$label1.Size = New-Object System.Drawing.Size(53, 20)
-	$label1.TabIndex = 1
-	$label1.Text = ''
+	$label1000.AutoSize = $True
+	$label1000.BackColor = [System.Drawing.Color]::Transparent 
+	$label1000.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '8')
+	$label1000.Location = New-Object System.Drawing.Point(502, 8)
+	$label1000.Margin = '0, 0, 0, 0'
+	$label1000.Name = 'label1000'
+	$label1000.Size = New-Object System.Drawing.Size(45, 20)
+	$label1000.TabIndex = 2
+	$label1000.Text = '1000'
 	#
-	# sqlprogressbaroverlay
+	# SQL
 	#
-	$sqlprogressbaroverlay.Location = New-Object System.Drawing.Point(14, 14)
-	$sqlprogressbaroverlay.Margin = '2, 2, 2, 2'
-	$sqlprogressbaroverlay.Name = 'sqlprogressbaroverlay'
-	$sqlprogressbaroverlay.Size = New-Object System.Drawing.Size(600, 35)
-	$sqlprogressbaroverlay.TabIndex = 0
-	$formSQLProgress.ResumeLayout()
+	$SQL.AutoSize = $True
+	$SQL.BackColor = [System.Drawing.Color]::Transparent 
+	$SQL.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '12')
+	$SQL.Location = New-Object System.Drawing.Point(25, 3)
+	$SQL.Margin = '0, 0, 0, 0'
+	$SQL.Name = 'SQL'
+	$SQL.Size = New-Object System.Drawing.Size(61, 29)
+	$SQL.TabIndex = 1
+	$SQL.Text = 'SQL'
+	#
+	# progressbaroverlay1
+	#
+	$progressbaroverlay1.Cursor = 'WaitCursor'
+	$progressbaroverlay1.Location = New-Object System.Drawing.Point(0, 0)
+	$progressbaroverlay1.Margin = '0, 0, 0, 0'
+	$progressbaroverlay1.Name = 'progressbaroverlay1'
+	$progressbaroverlay1.Size = New-Object System.Drawing.Size(562, 37)
+	$progressbaroverlay1.Step = 20
+	$progressbaroverlay1.TabIndex = 0
+	$progressbaroverlay1.UseWaitCursor = $True
+	$formSQL.ResumeLayout()
 	#endregion Generated Form Code
 
 	#----------------------------------------------
-	Add-Type -AssemblyName PresentationCore,PresentationFramework
+
 	#Save the initial state of the form
-	$InitialFormWindowState = $formSQLProgress.WindowState
+	$InitialFormWindowState = $formSQL.WindowState
 	#Init the OnLoad event to correct the initial state of the form
-	$formSQLProgress.add_Load($Form_StateCorrection_Load)
+	$formSQL.add_Load($Form_StateCorrection_Load)
 	#Clean up the control events
-	$formSQLProgress.add_FormClosed($Form_Cleanup_FormClosed)
+	$formSQL.add_FormClosed($Form_Cleanup_FormClosed)
 	#Show the Form
-	$formSQLProgress.Show()
+	$formSQL.Show()
+	
 	
 	
 	[string]$dt = get-date -Format "yyyyMMdd"
