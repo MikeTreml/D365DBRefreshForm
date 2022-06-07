@@ -1,16 +1,5 @@
-
 function Show-dbRefreshv2_psf {
 
-	#----------------------------------------------
-	#region Import the Assemblies
-	#----------------------------------------------
-	[void][reflection.assembly]::Load('System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089')
-	[void][reflection.assembly]::Load('System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a')
-	#endregion Import Assemblies
-
-	#----------------------------------------------
-	#region Define SAPIEN Types
-	#----------------------------------------------
 	try{
 		[ProgressBarOverlay] | Out-Null
 	}
@@ -130,37 +119,7 @@ function Show-dbRefreshv2_psf {
 	
 	
 	#region Control Theme Helper Function
-	<#
-		.SYNOPSIS
-			Applies a theme to the control and its children.
-		
-		.PARAMETER Control
-			The control to theme. Usually the form itself.
-		
-		.PARAMETER Theme
-			The color theme:
-			Light
-			Dark
 	
-		.PARAMETER CustomColor
-			A hashtable that contains the color values.
-			Keys:
-			WindowColor
-			ContainerColor
-			BackColor
-			ForeColor
-			BorderColor
-			SelectionForeColor
-			SelectionBackColor
-			MenuSelectionColor
-		.EXAMPLE
-			PS C:\> Set-ControlTheme -Control $form1 -Theme Dark
-		
-		.EXAMPLE
-			PS C:\> Set-ControlTheme -Control $form1 -CustomColor @{ WindowColor = 'White'; ContainerBackColor = 'Gray'; BackColor... }
-		.NOTES
-			Created by SAPIEN Technologies, Inc.
-	#>
 	function Set-ControlTheme
 	{
 		[CmdletBinding()]
@@ -449,21 +408,16 @@ namespace SAPIENTypes
 		$txtFile.Text = $FileBrowser.FileName
 	}
 	
-	
-	$labelAdminEmailAddress_Click={
-		#TODO: Place custom script here
-		
-	}
 	$Stamp = (Get-Date).toString("yyyy-MM-dd")
 	$Logfile = "C:\Users\$env:UserName\DBRefresh_$env:computername_$Stamp.log"
 	function WriteLog
 	{
-		Param ([string]$LogString)
-		Write-Host "$Stamp $LogString"
-		$labellog.Text = "$Stamp $LogString"
 		$Stamp = (Get-Date).toString("yyyy/MM/dd HH:mm:ss")
-		$LogMessage = "$Stamp $LogString"
-		Add-content $LogFile -value $LogMessage
+		Param ([string]$LogString)
+		Write-Host "$LogString ($Stamp)" -ForegroundColor Yellow
+		$labellog.Text = "$LogString ($Stamp)"
+		$LogMessage = "$Stamp - $LogString"
+		Add-content $LogFile -value $LogMessage 
 		Return $LogString
 	}
 	
@@ -472,8 +426,8 @@ namespace SAPIENTypes
 		#region Installing d365fo.tools and dbatools <--
 		# This is required by Find-Module, by doing it beforehand we remove some warning messages
 		WriteLog "Installing PowerShell modules d365fo.tools and dbatools" -ForegroundColor Yellow
-		Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope AllUsers
-		Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+		Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope AllUsers -Verbose
+		Set-PSRepository -Name PSGallery -InstallationPolicy Trusted -Verbose
 		$modules2Install = @('d365fo.tools', 'dbatools')
 		foreach ($module in $modules2Install)
 		{
@@ -481,12 +435,12 @@ namespace SAPIENTypes
 			if ($null -eq $(Get-Command -Module $module))
 			{
 				WriteLog "....installing module" $module -ForegroundColor Gray
-				Install-Module -Name $module -SkipPublisherCheck -Scope AllUsers
+				Install-Module -Name $module -SkipPublisherCheck -Scope AllUsers -Verbose
 			}
 			else
 			{
 				WriteLog "....updating module" $module -ForegroundColor Gray
-				Update-Module -Name $module
+				Update-Module -Name $module -Verbose
 			}
 			$mainprogressbaroverlay.PerformStep()
 		}
@@ -495,7 +449,7 @@ namespace SAPIENTypes
 	
 	function run-sqlbar
 	{
-		$Ofile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf'
+		$Ofile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf' -Verbose
 		$sqlprogressbaroverlay.Maximum = (Get-Item $Ofile).length/1MB
 		$sqlprogressbaroverlay.Step = 1
 		$sqlprogressbaroverlay.Value = 0
@@ -526,7 +480,6 @@ namespace SAPIENTypes
 		#region Installing d365fo.tools and dbatools <--
 		# This is required by Find-Module, by doing it beforehand we remove some warning messages
 		WriteLog "Installing PowerShell modules d365fo.tools and dbatools" -ForegroundColor Yellow
-		$labelInfo.Text = "Installing PowerShell modules d365fo.tools and dbatools"
 		
 		Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope AllUsers
 		Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
@@ -534,38 +487,22 @@ namespace SAPIENTypes
 		foreach ($module in $modules2Install)
 		{
 			WriteLog "..working on module" $module -ForegroundColor Yellow
-			$labelInfo.Text = "..working on module " + $module
+			WriteLog "..working on module " + $module
 			if ($null -eq $(Get-Command -Module $module))
 			{
 				WriteLog "....installing module" $module -ForegroundColor Gray
-				$labelInfo.Text = "installing module " + $module
-				Install-Module -Name $module -SkipPublisherCheck -Scope AllUsers
+				Install-Module -Name $module -SkipPublisherCheck -Scope AllUsers -Verbose
 			}
 			else
 			{
 				WriteLog "....updating module" $module -ForegroundColor Gray
-				$labelInfo.Text = "Updating module " + $module
-				Update-Module -Name $module
+				Update-Module -Name $module -Verbose
 			}
 			$mainprogressbaroverlay.PerformStep()
 		}
 		#endregion Installing d365fo.tools and dbatools -->
 	}
 	
-	function count-checkbox
-	{
-		if ($checkboxBackupNewlyCompleted.Checked) { $mainprogressbaroverlay.Maximum += 1 }
-		if ($checkboxCleanUpPowerBISettin.Checked) { $mainprogressbaroverlay.Maximum += 1 }
-		if ($checkboxEnableSQLChangeTrack.Checked) { $mainprogressbaroverlay.Maximum += 1 }
-		if ($checkboxEnableUsersExceptGue.Checked) { $mainprogressbaroverlay.Maximum += 1 }
-		if ($checkboxListOutUserEmails.Checked) { $mainprogressbaroverlay.Maximum += 1 }
-		if ($checkboxPromoteNewAdmin.Checked) { $mainprogressbaroverlay.Maximum += 1 }
-		if ($checkboxPutAllBatchJobsOnHol.Checked) { $mainprogressbaroverlay.Maximum += 1 }
-		if ($checkboxRunDatabaseSync.Checked) { $mainprogressbaroverlay.Maximum += 1 }
-		if ($checkboxSetDBRecoveryModel.Checked) { $mainprogressbaroverlay.Maximum += 1 }
-		if ($checkboxTruncateBatchTables.Checked) { $mainprogressbaroverlay.Maximum += 1 }
-		
-	}
 	
 	$buttonRun_Click = {
 		$ErrorActionPreference = 'Inquire'
@@ -574,16 +511,16 @@ namespace SAPIENTypes
 		$mainprogressbaroverlay.Step = 1
 		$mainprogressbaroverlay.Value = 0
 		$mainprogressbaroverlay.Visible = $True
-		count-checkbox
+		WriteLog | count-checkbox
 		
 		[string]$dt = get-date -Format "yyyyMMdd" #Generate the datetime stamp to make DB files unique
 		
-		$oldFile = Get-Item G:\MSSQL_DATA\AxDB*Primary.mdf
+		WriteLog $oldFile = Get-Item G:\MSSQL_DATA\AxDB*Primary.mdf -Verbose
 		$renameOldFile = $('G:\MSSQL_DATA\AxDB_PrimaryOld_') + $dt + $('.mdf')
 		WriteLog $oldFile -ForegroundColor Yellow
 		WriteLog $renameOldFile -ForegroundColor Yellow
 		Start-Sleep -Seconds 3;
-		Install-D365foDbatools
+		WriteLog | Install-D365foDbatools 
 		$NewDB = 'AxDB' #Database name. No spaces in the name!
 		
 		if ($txtLink.Text -ne '')
@@ -596,14 +533,13 @@ namespace SAPIENTypes
 			if ($BacpacSasLinkFromLCS.StartsWith('http'))
 			{
 				WriteLog "Downloading BACPAC from the LCS Asset library" -ForegroundColor Yellow
-				New-Item -Path $TempFolder -ItemType Directory -Force
+				WriteLog | New-Item -Path $TempFolder -ItemType Directory -Force -Verbose
 				$TempFileName = Join-path $TempFolder -ChildPath "$NewDB.bacpac"
 				
 				WriteLog "..Downloading file" $TempFileName -ForegroundColor Yellow
-				$labelInfo.Text = "Downloading file" + $TempFileName
 				
-				Invoke-D365InstallAzCopy
-				Invoke-D365AzCopyTransfer -SourceUri $BacpacSasLinkFromLCS -DestinationUri $TempFileName -ShowOriginalProgress
+				WriteLog | Invoke-D365InstallAzCopy -Verbose
+				WriteLog | Invoke-D365AzCopyTransfer -SourceUri $BacpacSasLinkFromLCS -DestinationUri $TempFileName -ShowOriginalProgress -Verbose
 				
 				$f = Get-ChildItem $TempFileName
 				$NewDB = $($f.BaseName).Replace(' ', '_')
@@ -618,114 +554,111 @@ namespace SAPIENTypes
 		
 		## Stop D365FO instance.
 		WriteLog "Stopping D365FO environment" -ForegroundColor Yellow
-		$labelInfo.Text = "Stopping D365FO environment"
-		Stop-D365Environment -All -Kill
+		
+		WriteLog | Stop-D365Environment -All -Kill -Verbose
 		$mainprogressbaroverlay.PerformStep()
-		$labelInfo.Text = "Enable-D365Exception"
-		Enable-D365Exception
+		WriteLog "Enable-D365Exception"
+		WriteLog | Enable-D365Exception -Verbose
 		$mainprogressbaroverlay.PerformStep()
 		
-		Start-Job -ScriptBlock { Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/pbar.ps1) }
-		$labelInfo.Text = "SQL bar"
+		Start-Job -Verbose -ScriptBlock { Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/pbar.ps1) }
+		WriteLog "SQL bar"
 		start-sleep -seconds 10
-		$labelInfo.Text = "Installing modern SqlPackage"
-		Invoke-D365InstallSqlPackage #Installing modern SqlPackage just in case  
+		WriteLog "Installing modern SqlPackage"
+		WriteLog | Invoke-D365InstallSqlPackage -Verbose #Installing modern SqlPackage just in case  
 		$mainprogressbaroverlay.PerformStep()
 		## Import bacpac to SQL Database
-		$labelInfo.Text = "Checking SQL file"
+		WriteLog "Checking SQL file"
 		If (-not (Test-DbaPath -SqlInstance localhost -Path $($f.FullName)))
 		{
 			Write-Warning "Database file $($f.FullName) could not be found by SQL Server. Try to move it to C:\Temp or D:\Temp"
 			throw "Database file $($f.FullName) could not be found by SQL Server. Try to move it to C:\Temp or D:\Temp"
 		}
 		$mainprogressbaroverlay.PerformStep()
-		$labelInfo.Text = "Unblock-File"
+		WriteLog "Unblock-File"
 		$f | Unblock-File
 		
 		WriteLog "Import BACPAC file to the SQL database" $NewDB -ForegroundColor Yellow
 		
 		$mainprogressbaroverlay.PerformStep()
-		$labelInfo.Text = "Import-D365Bacpac"
-		Import-D365Bacpac -ImportModeTier1 -BacpacFile $f.FullName -NewDatabaseName $NewDB -ShowOriginalProgress
+		WriteLog "Import-D365Bacpac"
+		WriteLog | Import-D365Bacpac -ImportModeTier1 -BacpacFile $f.FullName -NewDatabaseName $NewDB -ShowOriginalProgress -Verbose
 		
 		## Removing AxDB_orig database and Switching AxDB:   NULL <-1- AxDB_original <-2- AxDB <-3- [NewDB]
 		WriteLog "Stopping D365FO environment and Switching Databases" -ForegroundColor Yellow
-		$labelInfo.Text = "Stop-D365Environment"
-		Stop-D365Environment -All -Kill
-		$labelInfo.Text = "Switch-D365ActiveDatabase"
-		Switch-D365ActiveDatabase -NewDatabaseName $NewDB
+		WriteLog "Stop-D365Environment"
+		WriteLog | Stop-D365Environment -All -Kill -Verbose
+		WriteLog "Switch-D365ActiveDatabase"
+		WriteLog | Switch-D365ActiveDatabase -NewDatabaseName $NewDB -Verbose
 		
 		$mainprogressbaroverlay.PerformStep()
-		$labelInfo.Text = "Remove-D365Database"
-		Remove-D365Database -DatabaseName 'AxDB_Original'
+		WriteLog "Remove-D365Database"
+		WriteLog | Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose
 		$mainprogressbaroverlay.PerformStep()
 		
 		
 		## Start D365FO instance
 		WriteLog "Starting D365FO environment. Then open UI and refresh Data Entities." -ForegroundColor Yellow
-		$labelInfo.Text = "Start-D365Environment"
-		Start-D365Environment
+		WriteLog "Start-D365Environment"
+		WriteLog | Start-D365Environment
 		$mainprogressbaroverlay.PerformStep()
 		#move the file
-		$labelInfo.Text = "Stop-Service MSSQLSERVER, SQLSERVERAGENT"
-		Stop-Service MSSQLSERVER, SQLSERVERAGENT -Force
+		WriteLog "Stop-Service MSSQLSERVER, SQLSERVERAGENT"
+		WriteLog | Stop-Service MSSQLSERVER, SQLSERVERAGENT -Force -Verbose
 		
 		[string]$dt = get-date -Format "yyyyMMdd"
 		$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
 		[string]$oldFile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf' -Exclude AxDB*$dt*Primary.mdf
 		if ($oldFile -ne '')
 		{
-			$labelInfo.Text = "Move-Item -Path $oldFile -Destination G:\MSSQL_DATA\AxDB_Primaryold_" + $dt
+			WriteLog "Move-Item -Path $oldFile -Destination G:\MSSQL_DATA\AxDB_Primaryold_" + $dt
 			Move-Item -Path $oldFile -Destination G:\MSSQL_DATA\AxDB_Primaryold_$dt.mdf
 			#Remove-D365Database -DatabaseName 'AxDB_Original'
 		}
-		$labelInfo.Text = "Start-Service MSSQLSERVER, SQLSERVERAGENT "
-		Start-Service MSSQLSERVER, SQLSERVERAGENT
+		WriteLog "Start-Service MSSQLSERVER, SQLSERVERAGENT "
+		WriteLog | Start-Service MSSQLSERVER, SQLSERVERAGENT -Verbose
 		$mainprogressbaroverlay.PerformStep()
 		
 		if ($checkboxBackupNewlyCompleted.Checked)
 		{
 			## Backup AxDB database
-			$labelInfo.Text = "Backup AxDB"
+			
 			WriteLog "Backup AxDB" -ForegroundColor Yellow
 			$labelInfo = ""
-			Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Type Full -CompressBackup -BackupFileName "dbname-$NewDB-backuptype-timestamp.bak" -ReplaceInName
+			WriteLog | Invoke-DbaQuery -Verbose -SqlInstance localhost -Database AxDB -Type Full -CompressBackup -BackupFileName "dbname-$NewDB-backuptype-timestamp.bak" -ReplaceInName
 			$mainprogressbaroverlay.PerformStep()
 		}
 		
 		if ($checkboxCleanUpPowerBISettin.Checked)
 		{
 			## Clean up Power BI settings
-			$labelInfo.Text = "Cleaning up Power BI settings"
 			WriteLog "Cleaning up Power BI settings" -ForegroundColor Yellow
 			#Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "UPDATE PowerBIConfig set CLIENTID = '', APPLICATIONKEY = '', REDIRECTURL = ''" 
-			Invoke-D365SqlScript -DatabaseServer localhost -DatabaseName AxDB -Command "UPDATE PowerBIConfig set CLIENTID = '', APPLICATIONKEY = '', REDIRECTURL = ''"
+			WriteLog | Invoke-D365SqlScript -Verbose -DatabaseServer localhost -DatabaseName AxDB -Command "UPDATE PowerBIConfig set CLIENTID = '', APPLICATIONKEY = '', REDIRECTURL = ''"
 			$mainprogressbaroverlay.PerformStep()
 		}
 		
 		if ($checkboxEnableSQLChangeTrack.Checked)
 		{
-			$labelInfo.Text = "Enabling SQL Change Tracking"
 			## Enable SQL Change Tracking
 			WriteLog "Enabling SQL Change Tracking" -ForegroundColor Yellow
 			#Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "ALTER DATABASE AxDB SET CHANGE_TRACKING = ON (CHANGE_RETENTION = 6 DAYS, AUTO_CLEANUP = ON)" 
-			Invoke-D365SqlScript -DatabaseServer localhost -DatabaseName AxDB -Command "ALTER DATABASE AxDB SET CHANGE_TRACKING = ON (CHANGE_RETENTION = 6 DAYS, AUTO_CLEANUP = ON)"
+			WriteLog | Invoke-D365SqlScript -Verbose -DatabaseServer localhost -DatabaseName AxDB -Command "ALTER DATABASE AxDB SET CHANGE_TRACKING = ON (CHANGE_RETENTION = 6 DAYS, AUTO_CLEANUP = ON)"
 			$mainprogressbaroverlay.PerformStep()
 		}
 		
 		if ($checkboxPromoteNewAdmin.Checked)
 		{
-			$labelInfo.Text = "Setting up new Admin"
 			## Promote user as admin and set default tenant  (Optional)
 			WriteLog "Setting up new Admin" -ForegroundColor Yellow
-			Set-D365Admin -AdminSignInName textboxAdminEmailAddress.Text
+			WriteLog | Set-D365Admin -Verbose -AdminSignInName textboxAdminEmailAddress.Text
 			$mainprogressbaroverlay.PerformStep()
 		}
 		
 		if ($checkboxTruncateBatchTables.Checked)
 		{
-			$labelInfo.Text = "Truncate Batch Tables"
-			Invoke-D365SqlScript -DatabaseServer localhost -DatabaseName AxDB -Command "
+			WriteLog "Truncate Batch Tables"
+			WriteLog | Invoke-D365SqlScript -Verbose -DatabaseServer localhost -DatabaseName AxDB -Command "
 			TRUNCATE TABLE SYSSERVERCONFIG
 			TRUNCATE TABLE SYSSERVERSESSIONS
 			TRUNCATE TABLE SYSCORPNETPRINTERS
@@ -737,48 +670,44 @@ namespace SAPIENTypes
 		
 		if ($checkboxPutAllBatchJobsOnHol.Checked)
 		{
-			$labelInfo.Text = "Disabling all current Batch Jobs"
 			## Put on hold all Batch Jobs
 			WriteLog "Disabling all current Batch Jobs" -ForegroundColor Yellow
 			#Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "UPDATE BatchJob SET STATUS = 0 WHERE STATUS IN (1,2,5,7)  --Set any waiting, executing, ready, or canceling batches to withhold."
-			Invoke-D365SqlScript -DatabaseServer localhost -DatabaseName AxDB -Command "UPDATE BatchJob SET STATUS = 0 WHERE STATUS IN (1,2,5,7)  --Set any waiting, executing, ready, or canceling batches to withhold."
+			WriteLog | Invoke-D365SqlScript -Verbose -DatabaseServer localhost -DatabaseName AxDB -Command "UPDATE BatchJob SET STATUS = 0 WHERE STATUS IN (1,2,5,7)  --Set any waiting, executing, ready, or canceling batches to withhold."
 			$mainprogressbaroverlay.PerformStep()
 		}
 		
 		if ($checkboxRunDatabaseSync.Checked)
 		{
-			$labelInfo.Text = "Executing Database Sync"
 			## Run Database Sync
 			WriteLog "Executing Database Sync" -ForegroundColor Yellow
-			Invoke-D365DBSync -ShowOriginalProgress
+			WriteLog | Invoke-D365DBSync -ShowOriginalProgress -Verbose
 			$mainprogressbaroverlay.PerformStep()
 		}
 		
 		if ($checkboxSetDBRecoveryModel.Checked)
 		{
-			$labelInfo.Text = "Setting DB Recovery Model to Simple"
 			## Set DB Recovery Model to Simple  (Optional)
 			WriteLog "Setting DB Recovery Model to Simple" -ForegroundColor Yellow
-			Set-DbaDbRecoveryModel -SqlInstance localhost -RecoveryModel Simple -Database AxDB -Confirm:$false
+			WriteLog | Set-DbaDbRecoveryModel -Verbose -SqlInstance localhost -RecoveryModel Simple -Database AxDB -Confirm:$false
 			$mainprogressbaroverlay.PerformStep()
 		}
 		
 		
 		if ($checkboxEnableUsersExceptGue.Checked)
 		{
-			$labelInfo.Text = "Enable all users except Guest"
 			## Enable Users except Guest
 			WriteLog "Enable all users except Guest" -ForegroundColor Yellow
 			#Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "Update USERINFO set ENABLE = 1 where ID != 'Guest'"
-			Invoke-D365SqlScript -DatabaseServer localhost -DatabaseName AxDB -Command "Update USERINFO set ENABLE = 1 where ID != 'Guest'"
+			WriteLog | Invoke-D365SqlScript -Verbose -DatabaseServer localhost -DatabaseName AxDB -Command "Update USERINFO set ENABLE = 1 where ID != 'Guest'"
+			WriteLog | Update-D365User
 			$mainprogressbaroverlay.PerformStep()
 		}
 		
 		if ($checkboxListOutUserEmails.Checked)
 		{
-			$labelInfo.Text = "List Out User Email Addresses"
 			WriteLog "List Out User Email Addresses" -ForegroundColor Yellow
-			Invoke-D365SqlScript -DatabaseServer localhost -DatabaseName AxDB -Command "
+			WriteLog | Invoke-D365SqlScript -Verbose -DatabaseServer localhost -DatabaseName AxDB -Command "
 			select ID, Name, NetworkAlias, NETWORKDOMAIN, Enable from userInfo
 			where NETWORKALIAS not like '%@contosoax7.onmicrosoft.com'
 			and NETWORKALIAS not like '%@capintegration01.onmicrosoft.com'
@@ -858,7 +787,6 @@ namespace SAPIENTypes
 			$buttonAddFile.remove_Click($buttonAddFile_Click)
 			$txtFile.remove_TextChanged($txtFile_TextChanged)
 			$txtLink.remove_TextChanged($txtLink_TextChanged)
-			$labelAdminEmailAddress.remove_Click($labelAdminEmailAddress_Click)
 			$formDatabaseRefreshFromB.remove_Load($formDatabaseRefreshFromB_Load)
 			$formDatabaseRefreshFromB.remove_Load($Form_StateCorrection_Load)
 			$formDatabaseRefreshFromB.remove_FormClosed($Form_Cleanup_FormClosed)
@@ -913,7 +841,7 @@ AAEAAAD/////AQAAAAAAAAAMAgAAAFFTeXN0ZW0uRHJhd2luZywgVmVyc2lvbj00LjAuMC4wLCBD
 dWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWIwM2Y1ZjdmMTFkNTBhM2EFAQAAABNTeXN0
 ZW0uRHJhd2luZy5JY29uAgAAAAhJY29uRGF0YQhJY29uU2l6ZQcEAhNTeXN0ZW0uRHJhd2luZy5T
 aXplAgAAAAIAAAAJAwAAAAX8////E1N5c3RlbS5EcmF3aW5nLlNpemUCAAAABXdpZHRoBmhlaWdo
-dAAACAgCAAAAAAEAAAABAAAPAwAAAMlQAAACAAABAAEAAAAAAAEAIACzUAAAFgAAAIlQTkcNChoK
+dAAACAgCAAAAAAAAAAAAAAAPAwAAAMlQAAACAAABAAEAAAAAAAEAIACzUAAAFgAAAIlQTkcNChoK
 AAAADUlIRFIAAAEAAAABAAgGAAAAXHKoZgAAUHpJREFUeNrtnXl8FPX9/1+fmdl7N4RTQDEXeIAB
 hbZCDrQe9erX/tqqYG2tCsohucjBWcUDqiByJRDwW9vaWgUC2sNeX6tyY1tUTpFLQeQMR5I9ssfM
 /P6Y+czObjbJJtkku8nn2UcaTHY3O5+dz/vzvt9ElmUZXYjwiyHhv5dlSJIEnucBAPWeenz0wQd4
@@ -1596,6 +1524,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	$labelBacBakFileLocation.Size = New-Object System.Drawing.Size(175, 31)
 	$labelBacBakFileLocation.TabIndex = 18
 	$labelBacBakFileLocation.Text = 'File Location'
+	$labelBacBakFileLocation.UseCompatibleTextRendering = $True
 	#
 	# labelSASLink
 	#
@@ -1616,7 +1545,7 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	$labelAdminEmailAddress.Size = New-Object System.Drawing.Size(283, 31)
 	$labelAdminEmailAddress.TabIndex = 22
 	$labelAdminEmailAddress.Text = 'Admin Email Address'
-	$labelAdminEmailAddress.add_Click($labelAdminEmailAddress_Click)
+	$labelAdminEmailAddress.UseCompatibleTextRendering = $True
 	$formDatabaseRefreshFromB.ResumeLayout()
 	#endregion Generated Form Code
 
