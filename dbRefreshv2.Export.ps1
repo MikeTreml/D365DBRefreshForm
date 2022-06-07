@@ -452,8 +452,9 @@ namespace SAPIENTypes
 	$Logfile = "C:\Users\$env:UserName\DBRefresh_$env:computername_$Stamp.log"
 	function WriteLog
 	{
-		$Stamp = (Get-Date).toString("yyyy/MM/dd HH:mm:ss")
 		Param ([string]$LogString)
+		$Stamp = (Get-Date).toString("yyyy/MM/dd HH:mm:ss")
+		
 		Write-Host "$LogString ($Stamp)" -ForegroundColor Yellow
 		$labellog.Text = "$LogString ($Stamp)"
 		$LogMessage = "$Stamp - $LogString"
