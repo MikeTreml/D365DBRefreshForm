@@ -454,7 +454,6 @@ namespace SAPIENTypes
 	{
 		Param ([string]$LogString)
 		$Stamp = (Get-Date).toString("yyyy/MM/dd HH:mm:ss")
-		
 		Write-Host "$LogString ($Stamp)" -ForegroundColor Yellow
 		$labellog.Text = "$LogString ($Stamp)"
 		$LogMessage = "$Stamp - $LogString"
@@ -777,8 +776,6 @@ namespace SAPIENTypes
 			$labelAdminEmailAddress.Visible = $false
 		}
 	}
-	
-	
 	
 	$buttonSQLStatus_Click={
 		#TODO: Place custom script here
@@ -1257,7 +1254,6 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 	$formDatabaseRefreshFromB.MinimumSize = New-Object System.Drawing.Size(650, 650)
 	$formDatabaseRefreshFromB.Name = 'formDatabaseRefreshFromB'
 	$formDatabaseRefreshFromB.SizeGripStyle = 'Hide'
-	$formDatabaseRefreshFromB.StartPosition = 'CenterScreen'
 	$formDatabaseRefreshFromB.Text = 'Database Refresh from BacBak'
 	$formDatabaseRefreshFromB.add_Load($formDatabaseRefreshFromB_Load)
 	#
@@ -1605,4 +1601,5 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 
 #Call the form
 Show-dbRefreshv2_psf | Out-Null
+
 
