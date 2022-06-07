@@ -1,5 +1,15 @@
 function Show-dbRefreshv2_psf {
 
+	#----------------------------------------------
+	#region Import the Assemblies
+	#----------------------------------------------
+	[void][reflection.assembly]::Load('System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089')
+	[void][reflection.assembly]::Load('System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a')
+	#endregion Import Assemblies
+
+	#----------------------------------------------
+	#region Define SAPIEN Types
+	#----------------------------------------------
 	try{
 		[ProgressBarOverlay] | Out-Null
 	}
@@ -119,7 +129,37 @@ function Show-dbRefreshv2_psf {
 	
 	
 	#region Control Theme Helper Function
+	<#
+		.SYNOPSIS
+			Applies a theme to the control and its children.
+		
+		.PARAMETER Control
+			The control to theme. Usually the form itself.
+		
+		.PARAMETER Theme
+			The color theme:
+			Light
+			Dark
 	
+		.PARAMETER CustomColor
+			A hashtable that contains the color values.
+			Keys:
+			WindowColor
+			ContainerColor
+			BackColor
+			ForeColor
+			BorderColor
+			SelectionForeColor
+			SelectionBackColor
+			MenuSelectionColor
+		.EXAMPLE
+			PS C:\> Set-ControlTheme -Control $form1 -Theme Dark
+		
+		.EXAMPLE
+			PS C:\> Set-ControlTheme -Control $form1 -CustomColor @{ WindowColor = 'White'; ContainerBackColor = 'Gray'; BackColor... }
+		.NOTES
+			Created by SAPIEN Technologies, Inc.
+	#>
 	function Set-ControlTheme
 	{
 		[CmdletBinding()]
@@ -1564,4 +1604,5 @@ TmrZ8wUAAAAASUVORK5CYIIL'))
 
 #Call the form
 Show-dbRefreshv2_psf | Out-Null
+
 
