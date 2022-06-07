@@ -1,16 +1,8 @@
 function Show-bar_psf {
 
-	#----------------------------------------------
-	#region Import the Assemblies
-	#----------------------------------------------
 	[void][reflection.assembly]::Load('System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089')
-	[void][reflection.assembly]::Load('System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a')
 	[void][reflection.assembly]::Load('System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a')
-	#endregion Import Assemblies
 
-	#----------------------------------------------
-	#region Define SAPIEN Types
-	#----------------------------------------------
 	try{
 		[ProgressBarOverlay] | Out-Null
 	}
@@ -191,6 +183,7 @@ namespace SAPIENTypes
         Color BackColor;
         Color BorderColor;
 		Color SelectBackColor;
+
         public SAPIENColorTable(Color containerColor, Color backColor, Color borderColor, Color selectBackColor)
         {
             ContainerBackColor = containerColor;
@@ -421,14 +414,12 @@ namespace SAPIENTypes
 	$formSQL.ControlBox = $False
 	$formSQL.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
 	$formSQL.FormBorderStyle = 'None'
-	$formSQL.Margin = '0, 0, 0, 0'
+	$formSQL.Margin = '10, 10, 10, 10'
 	$formSQL.MaximizeBox = $False
 	$formSQL.MinimizeBox = $False
 	$formSQL.Name = 'formSQL'
 	$formSQL.Opacity = 0.8
 	$formSQL.ShowIcon = $False
-	$formSQL.ShowInTaskbar = $False
-	$formSQL.SizeGripStyle = 'Hide'
 	$formSQL.StartPosition = 'CenterScreen'
 	$formSQL.Text = 'SQL'
 	$formSQL.add_Load($formSQL_Load)
@@ -463,7 +454,7 @@ namespace SAPIENTypes
 	$progressbaroverlay1.Location = New-Object System.Drawing.Point(0, 0)
 	$progressbaroverlay1.Margin = '0, 0, 0, 0'
 	$progressbaroverlay1.Name = 'progressbaroverlay1'
-	$progressbaroverlay1.Size = New-Object System.Drawing.Size(562, 50)
+	$progressbaroverlay1.Size = New-Object System.Drawing.Size(562, 37)
 	$progressbaroverlay1.Step = 20
 	$progressbaroverlay1.TabIndex = 0
 	$progressbaroverlay1.UseWaitCursor = $True
@@ -482,28 +473,22 @@ namespace SAPIENTypes
 	$formSQL.Show()
 	
 	
-	
 	[string]$dt = get-date -Format "yyyyMMdd"
-	$oldFile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf' -Exclude AxDB*$dt*Primary.mdf
-	$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
-	$sqlprogressbaroverlay.Maximum = (Get-Item $oldFile).length/1MB
-	$sqlprogressbaroverlay.Value = 0
-	#[System.Windows.MessageBox]::Show($oldFile)
-	#[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Maximum)
-	#[System.Windows.MessageBox]::Show(($newFile).length/1MB)
-	$counter = 0
-	while ($sqlprogressbaroverlay.Value -lt $sqlprogressbaroverlay.Maximum)
-	{
-		$counter += 1
-		$label1.Text = $counter
-		if ($newFile -ne '')
-		{
-			$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
-			$sqlprogressbaroverlay.Value = ($newFile).length/1MB
-		}
-		Start-Sleep -Seconds 8;
-	}
+	$oldFile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf'
+	$newFile = Get-Item $('G:\MSSQL_DATA\*') + $dt + $('*')
 	
+	$sqlprogressbaroverlay.Maximum = (Get-Item $Ofile).length/1MB
+	$sqlprogressbaroverlay.Value = 0
+	
+	while ($sqlprogressbaroverlay1.Value -lt $sqlprogressbaroverlay.Maximum)
+	{
+		if (Test-Path -Path $newFile)
+		{
+			$sqlprogressbaroverlay.Value = (Get-Item $newFile).length/1MB
+			start-sleep -seconds 30
+		}
+	}
+
 } #End Function
 
 #Call the form
