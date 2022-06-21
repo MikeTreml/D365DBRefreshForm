@@ -590,29 +590,32 @@ namespace SAPIENTypes
 		Switch-D365ActiveDatabase -NewDatabaseName $NewDB -Verbose
 		
 		$mainprogressbaroverlay.PerformStep()
-		WriteLog "Remove-D365Database"
-		Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose
+		#WriteLog "Remove-D365Database"
+		#Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose
+		$mainprogressbaroverlay.PerformStep()
+		
+		
+		
+		#move the file
+		#WriteLog "Stop-Service MSSQLSERVER, SQLSERVERAGENT"
+		#Stop-Service MSSQLSERVER, SQLSERVERAGENT -Force -Verbose
+		
+		#[string]$dt = get-date -Format "yyyyMMdd"
+		#$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
+		#[string]$oldFile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf' -Exclude AxDB*$dt*Primary.mdf
+		#if ($oldFile -ne '')
+		#{
+			#WriteLog "Move-Item -Path $oldFile -Destination G:\MSSQL_DATA\AxDB_Primaryold_" + $dt
+			#Move-Item -Path $oldFile -Destination G:\MSSQL_DATA\AxDB_Primaryold_$dt.mdf
+			##Remove-D365Database -DatabaseName 'AxDB_Original'
+		#}
+		#WriteLog "Start-Service MSSQLSERVER, SQLSERVERAGENT "
+		#Start-Service MSSQLSERVER, SQLSERVERAGENT -Verbose
 		$mainprogressbaroverlay.PerformStep()
 		
 		## Start D365FO instance
 		WriteLog "Starting D365FO environment. Then open UI and refresh Data Entities." -ForegroundColor Yellow
 		Start-D365Environment
-		$mainprogressbaroverlay.PerformStep()
-		#move the file
-		WriteLog "Stop-Service MSSQLSERVER, SQLSERVERAGENT"
-		Stop-Service MSSQLSERVER, SQLSERVERAGENT -Force -Verbose
-		
-		[string]$dt = get-date -Format "yyyyMMdd"
-		$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
-		[string]$oldFile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf' -Exclude AxDB*$dt*Primary.mdf
-		if ($oldFile -ne '')
-		{
-			WriteLog "Move-Item -Path $oldFile -Destination G:\MSSQL_DATA\AxDB_Primaryold_" + $dt
-			Move-Item -Path $oldFile -Destination G:\MSSQL_DATA\AxDB_Primaryold_$dt.mdf
-			#Remove-D365Database -DatabaseName 'AxDB_Original'
-		}
-		WriteLog "Start-Service MSSQLSERVER, SQLSERVERAGENT "
-		Start-Service MSSQLSERVER, SQLSERVERAGENT -Verbose
 		$mainprogressbaroverlay.PerformStep()
 		
 		if ($checkboxBackupNewlyCompleted.Checked)
