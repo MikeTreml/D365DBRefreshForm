@@ -477,14 +477,14 @@ namespace SAPIENTypes
 	$oldFile = Get-Item 'G:\MSSQL_DATA\AxDB_backup_20220729_Primary.mdf'
 	$newFile = Get-Item 'G:\MSSQL_DATA\AxDB20220729_Primary.mdf'
 	
-	$sqlprogressbaroverlay.Maximum = (Get-Item $oldFile).length/1MB
-	$sqlprogressbaroverlay.Value = 0
+	$progressbaroverlay1.Maximum = (Get-Item $oldFile).length/1MB
+	$progressbaroverlay1.Value = 0
 	
-	while ($sqlprogressbaroverlay1.Value -lt $sqlprogressbaroverlay.Maximum)
+	while ($progressbaroverlay1.Value -lt $progressbaroverlay1.Maximum)
 	{
 		if (Test-Path -Path $newFile)
 		{
-			$sqlprogressbaroverlay.Value = (Get-Item $newFile).length/1MB
+			$progressbaroverlay1.Value = (Get-Item $newFile).length/1MB
 			start-sleep -seconds 30
 		}
 	}
