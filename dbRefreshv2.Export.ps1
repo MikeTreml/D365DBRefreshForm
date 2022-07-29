@@ -467,7 +467,6 @@ namespace SAPIENTypes
 		$mainprogressbaroverlay.Value = 0
 		$mainprogressbaroverlay.Visible = $True
 		count-checkbox
-		Clear-D365BacpacTableData -Path "D:\Temp\AxDB.bacpac" -Table "dbo.BATCHHISTORY","BATCHJOBHISTORY","SYSSERVERCONFIG","SYSSERVERSESSIONS","SYSCORPNETPRINTERS","SYSCLIENTSESSIONS","BATCHSERVERCONFIG","BATCHSERVERGROUP" -ClearFromSource -Verbose
 		[string]$dt = get-date -Format "yyyyMMdd" #Generate the datetime stamp to make DB files unique
 		
 		WriteLog $oldFile = Get-Item G:\MSSQL_DATA\AxDB*Primary.mdf -Verbose
@@ -476,7 +475,7 @@ namespace SAPIENTypes
 		WriteLog $renameOldFile -ForegroundColor Yellow
 		Start-Sleep -Seconds 3;
 		Install-D365foDbatools 
-		$NewDB = 'AxDB' #Database name. No spaces in the name!
+		$NewDB = $('AxDB')+ $dt #Database name. No spaces in the name!
 		
 		if ($txtLink.Text -ne '')
 		{
@@ -503,7 +502,12 @@ namespace SAPIENTypes
 		elseif ($txtFile.Text -ne '')
 		{
 			$f = Get-ChildItem $txtFile.Text #Please note that this file should be accessible from SQL server service account
-			$NewDB = $($f.BaseName).Replace(' ', '_') + $('_') + $dt; #'AxDB_CTS1005BU2'  #Temporary Database name for new AxDB. Use a file name or any meaningful name.
+			$downloadedDB = $($f.BaseName).Replace(' ', '_') + $('_') + $dt; #'AxDB_CTS1005BU2'  #Temporary Database name for new AxDB. Use a file name or any meaningful name.
+			Move-Item -Path $downloadedDB -Destination $NewDB
+		}
+		if ($checkboxTruncateBatchTables.Checked)
+		{
+			Clear-D365BacpacTableData -Path $NewDB -Table "dbo.BATCHHISTORY","BATCHJOBHISTORY","SYSSERVERCONFIG","SYSSERVERSESSIONS","SYSCORPNETPRINTERS","SYSCLIENTSESSIONS","BATCHSERVERCONFIG","BATCHSERVERGROUP" -ClearFromSource -Verbose
 		}
 		$mainprogressbaroverlay.PerformStep()
 		
@@ -543,15 +547,22 @@ namespace SAPIENTypes
 		WriteLog "Stopping D365FO environment and Switching Databases" -ForegroundColor Yellow
 		Stop-D365Environment -All -Kill -Verbose
 		WriteLog "Switch-D365ActiveDatabase"
-		Switch-D365ActiveDatabase -NewDatabaseName $NewDB -Verbose
+		if(Get-D365Database -Name AXDB)
+		{
+			Switch-D365ActiveDatabase -NewDatabaseName $NewDB -Verbose
+		}
+		else
+		{	
+			Write-Host "is not standard"
+		}
 		
 		$mainprogressbaroverlay.PerformStep()
 		#WriteLog "Remove-D365Database"
-		#Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose
+		Write-Host "Do you wish to remove AxDB_Original"
+		#if(yes){Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose}
+		#else{Rename with below code}
+		#
 		$mainprogressbaroverlay.PerformStep()
-		
-		
-		
 		#move the file
 		WriteLog "Stop-Service MSSQLSERVER, SQLSERVERAGENT"
 		Stop-Service MSSQLSERVER, SQLSERVERAGENT -Force -Verbose
