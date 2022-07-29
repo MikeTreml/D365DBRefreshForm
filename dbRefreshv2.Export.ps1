@@ -26,7 +26,6 @@ function Show-dbRefreshv2_psf {
 		else
 		{
 			$Assemblies = 'System.Windows.Forms', 'System.Drawing'  
-
         }
 		Add-Type -ReferencedAssemblies $Assemblies -TypeDefinition @"
 		using System;
@@ -62,18 +61,10 @@ function Show-dbRefreshv2_psf {
                         }
 	                }
 	            }
-              
                 public string TextOverlay
                 {
-                    get
-                    {
-                        return base.Text;
-                    }
-                    set
-                    {
-                        base.Text = value;
-                        Invalidate();
-                    }
+                    get{return base.Text;}
+                    set{base.Text = value;Invalidate();}
                 }
 	        }
         }
@@ -127,39 +118,6 @@ function Show-dbRefreshv2_psf {
 		Set-ControlTheme $formDatabaseRefreshFromB -Theme Dark
 	}
 	
-	
-	#region Control Theme Helper Function
-	<#
-		.SYNOPSIS
-			Applies a theme to the control and its children.
-		
-		.PARAMETER Control
-			The control to theme. Usually the form itself.
-		
-		.PARAMETER Theme
-			The color theme:
-			Light
-			Dark
-	
-		.PARAMETER CustomColor
-			A hashtable that contains the color values.
-			Keys:
-			WindowColor
-			ContainerColor
-			BackColor
-			ForeColor
-			BorderColor
-			SelectionForeColor
-			SelectionBackColor
-			MenuSelectionColor
-		.EXAMPLE
-			PS C:\> Set-ControlTheme -Control $form1 -Theme Dark
-		
-		.EXAMPLE
-			PS C:\> Set-ControlTheme -Control $form1 -CustomColor @{ WindowColor = 'White'; ContainerBackColor = 'Gray'; BackColor... }
-		.NOTES
-			Created by SAPIEN Technologies, Inc.
-	#>
 	function Set-ControlTheme
 	{
 		[CmdletBinding()]
@@ -187,8 +145,6 @@ function Show-dbRefreshv2_psf {
 			$SelectionForeColor = [System.Drawing.Color]::White
 			$MenuSelectionColor = [System.Drawing.Color]::DimGray
 		}
-		
-		
 		if ($CustomColor)
 		{
 			#Check and Validate the custom colors:
@@ -505,7 +461,7 @@ namespace SAPIENTypes
 	
 	$buttonRun_Click = {
 		$ErrorActionPreference = 'Inquire'
-		
+		$sqlprogressbaroverlay1.Visible =$false
 		$mainprogressbaroverlay.Maximum = 12
 		$mainprogressbaroverlay.Step = 1
 		$mainprogressbaroverlay.Value = 0
@@ -597,8 +553,8 @@ namespace SAPIENTypes
 		
 		
 		#move the file
-		#WriteLog "Stop-Service MSSQLSERVER, SQLSERVERAGENT"
-		#Stop-Service MSSQLSERVER, SQLSERVERAGENT -Force -Verbose
+		WriteLog "Stop-Service MSSQLSERVER, SQLSERVERAGENT"
+		Stop-Service MSSQLSERVER, SQLSERVERAGENT -Force -Verbose
 		
 		#[string]$dt = get-date -Format "yyyyMMdd"
 		#$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
@@ -609,8 +565,8 @@ namespace SAPIENTypes
 			#Move-Item -Path $oldFile -Destination G:\MSSQL_DATA\AxDB_Primaryold_$dt.mdf
 			##Remove-D365Database -DatabaseName 'AxDB_Original'
 		#}
-		#WriteLog "Start-Service MSSQLSERVER, SQLSERVERAGENT "
-		#Start-Service MSSQLSERVER, SQLSERVERAGENT -Verbose
+		WriteLog "Start-Service MSSQLSERVER, SQLSERVERAGENT "
+		Start-Service MSSQLSERVER, SQLSERVERAGENT -Verbose
 		$mainprogressbaroverlay.PerformStep()
 		
 		## Start D365FO instance
@@ -620,8 +576,6 @@ namespace SAPIENTypes
 		
 		if ($checkboxBackupNewlyCompleted.Checked)
 		{
-			## Backup AxDB database
-			
 			WriteLog "Backup AxDB" -ForegroundColor Yellow
 			$labelInfo = ""
 			Invoke-DbaQuery -Verbose -SqlInstance localhost -Database AxDB -Type Full -CompressBackup -BackupFileName "dbname-$NewDB-backuptype-timestamp.bak" -ReplaceInName
@@ -692,7 +646,6 @@ namespace SAPIENTypes
 			$mainprogressbaroverlay.PerformStep()
 		}
 		
-		
 		if ($checkboxEnableUsersExceptGue.Checked)
 		{
 			## Enable Users except Guest
@@ -718,15 +671,12 @@ namespace SAPIENTypes
 		}
 	}
 	
-	
-	
 	$checkboxNewAdmin_CheckStateChanged={
 		if ($checkboxNewAdmin.Checked)
 		{
 			$textboxAdminEmailAddress.Enabled = $true
 			$textboxAdminEmailAddress.Visible = $true
 			$labelAdminEmailAddress.Visible = $true
-			
 		}
 		else
 		{
@@ -736,32 +686,7 @@ namespace SAPIENTypes
 		}
 	}
 	
-	$buttonSQLStatus_Click={
-		#TODO: Place custom script here
 		
-		[string]$dt = get-date -Format "yyyyMMdd"
-		$oldFile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf' -Exclude AxDB*$dt*Primary.mdf
-		$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
-		$sqlprogressbaroverlay1.Maximum = (Get-Item $oldFile).length/1MB
-		$sqlprogressbaroverlay1.Value = 0
-		#[System.Windows.MessageBox]::Show($oldFile)
-		#[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Maximum)
-		#[System.Windows.MessageBox]::Show(($newFile).length/1MB)
-		$counter = 0
-		while ($sqlprogressbaroverlay1.Value -lt $sqlprogressbaroverlay1.Maximum)
-		{
-			$counter += 1
-			$label1.Text = $counter
-			if ($newFile -ne '')
-			{
-				$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
-				$sqlprogressbaroverlay1.Value = ($newFile).length/1MB
-			}
-			Start-Sleep -Seconds 30;
-		}
-	}
-	
-	
 	# --End User Generated Script--
 	#----------------------------------------------
 	#region Generated Events
