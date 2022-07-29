@@ -519,10 +519,10 @@ namespace SAPIENTypes
 		WriteLog "Enable-D365Exception"
 		Enable-D365Exception
 		$mainprogressbaroverlay.PerformStep()
-		WriteLog "Start SQLbar"
-		Start-Job -ScriptBlock { Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/pbar.ps1) }
-		WriteLog "SQL bar"
-		start-sleep -seconds 10
+		#WriteLog "Start SQLbar"
+		#Start-Job -ScriptBlock { Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/pbar.ps1) }
+		#WriteLog "SQL bar"
+		#start-sleep -seconds 10
 		WriteLog "Installing modern SqlPackage"
 		Invoke-D365InstallSqlPackage #Installing modern SqlPackage just in case  
 		$mainprogressbaroverlay.PerformStep()
