@@ -550,41 +550,42 @@ namespace SAPIENTypes
 		if(Get-D365Database -Name AXDB)
 		{
 			Switch-D365ActiveDatabase -NewDatabaseName $NewDB -Verbose
+			
+			$mainprogressbaroverlay.PerformStep()
+			#WriteLog "Remove-D365Database"
+			$decision = $Host.UI.PromptForChoice('something', 'Do you wish to delete old database or keep', ('&Delete', '&Keep'), 1)
+			if ($decision -eq 0) 
+			{
+				$mainprogressbaroverlay.PerformStep()
+				Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose
+			} 
+			else 
+			{
+			    	#move the file
+				$mainprogressbaroverlay.PerformStep()
+				WriteLog "Stop-Service MSSQLSERVER, SQLSERVERAGENT"
+				Stop-Service MSSQLSERVER, SQLSERVERAGENT -Force -Verbose
+
+				[string]$dt = get-date -Format "yyyyMMdd"
+				$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
+				[string]$oldFile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf' -Exclude AxDB*$dt*Primary.mdf
+				if ($oldFile -ne '')
+				{
+					WriteLog "Move-Item -Path $oldFile -Destination G:\MSSQL_DATA\AxDB_Primaryold_" + $dt
+					Move-Item -Path $oldFile -Destination G:\MSSQL_DATA\AxDB_Primaryold_$dt.mdf
+				}
+				WriteLog "Start-Service MSSQLSERVER, SQLSERVERAGENT "
+				Start-Service MSSQLSERVER, SQLSERVERAGENT -Verbose
+			}
+			## Start D365FO instance
+			WriteLog "Starting D365FO environment. Then open UI and refresh Data Entities." -ForegroundColor Yellow
+			Start-D365Environment
+			$mainprogressbaroverlay.PerformStep()
 		}
 		else
 		{	
-			Write-Host "is not standard"
+			Write-Host "is not standard names"
 		}
-		
-		$mainprogressbaroverlay.PerformStep()
-		#WriteLog "Remove-D365Database"
-		Write-Host "Do you wish to remove AxDB_Original"
-		#if(yes){Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose}
-		#else{Rename with below code}
-		#
-		$mainprogressbaroverlay.PerformStep()
-		#move the file
-		WriteLog "Stop-Service MSSQLSERVER, SQLSERVERAGENT"
-		Stop-Service MSSQLSERVER, SQLSERVERAGENT -Force -Verbose
-		
-		#[string]$dt = get-date -Format "yyyyMMdd"
-		#$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
-		#[string]$oldFile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf' -Exclude AxDB*$dt*Primary.mdf
-		#if ($oldFile -ne '')
-		#{
-			#WriteLog "Move-Item -Path $oldFile -Destination G:\MSSQL_DATA\AxDB_Primaryold_" + $dt
-			#Move-Item -Path $oldFile -Destination G:\MSSQL_DATA\AxDB_Primaryold_$dt.mdf
-			##Remove-D365Database -DatabaseName 'AxDB_Original'
-		#}
-		WriteLog "Start-Service MSSQLSERVER, SQLSERVERAGENT "
-		Start-Service MSSQLSERVER, SQLSERVERAGENT -Verbose
-		$mainprogressbaroverlay.PerformStep()
-		
-		## Start D365FO instance
-		WriteLog "Starting D365FO environment. Then open UI and refresh Data Entities." -ForegroundColor Yellow
-		Start-D365Environment
-		$mainprogressbaroverlay.PerformStep()
-		
 		if ($checkboxBackupNewlyCompleted.Checked)
 		{
 			WriteLog "Backup AxDB" -ForegroundColor Yellow
