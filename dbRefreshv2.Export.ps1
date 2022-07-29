@@ -467,7 +467,7 @@ namespace SAPIENTypes
 		$mainprogressbaroverlay.Value = 0
 		$mainprogressbaroverlay.Visible = $True
 		count-checkbox
-		[string]$dt = get-date -Format "yyyyMMdd" #Generate the datetime stamp to make DB files unique
+		[string]$dt = get-date -Format "yyyyMMdd_hh_mm" #Generate the datetime stamp to make DB files unique
 		
 		WriteLog $oldFile = Get-Item G:\MSSQL_DATA\AxDB*Primary.mdf -Verbose
 		$renameOldFile = $('G:\MSSQL_DATA\AxDB_PrimaryOld_') + $dt + $('.mdf')
