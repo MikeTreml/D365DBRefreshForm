@@ -467,7 +467,7 @@ namespace SAPIENTypes
 		$mainprogressbaroverlay.Value = 0
 		$mainprogressbaroverlay.Visible = $True
 		count-checkbox
-		#Clear-D365BacpacTableData -Path "C:\Temp\AxDB.bacpac" -Table "dbo.BATCHHISTORY","BATCHJOBHISTORY","SYSSERVERCONFIG","SYSSERVERSESSIONS","SYSCORPNETPRINTERS","SYSCLIENTSESSIONS","BATCHSERVERCONFIG","BATCHSERVERGROUP" -ClearFromSource -Verbose
+		Clear-D365BacpacTableData -Path "D:\Temp\AxDB.bacpac" -Table "dbo.BATCHHISTORY","BATCHJOBHISTORY","SYSSERVERCONFIG","SYSSERVERSESSIONS","SYSCORPNETPRINTERS","SYSCLIENTSESSIONS","BATCHSERVERCONFIG","BATCHSERVERGROUP" -ClearFromSource -Verbose
 		[string]$dt = get-date -Format "yyyyMMdd" #Generate the datetime stamp to make DB files unique
 		
 		WriteLog $oldFile = Get-Item G:\MSSQL_DATA\AxDB*Primary.mdf -Verbose
