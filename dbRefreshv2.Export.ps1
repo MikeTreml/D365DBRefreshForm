@@ -502,8 +502,8 @@ namespace SAPIENTypes
 		elseif ($txtFile.Text -ne '')
 		{
 			$f = Get-ChildItem $txtFile.Text #Please note that this file should be accessible from SQL server service account
-			$downloadedDB = $($f.BaseName).Replace(' ', '_') + $('_') + $dt; #'AxDB_CTS1005BU2'  #Temporary Database name for new AxDB. Use a file name or any meaningful name.
-			Move-Item -Path $downloadedDB -Destination $NewDB
+			$FileDB = $TempFolder + $NewDB
+			Move-Item -Path $txtFile.Text -Destination $FileDB
 		}
 		if ($checkboxTruncateBatchTables.Checked)
 		{
