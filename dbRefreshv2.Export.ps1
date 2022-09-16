@@ -507,9 +507,9 @@ namespace SAPIENTypes
 		}
 		if ($checkboxTruncateBatchTables.Checked)
 		{
-		WriteLog "..Tuncate" $NewDB
-		Clear-D365BacpacTableData -Path $NewDB -Table "dbo.BATCHHISTORY","BATCHJOBHISTORY","SYSSERVERCONFIG","SYSSERVERSESSIONS","SYSCORPNETPRINTERS","SYSCLIENTSESSIONS","BATCHSERVERCONFIG","BATCHSERVERGROUP" -ClearFromSource -Verbose
-		WriteLog "Done Tuncate" $NewDB
+			#WriteLog "..Tuncate" $NewDB
+			#Clear-D365BacpacTableData -Path $NewDB -Table "dbo.BATCHHISTORY","BATCHJOBHISTORY","SYSSERVERCONFIG","SYSSERVERSESSIONS","SYSCORPNETPRINTERS","SYSCLIENTSESSIONS","BATCHSERVERCONFIG","BATCHSERVERGROUP" -ClearFromSource -Verbose
+			#WriteLog "Done Tuncate" $NewDB
 		}
 		$mainprogressbaroverlay.PerformStep()
 		
@@ -529,10 +529,11 @@ namespace SAPIENTypes
 		Invoke-D365InstallSqlPackage #Installing modern SqlPackage just in case  
 		$mainprogressbaroverlay.PerformStep()
 		## Import bacpac to SQL Database
-		WriteLog "Checking SQL file"
+		WriteLog "Checking SQL file" $f.FullName
+		WriteLog $f
 		If (-not (Test-DbaPath -SqlInstance localhost -Path $($f.FullName)))
 		{
-			Write-Warning "Database file $($f.FullName) could not be found by SQL Server. Try to move it to C:\Temp or D:\Temp"
+			WriteLog  "Database file $($f.FullName) could not be found by SQL Server. Try to move it to C:\Temp or D:\Temp"
 			throw "Database file $($f.FullName) could not be found by SQL Server. Try to move it to C:\Temp or D:\Temp"
 		}
 		$mainprogressbaroverlay.PerformStep()
