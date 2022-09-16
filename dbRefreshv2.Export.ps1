@@ -80,7 +80,6 @@ function Show-dbRefreshv2_psf {
 	$buttonSQLStatus = New-Object 'System.Windows.Forms.Button'
 	$labelMain = New-Object 'System.Windows.Forms.Label'
 	$labelSQL = New-Object 'System.Windows.Forms.Label'
-	$sqlprogressbaroverlay1 = New-Object 'SAPIENTypes.ProgressBarOverlay'
 	$checkbox5 = New-Object 'System.Windows.Forms.CheckBox'
 	$checkbox4 = New-Object 'System.Windows.Forms.CheckBox'
 	$checkbox3 = New-Object 'System.Windows.Forms.CheckBox'
@@ -92,6 +91,7 @@ function Show-dbRefreshv2_psf {
 	$checkboxTruncateBatchTables = New-Object 'System.Windows.Forms.CheckBox'
 	$checkboxEnableUsers = New-Object 'System.Windows.Forms.CheckBox'
 	$buttonRun = New-Object 'System.Windows.Forms.Button'
+	$buttonDBDelete = New-Object 'System.Windows.Forms.Button'
 	$checkboxListOutUserEmails = New-Object 'System.Windows.Forms.CheckBox'
 	$checkboxNewAdmin = New-Object 'System.Windows.Forms.CheckBox'
 	$checkboxBackupCompletedAxDB = New-Object 'System.Windows.Forms.CheckBox'
@@ -194,7 +194,6 @@ namespace SAPIENTypes
         Color BackColor;
         Color BorderColor;
 		Color SelectBackColor;
-
         public SAPIENColorTable(Color containerColor, Color backColor, Color borderColor, Color selectBackColor)
         {
             ContainerBackColor = containerColor;
@@ -457,11 +456,13 @@ namespace SAPIENTypes
 		}
 		#endregion Installing d365fo.tools and dbatools -->
 	}
-	
-	
+	$buttonDBDelete_Click = {
+		WriteLog "Start remove DB"
+		Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose
+	}
 	$buttonRun_Click = {
 		$ErrorActionPreference = 'Inquire'
-		$sqlprogressbaroverlay1.Visible =$false
+		$buttonDBDelete.Visible =$false
 		$mainprogressbaroverlay.Maximum = 12
 		$mainprogressbaroverlay.Step = 1
 		$mainprogressbaroverlay.Value = 0
@@ -562,9 +563,10 @@ namespace SAPIENTypes
 			#{
 				WriteLog "Stop-D365Environment"
 				Stop-D365Environment -All -Kill -Verbose
-				WriteLog "Start remove DB"
-				Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose
-				WriteLog "removed DB"
+				$buttonDBDelete.Visible =$true
+				#WriteLog "Start remove DB"
+				#Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose
+				#WriteLog "removed DB"
 				$mainprogressbaroverlay.PerformStep()
 			#} 
 			#else 
@@ -726,6 +728,7 @@ namespace SAPIENTypes
 		{
 			$buttonSQLStatus.remove_Click($buttonSQLStatus_Click)
 			$buttonRun.remove_Click($buttonRun_Click)
+			$buttonDBDelete.remove_Click($buttonDBDelete_Click)
 			$checkboxNewAdmin.remove_CheckStateChanged($checkboxNewAdmin_CheckStateChanged)
 			$buttonAddFile.remove_Click($buttonAddFile_Click)
 			$txtFile.remove_TextChanged($txtFile_TextChanged)
@@ -748,7 +751,6 @@ namespace SAPIENTypes
 	$formDatabaseRefreshFromB.Controls.Add($buttonSQLStatus)
 	$formDatabaseRefreshFromB.Controls.Add($labelMain)
 	$formDatabaseRefreshFromB.Controls.Add($labelSQL)
-	$formDatabaseRefreshFromB.Controls.Add($sqlprogressbaroverlay1)
 	$formDatabaseRefreshFromB.Controls.Add($checkbox5)
 	$formDatabaseRefreshFromB.Controls.Add($checkbox4)
 	$formDatabaseRefreshFromB.Controls.Add($checkbox3)
@@ -760,6 +762,7 @@ namespace SAPIENTypes
 	$formDatabaseRefreshFromB.Controls.Add($checkboxTruncateBatchTables)
 	$formDatabaseRefreshFromB.Controls.Add($checkboxEnableUsers)
 	$formDatabaseRefreshFromB.Controls.Add($buttonRun)
+	$formDatabaseRefreshFromB.Controls.Add($buttonDBDelete)
 	$formDatabaseRefreshFromB.Controls.Add($checkboxListOutUserEmails)
 	$formDatabaseRefreshFromB.Controls.Add($checkboxNewAdmin)
 	$formDatabaseRefreshFromB.Controls.Add($checkboxBackupCompletedAxDB)
@@ -826,15 +829,6 @@ namespace SAPIENTypes
 	$labelSQL.Size = New-Object System.Drawing.Size(41, 20)
 	$labelSQL.TabIndex = 43
 	$labelSQL.Text = 'SQL'
-	#
-	# sqlprogressbaroverlay1
-	#
-	$sqlprogressbaroverlay1.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
-	$sqlprogressbaroverlay1.Location = New-Object System.Drawing.Point(52, 501)
-	$sqlprogressbaroverlay1.Margin = '4, 4, 4, 4'
-	$sqlprogressbaroverlay1.Name = 'sqlprogressbaroverlay1'
-	$sqlprogressbaroverlay1.Size = New-Object System.Drawing.Size(569, 33)
-	$sqlprogressbaroverlay1.TabIndex = 42
 	#
 	# checkbox5
 	#
@@ -952,6 +946,18 @@ namespace SAPIENTypes
 	$checkboxEnableUsers.TabIndex = 34
 	$checkboxEnableUsers.Text = 'Enable Users'
 	$checkboxEnableUsers.UseVisualStyleBackColor = $True
+	#
+	# $buttonDBDelete
+	#
+	$buttonDBDelete.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
+	$buttonDBDelete.Location = New-Object System.Drawing.Point(544, 501)
+	$buttonDBDelete.Margin = '5, 5, 5, 5'
+	$buttonDBDelete.Name = 'buttonDBDelete'
+	$buttonDBDelete.Size = New-Object System.Drawing.Size(77, 43)
+	$buttonDBDelete.TabIndex = 62
+	$buttonDBDelete.Text = 'Delte old DB'
+	$buttonDBDelete.UseVisualStyleBackColor = $True
+	$buttonDBDelete.add_Click($buttonDBDelete_Click)
 	#
 	# buttonRun
 	#
