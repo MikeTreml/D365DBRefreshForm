@@ -507,7 +507,9 @@ namespace SAPIENTypes
 		}
 		if ($checkboxTruncateBatchTables.Checked)
 		{
-			Clear-D365BacpacTableData -Path $NewDB -Table "dbo.BATCHHISTORY","BATCHJOBHISTORY","SYSSERVERCONFIG","SYSSERVERSESSIONS","SYSCORPNETPRINTERS","SYSCLIENTSESSIONS","BATCHSERVERCONFIG","BATCHSERVERGROUP" -ClearFromSource -Verbose
+		WriteLog "..Tuncate" $NewDB
+		Clear-D365BacpacTableData -Path $NewDB -Table "dbo.BATCHHISTORY","BATCHJOBHISTORY","SYSSERVERCONFIG","SYSSERVERSESSIONS","SYSCORPNETPRINTERS","SYSCLIENTSESSIONS","BATCHSERVERCONFIG","BATCHSERVERGROUP" -ClearFromSource -Verbose
+		WriteLog "Done Tuncate" $NewDB
 		}
 		$mainprogressbaroverlay.PerformStep()
 		
@@ -549,14 +551,22 @@ namespace SAPIENTypes
 		WriteLog "Switch-D365ActiveDatabase"
 		if(Get-D365Database -Name AXDB)
 		{
+			WriteLog "switch DB"
 			Switch-D365ActiveDatabase -NewDatabaseName $NewDB -Verbose
+			WriteLog "switch DB done"
 			$mainprogressbaroverlay.PerformStep()
 			#WriteLog "Remove-D365Database"
 			#$decision = $Host.UI.PromptForChoice('something', 'Do you wish to delete old database or keep', ('&Delete', '&Keep'), 1)
 			#if ($decision -eq 0) 
 			#{
-				$mainprogressbaroverlay.PerformStep()
+				
+				#Stop-D365Environment -All -Kill -Verbose
+				WriteLog "Sleep time"
+				Start-Sleep -Seconds 20;
+				WriteLog "Start remove DB"
 				Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose
+				WriteLog "removed DB"
+				$mainprogressbaroverlay.PerformStep()
 			#} 
 			#else 
 			#{
@@ -670,14 +680,14 @@ namespace SAPIENTypes
 		if ($checkboxListOutUserEmails.Checked)
 		{
 			WriteLog "List Out User Email Addresses" -ForegroundColor Yellow
-			Invoke-D365SqlScript -Verbose -DatabaseServer localhost -DatabaseName AxDB -Command "
-			select ID, Name, NetworkAlias, NETWORKDOMAIN, Enable from userInfo
-			where NETWORKALIAS not like '%@contosoax7.onmicrosoft.com'
-			and NETWORKALIAS not like '%@capintegration01.onmicrosoft.com'
-			and NETWORKALIAS not like '%@devtesttie.ccsctp.net'
-		 	and NETWORKALIAS not like '%@DAXMDSRunner.com'
-			and NETWORKALIAS not like '%@dynamics.com'
-			and NETWORKALIAS != ''"
+			#Invoke-D365SqlScript -Verbose -DatabaseServer localhost -DatabaseName AxDB -Command "
+			#select ID, Name, NetworkAlias, NETWORKDOMAIN, Enable from userInfo
+			#where NETWORKALIAS not like '%@contosoax7.onmicrosoft.com'
+			#and NETWORKALIAS not like '%@capintegration01.onmicrosoft.com'
+			#and NETWORKALIAS not like '%@devtesttie.ccsctp.net'
+		 	#and NETWORKALIAS not like '%@DAXMDSRunner.com'
+			#and NETWORKALIAS not like '%@dynamics.com'
+			#and NETWORKALIAS != ''"
 			$mainprogressbaroverlay.PerformStep()
 		}
 	}
