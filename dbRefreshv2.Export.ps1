@@ -560,10 +560,8 @@ namespace SAPIENTypes
 			#$decision = $Host.UI.PromptForChoice('something', 'Do you wish to delete old database or keep', ('&Delete', '&Keep'), 1)
 			#if ($decision -eq 0) 
 			#{
-				
-				#Stop-D365Environment -All -Kill -Verbose
-				WriteLog "Sleep time"
-				Start-Sleep -Seconds 20;
+				WriteLog "Stop-D365Environment"
+				Stop-D365Environment -All -Kill -Verbose
 				WriteLog "Start remove DB"
 				Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose
 				WriteLog "removed DB"
@@ -674,7 +672,8 @@ namespace SAPIENTypes
 			WriteLog "Enable all users except Guest" -ForegroundColor Yellow
 			#Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "Update USERINFO set ENABLE = 1 where ID != 'Guest'"
 			Invoke-D365SqlScript -Verbose -DatabaseServer localhost -DatabaseName AxDB -Command "Update USERINFO set ENABLE = 1 where ID != 'Guest'"
-			Update-D365User
+			Enable-D365User -Email "*@*.com" -Verbose
+			Update-D365User -Email "*@*.com" -Verbose
 			$mainprogressbaroverlay.PerformStep()
 		}
 		
