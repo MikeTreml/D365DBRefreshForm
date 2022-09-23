@@ -387,13 +387,11 @@ namespace SAPIENTypes
 	$txtLink_TextChanged = {
 		$txtFile.Text = ''
 	}
-	
 	$txtFile_TextChanged = {
 		$txtLink.Text = ''
 	}
-	
-	
-	
+	$buttonEnableUsers = {
+	}
 	$buttonAddFile_Click = {
 		$txtFile.Visible = $true
 		$labelBacBakFileLocation.Visible = $true
