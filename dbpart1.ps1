@@ -77,7 +77,7 @@ function Show-dbRefreshv2_psf {
 	#----------------------------------------------
 	[System.Windows.Forms.Application]::EnableVisualStyles()
 	$formDatabaseRefreshFromB = New-Object 'System.Windows.Forms.Form'
-	$buttonSQLStatus = New-Object 'System.Windows.Forms.Button'
+	$buttonEnableUsers = New-Object 'System.Windows.Forms.Button'
 	$labelMain = New-Object 'System.Windows.Forms.Label'
 	$labelSQL = New-Object 'System.Windows.Forms.Label'
 	$checkbox5 = New-Object 'System.Windows.Forms.CheckBox'
@@ -474,8 +474,8 @@ namespace SAPIENTypes
 		else
 		{
 			$textboxAdminEmailAddress.Enabled = $false
-			$textboxAdminEmailAddress.Visible = $false
-			$labelAdminEmailAddress.Visible = $false
+			$textboxAdminEmailAddress.Visible = $False
+			$labelAdminEmailAddress.Visible = $False
 		}
 	}
 	
@@ -496,7 +496,7 @@ namespace SAPIENTypes
 		#Remove all event handlers from the controls
 		try
 		{
-			$buttonSQLStatus.remove_Click($buttonSQLStatus_Click)
+			$buttonEnableUsers.remove_Click($buttonEnableUsers_Click)
 			$buttonRun.remove_Click($buttonRun_Click)
 			$buttonDBDelete.remove_Click($buttonDBDelete_Click)
 			$checkboxNewAdmin.remove_CheckStateChanged($checkboxNewAdmin_CheckStateChanged)
@@ -518,7 +518,7 @@ namespace SAPIENTypes
 	#
 	# formDatabaseRefreshFromB
 	#
-	$formDatabaseRefreshFromB.Controls.Add($buttonSQLStatus)
+	$formDatabaseRefreshFromB.Controls.Add($buttonEnableUsers)
 	$formDatabaseRefreshFromB.Controls.Add($labelMain)
 	$formDatabaseRefreshFromB.Controls.Add($labelSQL)
 	$formDatabaseRefreshFromB.Controls.Add($checkbox5)
@@ -567,16 +567,16 @@ namespace SAPIENTypes
 	$formDatabaseRefreshFromB.Text = 'Database Refresh from BacBak'
 	$formDatabaseRefreshFromB.add_Load($formDatabaseRefreshFromB_Load)
 	#
-	# buttonSQLStatus
+	# buttonEnableUsers
 	#
-	$buttonSQLStatus.Location = New-Object System.Drawing.Point(509, 417)
-	$buttonSQLStatus.Margin = '4, 4, 4, 4'
-	$buttonSQLStatus.Name = 'buttonSQLStatus'
-	$buttonSQLStatus.Size = New-Object System.Drawing.Size(112, 34)
-	$buttonSQLStatus.TabIndex = 45
-	$buttonSQLStatus.Text = 'SQL Status'
-	$buttonSQLStatus.UseVisualStyleBackColor = $True
-	$buttonSQLStatus.add_Click($buttonSQLStatus_Click)
+	$buttonEnableUsers.Location = New-Object System.Drawing.Point(509, 417)
+	$buttonEnableUsers.Margin = '4, 4, 4, 4'
+	$buttonEnableUsers.Name = 'buttonEnableUsers'
+	$buttonEnableUsers.Size = New-Object System.Drawing.Size(112, 34)
+	$buttonEnableUsers.TabIndex = 45
+	$buttonEnableUsers.Text = '$Enable Users'
+	$buttonEnableUsers.UseVisualStyleBackColor = $True
+	$buttonEnableUsers.add_Click($buttonEnableUsers_Click)
 	#
 	# labelMain
 	#
@@ -610,7 +610,7 @@ namespace SAPIENTypes
 	$checkbox5.TabIndex = 41
 	$checkbox5.Text = 'checkbox5'
 	$checkbox5.UseVisualStyleBackColor = $True
-	$checkbox5.Visible = $False
+	$checkbox5.Visible = $True
 	#
 	# checkbox4
 	#
@@ -622,7 +622,7 @@ namespace SAPIENTypes
 	$checkbox4.TabIndex = 40
 	$checkbox4.Text = 'checkbox4'
 	$checkbox4.UseVisualStyleBackColor = $True
-	$checkbox4.Visible = $False
+	$checkbox4.Visible = $True
 	#
 	# checkbox3
 	#
@@ -634,7 +634,7 @@ namespace SAPIENTypes
 	$checkbox3.TabIndex = 39
 	$checkbox3.Text = 'checkbox3'
 	$checkbox3.UseVisualStyleBackColor = $True
-	$checkbox3.Visible = $False
+	$checkbox3.Visible = $True
 	#
 	# checkbox2
 	#
@@ -646,7 +646,7 @@ namespace SAPIENTypes
 	$checkbox2.TabIndex = 38
 	$checkbox2.Text = 'checkbox2'
 	$checkbox2.UseVisualStyleBackColor = $True
-	$checkbox2.Visible = $False
+	$checkbox2.Visible = $True
 	#
 	# checkbox1
 	#
@@ -658,7 +658,7 @@ namespace SAPIENTypes
 	$checkbox1.TabIndex = 37
 	$checkbox1.Text = 'checkbox1'
 	$checkbox1.UseVisualStyleBackColor = $True
-	$checkbox1.Visible = $False
+	$checkbox1.Visible = $True
 	#
 	# labellog
 	#
