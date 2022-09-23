@@ -383,124 +383,136 @@ namespace SAPIENTypes
 		}
 	}
 	#endregion
-#-------------------------------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------------------------------
 
+function WriteLog
+{
+	Param ([string]$LogString)
+	$Stamp = (Get-Date).toString("yyyy/MM/dd HH:mm:ss")
+	Write-Host "$LogString ($Stamp)" -ForegroundColor Yellow
+	$labellog.Text = "$LogString ($Stamp)"
+	$LogMessage = "$Stamp - $LogString"
+	Add-content $LogFile -value $LogMessage 
+	Return $LogString
+}
 
+function count-checkbox
+{
+	if ($checkboxBackupCompletedAxDB.Checked) { $mainprogressbaroverlay.Maximum += 1 }
+	if ($checkboxCleanUpPowerBI.Checked) { $mainprogressbaroverlay.Maximum += 1 }
+	if ($checkboxEnableSQLTracking.Checked) { $mainprogressbaroverlay.Maximum += 1 }
+	if ($checkboxEnableUsers.Checked) { $mainprogressbaroverlay.Maximum += 1 }
+	if ($checkboxListOutUserEmails.Checked) { $mainprogressbaroverlay.Maximum += 1 }
+	if ($checkboxNewAdmin.Checked) { $mainprogressbaroverlay.Maximum += 1 }
+	if ($checkboxPauseBatchJobs.Checked) { $mainprogressbaroverlay.Maximum += 1 }
+	if ($checkboxRunDatabaseSync.Checked) { $mainprogressbaroverlay.Maximum += 1  }
+	if ($checkboxDBRecoveryModel.Checked) { $mainprogressbaroverlay.Maximum += 1 }
+	if ($checkboxTruncateBatchTables.Checked) { $mainprogressbaroverlay.Maximum += 1 }
+}
 
+function Install-D365foDbatools
+{
+	#region Installing d365fo.tools and dbatools <--
+	# This is required by Find-Module, by doing it beforehand we remove some warning messages
+	WriteLog "Installing PowerShell modules d365fo.tools and dbatools" -ForegroundColor Yellow
 
-
-
-
-
-	$f = ''
-	$txtLink_TextChanged = {
-		$txtFile.Text = ''
-	}
-	$txtFile_TextChanged = {
-		$txtLink.Text = ''
-	}
-	$buttonEnableUsers = {
-	}
-	$buttonAddFile_Click = {
-		$txtFile.Visible = $true
-		$labelBacBakFileLocation.Visible = $true
-		Add-Type -AssemblyName System.Windows.Forms
-		$FileBrowser = New-Object System.Windows.Forms.OpenFileDialog -Property @{ InitialDirectory = [Environment]::GetFolderPath('Desktop') }
-		$FileBrowser.ShowDialog()
-		$txtFile.Text = $FileBrowser.FileName
-	}
-	
-	$Stamp = (Get-Date).toString("yyyy-MM-dd")
-	$LogFile = "C:\Users\$env:UserName\Desktop\DBRefresh_$env:computername_$Stamp.log"
-	function WriteLog
+	Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope AllUsers
+	Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+	$modules2Install = @('d365fo.tools', 'dbatools')
+	foreach ($module in $modules2Install)
 	{
-		Param ([string]$LogString)
-		$Stamp = (Get-Date).toString("yyyy/MM/dd HH:mm:ss")
-		Write-Host "$LogString ($Stamp)" -ForegroundColor Yellow
-		$labellog.Text = "$LogString ($Stamp)"
-		$LogMessage = "$Stamp - $LogString"
-		Add-content $LogFile -value $LogMessage 
-		Return $LogString
-	}
-	
-	function count-checkbox
-	{
-		if ($checkboxBackupCompletedAxDB.Checked) { $mainprogressbaroverlay.Maximum += 1 }
-		if ($checkboxCleanUpPowerBI.Checked) { $mainprogressbaroverlay.Maximum += 1 }
-		if ($checkboxEnableSQLTracking.Checked) { $mainprogressbaroverlay.Maximum += 1 }
-		if ($checkboxEnableUsers.Checked) { $mainprogressbaroverlay.Maximum += 1 }
-		if ($checkboxListOutUserEmails.Checked) { $mainprogressbaroverlay.Maximum += 1 }
-		if ($checkboxNewAdmin.Checked) { $mainprogressbaroverlay.Maximum += 1 }
-		if ($checkboxPauseBatchJobs.Checked) { $mainprogressbaroverlay.Maximum += 1 }
-		if ($checkboxRunDatabaseSync.Checked) { $mainprogressbaroverlay.Maximum += 1  }
-		if ($checkboxDBRecoveryModel.Checked) { $mainprogressbaroverlay.Maximum += 1 }
-		if ($checkboxTruncateBatchTables.Checked) { $mainprogressbaroverlay.Maximum += 1 }
-	}
-	
-	function Install-D365foDbatools
-	{
-		#region Installing d365fo.tools and dbatools <--
-		# This is required by Find-Module, by doing it beforehand we remove some warning messages
-		WriteLog "Installing PowerShell modules d365fo.tools and dbatools" -ForegroundColor Yellow
-		
-		Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope AllUsers
-		Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
-		$modules2Install = @('d365fo.tools', 'dbatools')
-		foreach ($module in $modules2Install)
+		WriteLog "..working on module $module"
+		if ($null -eq $(Get-Command -Module $module))
 		{
-			WriteLog "..working on module $module"
-			if ($null -eq $(Get-Command -Module $module))
-			{
-				WriteLog "....installing module $module" -ForegroundColor Gray
-				Install-Module -Name $module -SkipPublisherCheck -Scope AllUsers -Verbose
-			}
-			else
-			{
-				WriteLog "....updating module" $module -ForegroundColor Gray
-				Update-Module -Name $module -Verbose
-			}
-			$mainprogressbaroverlay.PerformStep()
-		}
-		#endregion Installing d365fo.tools and dbatools -->
-	}
-	$buttonDBDelete_Click = {
-		WriteLog "Start remove DB"
-		Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose
-	}
-	$buttonRun_Click = {
-	Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/DBRefreshRunButton.ps1)
-	}
-	
-	$checkboxNewAdmin_CheckStateChanged={
-		if ($checkboxNewAdmin.Checked)
-		{
-			$textboxAdminEmailAddress.Enabled = $true
-			$textboxAdminEmailAddress.Visible = $true
-			$labelAdminEmailAddress.Visible = $true
+			WriteLog "....installing module $module" -ForegroundColor Gray
+			Install-Module -Name $module -SkipPublisherCheck -Scope AllUsers -Verbose
 		}
 		else
 		{
-			$textboxAdminEmailAddress.Enabled = $false
-			$textboxAdminEmailAddress.Visible = $False
-			$labelAdminEmailAddress.Visible = $False
+			WriteLog "....updating module" $module -ForegroundColor Gray
+			Update-Module -Name $module -Verbose
 		}
+		$mainprogressbaroverlay.PerformStep()
 	}
+	#endregion Installing d365fo.tools and dbatools -->
+}
+
+$checkboxNewAdmin_CheckStateChanged={
+	if ($checkboxNewAdmin.Checked)
+	{
+		$textboxAdminEmailAddress.Enabled = $true
+		$textboxAdminEmailAddress.Visible = $true
+		$labelAdminEmailAddress.Visible = $true
+	}
+	else
+	{
+		$textboxAdminEmailAddress.Enabled = $false
+		$textboxAdminEmailAddress.Visible = $False
+		$labelAdminEmailAddress.Visible = $False
+	}
+}
+
+
+#-------------------------------------------------------------------------------------------------------#-------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------#-------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------#-------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------#-------------------------------------------------------------------------------------------------------
+
+
+$f = ''
+$Stamp = (Get-Date).toString("yyyy-MM-dd")
+$LogFile = "C:\Users\$env:UserName\Desktop\DBRefresh_$env:computername_$Stamp.log"
+
+$txtLink_TextChanged = 
+{
+	$txtFile.Text = ''
+}
+
+$txtFile_TextChanged = 
+{
+	$txtLink.Text = ''
+}
+
+#-------------------------------------------------------------------------------------------------------#-------------------------------------------------------------------------------------------------------
+
+$buttonEnableUsers = {
+}
+
+#-------------------------------------------------------------------------------------------------------#-------------------------------------------------------------------------------------------------------
+
+$buttonAddFile_Click = {
+	$txtFile.Visible = $true
+	$labelBacBakFileLocation.Visible = $true
+	Add-Type -AssemblyName System.Windows.Forms
+	$FileBrowser = New-Object System.Windows.Forms.OpenFileDialog -Property @{ InitialDirectory = [Environment]::GetFolderPath('Desktop') }
+	$FileBrowser.ShowDialog()
+	$txtFile.Text = $FileBrowser.FileName
+}
+
+#-------------------------------------------------------------------------------------------------------#-------------------------------------------------------------------------------------------------------
+
+$buttonDBDelete_Click = {
+	WriteLog "Start remove DB"
+	Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose
+}
+
+#-------------------------------------------------------------------------------------------------------#-------------------------------------------------------------------------------------------------------
+
+$buttonRun_Click = {
+Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/DBRefreshRunButton.ps1)
+}
+
+
+
+
+
 	
 	
 	
 	
-	
-	
-	
-	
-	
-#-------------------------------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------#-------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------#-------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------#-------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------#-------------------------------------------------------------------------------------------------------
 		
 	# --End User Generated Script--
 	#----------------------------------------------
