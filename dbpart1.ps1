@@ -459,7 +459,7 @@ namespace SAPIENTypes
 		Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose
 	}
 	$buttonRun_Click = {
-	Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/dbpart2)
+	Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/DBRefreshRunButton.ps1)
 	}
 	
 	$checkboxNewAdmin_CheckStateChanged={
