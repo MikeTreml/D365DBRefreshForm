@@ -546,148 +546,141 @@ namespace SAPIENTypes
 	
 	
 	$buttonAdminEmailAdd_Click={
-		#TODO: Place custom script here
-		
-	}
-	
-	$labelSysAdmin_Click={
-		#TODO: Place custom script here
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/NewAdmin.ps1)
 		
 	}
 	
 	$checkboxTruncateBatchTables_CheckedChanged={
-		#TODO: Place custom script here
+		https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/TruncateBatch.ps1)
 		
 	}
 	
 	$buttonCleanUpPowerBI_Click={
-		#TODO: Place custom script here
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/CleanPowerBI.ps1)
 		
 	}
 	
 	$buttonDBRecoveryModel_Click={
-		#TODO: Place custom script here
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/SetDBRecoveryModel.ps1)
 		
 	}
 	
 	$buttonListOutUserEmails_Click={
-		#TODO: Place custom script here
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/ListOutUserEmails.ps1)
 		
 	}
 	
 	$buttonEnableUsers_Click={
-		#TODO: Place custom script here
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/EnableUsers.ps1)
 		
 	}
 	
 	$buttonRunDatabaseSync_Click={
-		#TODO: Place custom script here
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/DBSync.ps1)
 		
 	}
 	
 	$buttonTruncateBatchTables_Click={
-		#TODO: Place custom script here
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/TruncateBatch.ps1)
 		
 	}
 	
 	$buttonEnableSQLTracking_Click={
-		#TODO: Place custom script here
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/SQLTracking.ps1)
 		
 	}
 	
 	$buttonPauseBatchJobs_Click={
-		#TODO: Place custom script here
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/BatchHold.ps1)
 		
 	}
 	
 	$button1_Click={
-		#TODO: Place custom script here
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/1)
 		
 	}
 	
 	$button2_Click={
-		#TODO: Place custom script here
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/2)
 		
 	}
 	
 	$button3_Click={
-		#TODO: Place custom script here
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/3)
 		
 	}
 	
 	$button4_Click={
-		#TODO: Place custom script here
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/4)
 		
 	}
 	
 	$button5_Click={
-		#TODO: Place custom script here
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/5)
 		
 	}
 	
 	$checkbox5_CheckedChanged={
-		#TODO: Place custom script here
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/5)
 		
 	}
 	
 	$checkbox4_CheckedChanged={
-		#TODO: Place custom script here
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/4)
 		
 	}
 	
 	$checkbox3_CheckedChanged={
-		#TODO: Place custom script here
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/3)
 		
 	}
 	
 	$checkbox2_CheckedChanged={
-		#TODO: Place custom script here
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/2)
 		
 	}
 	
 	$checkbox1_CheckedChanged={
-		#TODO: Place custom script here
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/1)
 		
 	}
 	
 	$checkboxPauseBatchJobs_CheckedChanged={
-		#TODO: Place custom script here
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/BatchHold.ps1)
 		
 	}
 	
 	$checkboxEnableSQLTracking_CheckedChanged={
-		#TODO: Place custom script here
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/SQLTracking.ps1)
 		
 	}
 	
 	$checkboxDBRecoveryModel_CheckedChanged={
-		#TODO: Place custom script here
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/SetDBRecoveryModel.ps1)
 		
 	}
 	
 	$checkboxListOutUserEmails_CheckedChanged={
-		#TODO: Place custom script here
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/ListOutUserEmails.ps1)
 		
 	}
 	
 	$checkboxEnableUsers_CheckedChanged={
-		#TODO: Place custom script here
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/EnableUsers.ps1)
 		
 	}
 	
 	$checkboxRunDatabaseSync_CheckedChanged={
-		#TODO: Place custom script here
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/DBSync.ps1)
 		
 	}
 	
 	$checkboxCleanUpPowerBI_CheckedChanged={
-		#TODO: Place custom script here
-		
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/CleanPowerBI.ps1)
 	}
 	
 	$buttonAddSysAdminUser_Click={
-		#TODO: Place custom script here
-		
+		Invoke-Expression $(Invoke-WebRequest  )
 	}
 	
 
