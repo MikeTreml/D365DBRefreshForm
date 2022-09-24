@@ -479,15 +479,27 @@ namespace SAPIENTypes
 	
 	function count-checkbox
 	{
-		if ($checkboxBackupCompletedAxDB.Checked) { $mainprogressbaroverlay.Maximum += 1 }
-		if ($checkboxCleanUpPowerBI.Checked) { $mainprogressbaroverlay.Maximum += 1 }
-		if ($checkboxEnableSQLTracking.Checked) { $mainprogressbaroverlay.Maximum += 1 }
+	
+	
+		#if ($checkboxPauseBatchJobsChecked) { $mainprogressbaroverlay.Maximum += 1 }
+		#if ($checkboxEnableSQLTracking.Checked) { $mainprogressbaroverlay.Maximum += 1 }
+		#if ($checkboxDBRecoveryModel.Checked) { $mainprogressbaroverlay.Maximum += 1 }
 		if ($checkboxEnableUsers.Checked) { $mainprogressbaroverlay.Maximum += 1 }
-		if ($checkboxListOutUserEmails.Checked) { $mainprogressbaroverlay.Maximum += 1 }
+		#if ($checkboxListOutUserEmails.Checked) { $mainprogressbaroverlay.Maximum += 1 }
+		#if ($checkboxEnableUsers.Checked) { $mainprogressbaroverlay.Maximum += 1 }
+		#if ($checkboxRunDatabaseSync.Checked) { $mainprogressbaroverlay.Maximum += 1 }
+		#if ($checkboxCleanUpPowerBI.Checked) { $mainprogressbaroverlay.Maximum += 1  }
+		
+		if ($checkbox5.Checked) { $mainprogressbaroverlay.Maximum += 1 }
+		if ($checkbox4.Checked) { $mainprogressbaroverlay.Maximum += 1 }
+		if ($checkbox3.Checked) { $mainprogressbaroverlay.Maximum += 1 }
+		if ($checkbox2.Checked) { $mainprogressbaroverlay.Maximum += 1 }
+		if ($checkbox1.Checked) { $mainprogressbaroverlay.Maximum += 1 }
+		
+		if ($checkboxBackupCompletedAxDB.Checked) { $mainprogressbaroverlay.Maximum += 1 }
+		
+		
 		if ($checkboxNewAdmin.Checked) { $mainprogressbaroverlay.Maximum += 1 }
-		if ($checkboxPauseBatchJobs.Checked) { $mainprogressbaroverlay.Maximum += 1 }
-		if ($checkboxRunDatabaseSync.Checked) { $mainprogressbaroverlay.Maximum += 1  }
-		if ($checkboxDBRecoveryModel.Checked) { $mainprogressbaroverlay.Maximum += 1 }
 		if ($checkboxTruncateBatchTables.Checked) { $mainprogressbaroverlay.Maximum += 1 }
 	}
 	
