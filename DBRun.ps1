@@ -110,84 +110,119 @@ WriteLog "Start-Service MSSQLSERVER, SQLSERVERAGENT "
 Start-Service MSSQLSERVER, SQLSERVERAGENT -Verbose
 $mainprogressbaroverlay.PerformStep()
 
+if ($checkbox1.Checked)
+{
+  WriteLog "Starting 1" 
+Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/1)
+  $mainprogressbaroverlay.PerformStep()
+  WriteLog "Done 1" 
+}
+if ($checkbox2.Checked)
+{
+  WriteLog "Starting 2" 
+Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/2)
+  $mainprogressbaroverlay.PerformStep()
+  WriteLog "Done 2" 
+}
+if ($checkbox3.Checked)
+{
+  WriteLog "Starting 3" 
+Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/3)
+  $mainprogressbaroverlay.PerformStep()
+  WriteLog "Done 3" 
+}
+if ($checkbox4.Checked)
+{
+  WriteLog "Starting 4" 
+Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/4)
+  $mainprogressbaroverlay.PerformStep()
+  WriteLog "Done 4" 
+}
+if ($checkbox5.Checked)
+{
+  WriteLog "Starting 5" 
+Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/5)
+  $mainprogressbaroverlay.PerformStep()
+  WriteLog "Done 5" 
+}
 if ($checkboxBackupNewlyCompleted.Checked)
 {
-  WriteLog "Starting Backup AxDB" -ForegroundColor Yellow
+  WriteLog "Starting Backup AxDB" 
   Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/BackUpDB.ps1)
   $mainprogressbaroverlay.PerformStep()
-  WriteLog "Done Backup AxDB" -ForegroundColor Yellow
+  WriteLog "Done Backup AxDB" 
 }
 
 if ($checkboxCleanUpPowerBISettin.Checked)
 {
-  WriteLog "Starting Cleaning up Power BI settings" -ForegroundColor Yellow
-  Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/CleanPowerBI.ps1)
+  WriteLog "Starting Cleaning up Power BI settings" 
+  Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/CleanPowerBI.ps1)
   $mainprogressbaroverlay.PerformStep()
-  WriteLog "Done Cleaning up Power BI settings" -ForegroundColor Yellow
+  WriteLog "Done Cleaning up Power BI settings" 
 }
 
 if ($checkboxEnableSQLChangeTrack.Checked)
 {
- WriteLog "Starting SQL Tracking" -ForegroundColor Yellow
-  Invoke-Expression $(Invoke-WebRequest  https://github.com/MikeTreml/D365DBRefreshForm/blob/main/SQLTracking.ps1)
+ WriteLog "Starting SQL Tracking" 
+ Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/SQLTracking.ps1)
   $mainprogressbaroverlay.PerformStep()
-   WriteLog "Done SQL Tracking" -ForegroundColor Yellow
+   WriteLog "Done SQL Tracking" 
 }
 
 if ($checkboxPromoteNewAdmin.Checked)
 {
- WriteLog "Starting New Admin" -ForegroundColor Yellow
+ WriteLog "Starting New Admin" 
   Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/NewAdmin.ps1)
   $mainprogressbaroverlay.PerformStep()
-   WriteLog "Done New Admin" -ForegroundColor Yellow
+   WriteLog "Done New Admin" 
 }
 
 if ($checkboxTruncateBatchTables.Checked)
 {
- WriteLog "Starting truncate Batch" -ForegroundColor Yellow
+ WriteLog "Starting truncate Batch" 
  Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/TruncateBatch.ps1)
   $mainprogressbaroverlay.PerformStep()
-   WriteLog "Done truncate Batch" -ForegroundColor Yellow
+   WriteLog "Done truncate Batch" 
 }
 
 if ($checkboxPutAllBatchJobsOnHol.Checked)
 {
- WriteLog "Starting hold batch jobs" -ForegroundColor Yellow
+ WriteLog "Starting hold batch jobs" 
    Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/BatchHold.ps1)
    $mainprogressbaroverlay.PerformStep()
-    WriteLog "Done hold batch jobs" -ForegroundColor Yellow
+    WriteLog "Done hold batch jobs" 
 }
 
 if ($checkboxRunDatabaseSync.Checked)
 {
- WriteLog "Starting DB sync" -ForegroundColor Yellow
+ WriteLog "Starting DB sync" 
   Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/DBSync.ps1)
   $mainprogressbaroverlay.PerformStep()
-   WriteLog "Done DB sync" -ForegroundColor Yellow
+   WriteLog "Done DB sync" 
 }
 
 if ($checkboxSetDBRecoveryModel.Checked)
 {
- WriteLog "Starting " -ForegroundColor Yellow
+ WriteLog "Starting " 
   Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/SetDBRecoveryModel.ps1)
   $mainprogressbaroverlay.PerformStep()
-   WriteLog "Done" -ForegroundColor Yellow
+   WriteLog "Done" 
 }
 
 
 if ($checkboxEnableUsersExceptGue.Checked)
 {
-  WriteLog "Starting Enable Users" -ForegroundColor Yellow
- Invoke-Expression $(Invoke-WebRequest  https://github.com/MikeTreml/D365DBRefreshForm/blob/main/EnableUsers.ps1)
+  WriteLog "Starting Enable Users" 
+  Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/EnableUsers.ps1)
   $mainprogressbaroverlay.PerformStep()
-   WriteLog "Done Enable Users" -ForegroundColor Yellow
+   WriteLog "Done Enable Users" 
 }
 
 if ($checkboxListOutUserEmails.Checked)
 {
-  WriteLog "Starting List Out User Email Addresses" -ForegroundColor Yellow
-  Invoke-Expression $(Invoke-WebRequest  https://github.com/MikeTreml/D365DBRefreshForm/blob/main/ListOutUserEmails.ps1)
+  WriteLog "Starting List Out User Email Addresses" 
+  Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/ListOutUserEmails.ps1)
   $mainprogressbaroverlay.PerformStep()
-   WriteLog "Done List Out User Email Addresses" -ForegroundColor Yellow
+   WriteLog "Done List Out User Email Addresses" 
 }
 WriteLog "Completed running" -ForegroundColor Yellow
