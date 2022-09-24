@@ -562,10 +562,7 @@ namespace SAPIENTypes
 		
 	}
 	
-	$checkboxTruncateBatchTables_CheckedChanged={
-		https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/TruncateBatch.ps1)
-		
-	}
+	
 	
 	$buttonCleanUpPowerBI_Click={
 		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/CleanPowerBI.ps1)
@@ -632,64 +629,6 @@ namespace SAPIENTypes
 		
 	}
 	
-	$checkbox5_CheckedChanged={
-		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/5)
-		
-	}
-	
-	$checkbox4_CheckedChanged={
-		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/4)
-		
-	}
-	
-	$checkbox3_CheckedChanged={
-		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/3)
-		
-	}
-	
-	$checkbox2_CheckedChanged={
-		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/2)
-		
-	}
-	
-	$checkbox1_CheckedChanged={
-		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/1)
-		
-	}
-	
-	$checkboxPauseBatchJobs_CheckedChanged={
-		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/BatchHold.ps1)
-		
-	}
-	
-	$checkboxEnableSQLTracking_CheckedChanged={
-		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/SQLTracking.ps1)
-		
-	}
-	
-	$checkboxDBRecoveryModel_CheckedChanged={
-		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/SetDBRecoveryModel.ps1)
-		
-	}
-	
-	$checkboxListOutUserEmails_CheckedChanged={
-		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/ListOutUserEmails.ps1)
-		
-	}
-	
-	$checkboxEnableUsers_CheckedChanged={
-		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/EnableUsers.ps1)
-		
-	}
-	
-	$checkboxRunDatabaseSync_CheckedChanged={
-		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/DBSync.ps1)
-		
-	}
-	
-	$checkboxCleanUpPowerBI_CheckedChanged={
-		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/CleanPowerBI.ps1)
-	}
 	
 	$buttonAddSysAdminUser_Click={
 		Invoke-Expression $(Invoke-WebRequest  )
