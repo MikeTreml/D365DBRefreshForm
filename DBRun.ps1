@@ -15,7 +15,6 @@ WriteLog $renameOldFile -ForegroundColor Yellow
 Start-Sleep -Seconds 3;
 Install-D365foDbatools 
 $NewDB = 'AxDB' #Database name. No spaces in the name!
-Clear-D365BacpacTableData -Path "C:\Temp\AxDB.bacpac" -Table "dbo.BATCHHISTORY","BATCHJOBHISTORY","SYSSERVERCONFIG","SYSSERVERSESSIONS","SYSCORPNETPRINTERS","SYSCLIENTSESSIONS","BATCHSERVERCONFIG","BATCHSERVERGROUP" -ClearFromSource -Verbose
 
 if ($txtLink.Text -ne '')
 {
@@ -47,9 +46,12 @@ elseif ($txtFile.Text -ne '')
 $mainprogressbaroverlay.PerformStep()
 
 ## Stop D365FO instance.
-WriteLog "Stopping D365FO environment" -ForegroundColor Yellow
+WriteLog "Stopping D365FO environment"
+Write-Host "Stopping D365FO environment" -ForegroundColor Yellow
 
 Stop-D365Environment -All -Kill -Verbose
+Clear-D365BacpacTableData -Path "D:\Temp\AxDB.bacpac" -Table "dbo.BATCHHISTORY","BATCHJOBHISTORY","SYSSERVERCONFIG","SYSSERVERSESSIONS","SYSCORPNETPRINTERS","SYSCLIENTSESSIONS","BATCHSERVERCONFIG","BATCHSERVERGROUP" -ClearFromSource -Verbose
+
 $mainprogressbaroverlay.PerformStep()
 WriteLog "Enable-D365Exception"
 Enable-D365Exception -Verbose
