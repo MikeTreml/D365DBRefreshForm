@@ -1,5 +1,5 @@
 Write-host "List Out User Email Addresses" -ForegroundColor Yellow
-Invoke-D365SqlScript -Verbose -DatabaseServer localhost -DatabaseName AxDB -Command "
+Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "
 select ID, Name, NetworkAlias, NETWORKDOMAIN, Enable from userInfo
 where NETWORKALIAS not like '%@contosoax7.onmicrosoft.com'
 and NETWORKALIAS not like '%@capintegration01.onmicrosoft.com'
