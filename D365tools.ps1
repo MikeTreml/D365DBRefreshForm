@@ -1,5 +1,3 @@
-#region Installing d365fo.tools and dbatools <--
-# This is required by Find-Module, by doing it beforehand we remove some warning messages
 WriteLog "Installing PowerShell modules d365fo.tools and dbatools" -ForegroundColor Yellow
 
 Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope AllUsers
