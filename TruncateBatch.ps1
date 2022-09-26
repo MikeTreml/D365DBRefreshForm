@@ -1,9 +1,9 @@
  WriteLog "Truncate Batch Tables"
-  Invoke-D365SqlScript -Verbose -DatabaseServer localhost -DatabaseName AxDB -Command "
+ Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "
   TRUNCATE TABLE SYSSERVERCONFIG
   TRUNCATE TABLE SYSSERVERSESSIONS
   TRUNCATE TABLE SYSCORPNETPRINTERS
   TRUNCATE TABLE SYSCLIENTSESSIONS
   TRUNCATE TABLE BATCHSERVERCONFIG
-  TRUNCATE TABLE BATCHSERVERGROUP"
-  $mainprogressbaroverlay.PerformStep()
+  TRUNCATE TABLE BATCHSERVERGROUP" | Out-File -FilePath $Logfile
+
