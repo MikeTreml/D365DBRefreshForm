@@ -1,18 +1,12 @@
 $ErrorActionPreference = 'Inquire'
 
-$mainprogressbaroverlay.Maximum = 10
+$mainprogressbaroverlay.Maximum = 14
 $mainprogressbaroverlay.Step = 1
 $mainprogressbaroverlay.Value = 0
 $mainprogressbaroverlay.Visible = $True
 $NewDB = 'AxDB' 
 [string]$dt = get-date -Format "yyyyMMdd" 
 count-checkbox
-
-#WriteLog "Old File Name  - " $oldFile = Get-Item G:\MSSQL_DATA\AxDB*Primary.mdf -Verbose
-#Write-Host "Old File Name  - " $oldFile -ForegroundColor Yellow
-WriteLog "Rename old File  - " $renameOldFile -ForegroundColor Yellow
-Write-Host "Rename old File - " $renameOldFile -ForegroundColor Yellow
-
 
 WriteLog "Stopping D365FO environment"
 Write-Host "Stopping D365FO environment" -ForegroundColor Yellow
@@ -22,15 +16,13 @@ WriteLog "Stopping D365FO environment"
 Write-Host "Stopping D365FO environment" -ForegroundColor Green
 
 
-if ($txtLink.Text -ne '')
-{
+if ($txtLink.Text -ne ''){
 	#If you are going to download BACPAC file from the LCS Asset Library, please use in this section
 	$BacpacSasLinkFromLCS = $txtLink.Text
 	
 	$TempFolder = 'D:\temp\' # 'c:\temp\'  #$env:TEMP
 	#region Download bacpac from LCS
-	if ($BacpacSasLinkFromLCS.StartsWith('http'))
-	{
+	if ($BacpacSasLinkFromLCS.StartsWith('http'))	{
         WriteLog "Downloading BACPAC from the LCS Asset library"
 		Write-Host "Downloading BACPAC from the LCS Asset library" -ForegroundColor Yellow
 		New-Item -Path $TempFolder -ItemType Directory -Force -Verbose
@@ -46,8 +38,7 @@ if ($txtLink.Text -ne '')
 		$NewDB = $($f.BaseName).Replace(' ', '_')
 	}
 }
-elseif ($txtFile.Text -ne '')
-{
+elseif ($txtFile.Text -ne ''){
 	$f = Get-ChildItem $txtFile.Text #Please note that this file should be accessible from SQL server service account
 	$NewDB = $($f.BaseName).Replace(' ', '_') + $('_') + $dt; #'AxDB_CTS1005BU2'  #Temporary Database name for new AxDB. Use a file name or any meaningful name.
 }
@@ -88,8 +79,7 @@ Write-Host  "Installing modern SqlPackage" -ForegroundColor Green
 
 WriteLog "Checking SQL file"
 Write-Host  "Checking SQL file" -ForegroundColor Yellow
-If (-not (Test-DbaPath -SqlInstance localhost -Path $($f.FullName)))
-{
+If (-not (Test-DbaPath -SqlInstance localhost -Path $($f.FullName))){
 	Write-Warning "Database file $($f.FullName) could not be found by SQL Server. Try to move it to C:\Temp or D:\Temp"
 	throw "Database file $($f.FullName) could not be found by SQL Server. Try to move it to C:\Temp or D:\Temp"
 }
@@ -144,8 +134,7 @@ WriteLog "Starting D365FO environment. Then open UI and refresh Data Entities."
 Write-Host  "Starting D365FO environment. Then open UI and refresh Data Entities." -ForegroundColor Green
 
 
-if ($checkbox1.Checked)
-{
+if ($checkbox1.Checked){
 	Write-Host "Starting 1" -ForegroundColor Yellow
 	WriteLog "Starting 1"
 	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/1)
@@ -153,8 +142,8 @@ if ($checkbox1.Checked)
 	Write-Host "Done 1" -ForegroundColor Green
 	WriteLog "Done 1"
 }
-if ($checkbox2.Checked)
-{
+
+if ($checkbox2.Checked){
 	Write-Host "Starting 2" -ForegroundColor Yellow
 	WriteLog "Starting 2"
 	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/2)
@@ -162,8 +151,8 @@ if ($checkbox2.Checked)
 	Write-Host "Done 2" -ForegroundColor Green
 	WriteLog "Done 2"
 }
-if ($checkbox3.Checked)
-{
+
+if ($checkbox3.Checked){
 	Write-Host "Starting 3" -ForegroundColor Yellow
 	WriteLog "Starting 3"
 	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/3)
@@ -171,8 +160,8 @@ if ($checkbox3.Checked)
 	Write-Host "Done 3" -ForegroundColor Green
 	WriteLog "Done 3"
 }
-if ($checkbox4.Checked)
-{
+
+if ($checkbox4.Checked){
 	Write-Host "Starting 4" -ForegroundColor Yellow
 	WriteLog "Starting 4"
 	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/4)
@@ -180,8 +169,8 @@ if ($checkbox4.Checked)
 	Write-Host "Done 4"  -ForegroundColor Green
 	WriteLog "Done 4"
 }
-if ($checkbox5.Checked)
-{
+
+if ($checkbox5.Checked){
 	Write-Host "Starting 5" -ForegroundColor Yellow
 	WriteLog "Starting 5"
 	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/5)
@@ -189,8 +178,8 @@ if ($checkbox5.Checked)
 	Write-Host "Done 5" -ForegroundColor Green
 	WriteLog "Done 5"
 }
-if ($checkboxBackupNewlyCompleted.Checked)
-{
+
+if ($checkboxBackupNewlyCompleted.Checked){
 	Write-Host "Starting Backup AxDB" -ForegroundColor Yellow
 	WriteLog "Starting Backup AxDB"
 	Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/BackUpDB.ps1)
@@ -199,8 +188,7 @@ if ($checkboxBackupNewlyCompleted.Checked)
 	WriteLog "Done Backup AxDB"
 }
 
-if ($checkboxCleanUpPowerBISettin.Checked)
-{
+if ($checkboxCleanUpPowerBISettin.Checked){
 	Write-Host "Starting Cleaning up Power BI settings"  -ForegroundColor Yellow
 	WriteLog "Starting Cleaning up Power BI settings"
 	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/CleanPowerBI.ps1)
@@ -209,8 +197,7 @@ if ($checkboxCleanUpPowerBISettin.Checked)
 	WriteLog "Done Cleaning up Power BI settings"
 }
 
-if ($checkboxEnableSQLChangeTrack.Checked)
-{
+if ($checkboxEnableSQLChangeTrack.Checked){
 	Write-Host "Starting SQL Tracking" -ForegroundColor Yellow
 	WriteLog "Starting SQL Tracking"
 	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/SQLTracking.ps1)
@@ -219,8 +206,7 @@ if ($checkboxEnableSQLChangeTrack.Checked)
 	WriteLog "Done SQL Tracking"
 }
 
-if ($checkboxPromoteNewAdmin.Checked)
-{
+if ($checkboxPromoteNewAdmin.Checked){
 	Write-Host "Starting New Admin" -ForegroundColor Yellow
 	WriteLog "Starting New Admin"
 	Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/NewAdmin.ps1)
@@ -229,8 +215,7 @@ if ($checkboxPromoteNewAdmin.Checked)
 	WriteLog "Done New Admin"
 }
 
-if ($checkboxTruncateBatchTables.Checked)
-{
+if ($checkboxTruncateBatchTables.Checked){
 	Write-Host "Starting truncate Batch" -ForegroundColor Yellow
 	WriteLog "Starting truncate Batch"
 	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/TruncateBatch.ps1)
@@ -239,8 +224,7 @@ if ($checkboxTruncateBatchTables.Checked)
 	WriteLog "Done truncate Batch"
 }
 
-if ($checkboxPutAllBatchJobsOnHol.Checked)
-{
+if ($checkboxPutAllBatchJobsOnHol.Checked){
 	Write-Host "Starting hold batch jobs" -ForegroundColor Yellow
 	WriteLog "Starting hold batch jobs"
 	Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/BatchHold.ps1)
@@ -249,8 +233,7 @@ if ($checkboxPutAllBatchJobsOnHol.Checked)
 	WriteLog "Done hold batch jobs"
 }
 
-if ($checkboxRunDatabaseSync.Checked)
-{
+if ($checkboxRunDatabaseSync.Checked){
 	Write-Host "Starting DB sync" -ForegroundColor Yellow
 	WriteLog "Starting DB sync"
 	Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/DBSync.ps1)
@@ -259,8 +242,7 @@ if ($checkboxRunDatabaseSync.Checked)
 	WriteLog "Done DB sync"
 }
 
-if ($checkboxSetDBRecoveryModel.Checked)
-{
+if ($checkboxSetDBRecoveryModel.Checked){
 	Write-Host  "Starting " -ForegroundColor Yellow
 	WriteLog "Starting "
 	Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/SetDBRecoveryModel.ps1)
@@ -269,9 +251,7 @@ if ($checkboxSetDBRecoveryModel.Checked)
 	WriteLog "Done"
 }
 
-
-if ($checkboxEnableUsersExceptGue.Checked)
-{
+if ($checkboxEnableUsersExceptGue.Checked){
 	Write-Host "Starting Enable Users" -ForegroundColor Yellow
 	WriteLog "Starting Enable Users"
 	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/EnableUsers.ps1)
@@ -280,8 +260,7 @@ if ($checkboxEnableUsersExceptGue.Checked)
 	WriteLog "Done Enable Users"
 }
 
-if ($checkboxListOutUserEmails.Checked)
-{
+if ($checkboxListOutUserEmails.Checked){
 	Write-Host "Starting List Out User Email Addresses" -ForegroundColor Yellow
 	WriteLog "Starting List Out User Email Addresses"
 	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/ListOutUserEmails.ps1)
