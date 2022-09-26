@@ -1,6 +1,6 @@
 $ErrorActionPreference = 'Inquire'
 
-$mainprogressbaroverlay.Maximum = 14
+$mainprogressbaroverlay.Maximum = 10
 $mainprogressbaroverlay.Step = 1
 $mainprogressbaroverlay.Value = 0
 $mainprogressbaroverlay.Visible = $True
