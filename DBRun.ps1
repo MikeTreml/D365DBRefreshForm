@@ -23,17 +23,17 @@ if ($txtLink.Text -ne ''){
 	$TempFolder = 'D:\temp\' # 'c:\temp\'  #$env:TEMP
 	#region Download bacpac from LCS
 	if ($BacpacSasLinkFromLCS.StartsWith('http'))	{
-        WriteLog "Downloading BACPAC from the LCS Asset library"
+       		WriteLog "Downloading BACPAC from the LCS Asset library"
 		Write-Host "Downloading BACPAC from the LCS Asset library" -ForegroundColor Yellow
 		New-Item -Path $TempFolder -ItemType Directory -Force -Verbose
 		$TempFileName = Join-path $TempFolder -ChildPath "$NewDB.bacpac"
-		
-        WriteLog "..Downloading file" $TempFileName
-		Write-Host "..Downloading file" $TempFileName -ForegroundColor Green
+        	WriteLog "..Downloading file" $TempFileName
+		Write-Host "..Downloading file" $TempFileName -ForegroundColor Yellow
 		
 		Invoke-D365InstallAzCopy -Verbose
 		Invoke-D365AzCopyTransfer -SourceUri $BacpacSasLinkFromLCS -DestinationUri $TempFileName -ShowOriginalProgress -Verbose
-		
+		WriteLog "..Downloading file" $TempFileName
+		Write-Host "Done ..Downloading file" $TempFileName -ForegroundColor Green
 		$f = Get-ChildItem $TempFileName
 		$NewDB = $($f.BaseName).Replace(' ', '_')
 	}
@@ -49,32 +49,32 @@ WriteLog "Stopping D365FO environment"
 Write-Host "Stopping D365FO environment" -ForegroundColor Yellow
 Stop-D365Environment -All -Kill -Verbose
 $mainprogressbaroverlay.PerformStep()
-WriteLog "Stopping D365FO environment"
-Write-Host "Stopping D365FO environment" -ForegroundColor Green
+WriteLog "Done Stopping D365FO environment"
+Write-Host "Done Stopping D365FO environment" -ForegroundColor Green
 
 
 WriteLog "truncate"
 Write-Host "truncate" -ForegroundColor Yellow
 Clear-D365BacpacTableData -Path "D:\Temp\AxDB.bacpac" -Table "dbo.BATCHHISTORY", "BATCHJOBHISTORY", "SYSSERVERCONFIG", "SYSSERVERSESSIONS", "SYSCORPNETPRINTERS", "SYSCLIENTSESSIONS", "BATCHSERVERCONFIG", "BATCHSERVERGROUP" -ClearFromSource -Verbose
 $mainprogressbaroverlay.PerformStep()
-WriteLog "truncate"
-Write-Host "truncate" -ForegroundColor Green
+WriteLog "Done truncate"
+Write-Host "Done truncate" -ForegroundColor Green
 
 
 WriteLog "Enable-D365Exception"
 Write-Host  "Enable-D365Exception" -ForegroundColor Yellow
 Enable-D365Exception -Verbose
 $mainprogressbaroverlay.PerformStep()
-WriteLog "Enable-D365Exception"
-Write-Host "Enable-D365Exception" -ForegroundColor Green
+WriteLog "Done Enable-D365Exception"
+Write-Host "Done Enable-D365Exception" -ForegroundColor Green
 
 
 WriteLog "Installing modern SqlPackage"
 Write-Host  "Installing modern SqlPackage" -ForegroundColor Yellow
 Invoke-D365InstallSqlPackage -Verbose 
 $mainprogressbaroverlay.PerformStep()
-WriteLog "Installing modern SqlPackage"
-Write-Host  "Installing modern SqlPackage" -ForegroundColor Green
+WriteLog "Done Installing modern SqlPackage"
+Write-Host  "Done Installing modern SqlPackage" -ForegroundColor Green
 
 
 WriteLog "Checking SQL file"
@@ -84,24 +84,24 @@ If (-not (Test-DbaPath -SqlInstance localhost -Path $($f.FullName))){
 	throw "Database file $($f.FullName) could not be found by SQL Server. Try to move it to C:\Temp or D:\Temp"
 }
 $mainprogressbaroverlay.PerformStep()
-WriteLog "Checking SQL file"
-Write-Host  "Checking SQL file" -ForegroundColor Green
+WriteLog "Done Checking SQL file"
+Write-Host  "Done Checking SQL file" -ForegroundColor Green
 
 
 WriteLog "Unblock-File"
 Write-Host  "Unblock-File" -ForegroundColor Yellow
 $f | Unblock-File
 $mainprogressbaroverlay.PerformStep()
-WriteLog "Unblock-File"
-Write-Host  "Unblock-File" -ForegroundColor Green
+WriteLog "Done Unblock-File"
+Write-Host  "Done Unblock-File" -ForegroundColor Green
 
 
 WriteLog "Import-D365Bacpac"
 Write-Host  "Import-D365Bacpac" -ForegroundColor Yellow
 Import-D365Bacpac -ImportModeTier1 -BacpacFile $f.FullName -NewDatabaseName $NewDB -ShowOriginalProgress
 $mainprogressbaroverlay.PerformStep()
-WriteLog "Import-D365Bacpac"
-Write-Host  "Import-D365Bacpac" -ForegroundColor Green
+WriteLog "Done Import-D365Bacpac"
+Write-Host  "Done Import-D365Bacpac" -ForegroundColor Green
 
 ## Stopping enviroment again before switch
 #WriteLog "Stopping D365FO environment and Switching Databases" 
@@ -115,8 +115,8 @@ WriteLog "Switch-D365ActiveDatabase"
 Write-Host  "Switch-D365ActiveDatabase" -ForegroundColor Yellow
 Switch-D365ActiveDatabase -NewDatabaseName $NewDB -Verbose
 $mainprogressbaroverlay.PerformStep()
-WriteLog "Switch-D365ActiveDatabase"
-Write-Host  "Switch-D365ActiveDatabase" -ForegroundColor Green
+WriteLog "Done Switch-D365ActiveDatabase"
+Write-Host  "Done Switch-D365ActiveDatabase" -ForegroundColor Green
 
 ### Manual remove is a better option
 #WriteLog "Remove-D365Database"
@@ -130,8 +130,8 @@ WriteLog "Starting D365FO environment. Then open UI and refresh Data Entities."
 Write-Host  "Starting D365FO environment. Then open UI and refresh Data Entities." -ForegroundColor Yellow
 Start-D365Environment
 $mainprogressbaroverlay.PerformStep()
-WriteLog "Starting D365FO environment. Then open UI and refresh Data Entities." 
-Write-Host  "Starting D365FO environment. Then open UI and refresh Data Entities." -ForegroundColor Green
+WriteLog "Done Starting D365FO environment. Then open UI and refresh Data Entities." 
+Write-Host  "Done Starting D365FO environment. Then open UI and refresh Data Entities." -ForegroundColor Green
 
 
 if ($checkbox1.Checked){
