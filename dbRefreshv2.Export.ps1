@@ -826,6 +826,7 @@ namespace SAPIENTypes
 	#
 	# button5
 	#
+	$button5.Enabled = $False
 	$button5.Location = New-Object System.Drawing.Point(38, 409)
 	$button5.Margin = '4, 4, 4, 4'
 	$button5.Name = 'button5'
@@ -837,6 +838,7 @@ namespace SAPIENTypes
 	#
 	# button4
 	#
+	$button4.Enabled = $False
 	$button4.Location = New-Object System.Drawing.Point(39, 367)
 	$button4.Margin = '4, 4, 4, 4'
 	$button4.Name = 'button4'
@@ -860,6 +862,7 @@ namespace SAPIENTypes
 	#
 	# button3
 	#
+	$button3.Enabled = $False
 	$button3.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
 	$button3.Location = New-Object System.Drawing.Point(39, 325)
 	$button3.Margin = '4, 4, 4, 4'
@@ -872,6 +875,7 @@ namespace SAPIENTypes
 	#
 	# button1
 	#
+	$button1.Enabled = $False
 	$button1.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
 	$button1.Location = New-Object System.Drawing.Point(40, 241)
 	$button1.Margin = '4, 4, 4, 4'
@@ -908,6 +912,7 @@ namespace SAPIENTypes
 	#
 	# button2
 	#
+	$button2.Enabled = $False
 	$button2.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
 	$button2.Location = New-Object System.Drawing.Point(40, 283)
 	$button2.Margin = '4, 4, 4, 4'
@@ -932,7 +937,7 @@ namespace SAPIENTypes
 	#
 	# buttonTruncateBatchTables
 	#
-	$buttonTruncateBatchTables.Enabled = $False
+	#$buttonTruncateBatchTables.Enabled = $False
 	$buttonTruncateBatchTables.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
 	$buttonTruncateBatchTables.Location = New-Object System.Drawing.Point(361, 199)
 	$buttonTruncateBatchTables.Margin = '0, 0, 0, 0'
@@ -1014,6 +1019,7 @@ namespace SAPIENTypes
 	#
 	# checkbox5
 	#
+	$checkbox5.Enabled = $False
 	$checkbox5.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
 	$checkbox5.Location = New-Object System.Drawing.Point(12, 408)
 	$checkbox5.Margin = '5, 5, 5, 5'
@@ -1026,6 +1032,7 @@ namespace SAPIENTypes
 	#
 	# checkbox4
 	#
+	$checkbox4.Enabled = $False
 	$checkbox4.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
 	$checkbox4.Location = New-Object System.Drawing.Point(12, 366)
 	$checkbox4.Margin = '5, 5, 5, 5'
@@ -1038,6 +1045,7 @@ namespace SAPIENTypes
 	#
 	# checkbox3
 	#
+	$checkbox3.Enabled = $False
 	$checkbox3.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
 	$checkbox3.Location = New-Object System.Drawing.Point(12, 324)
 	$checkbox3.Margin = '5, 5, 5, 5'
@@ -1050,6 +1058,7 @@ namespace SAPIENTypes
 	#
 	# checkbox2
 	#
+	$checkbox2.Enabled = $False
 	$checkbox2.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
 	$checkbox2.Location = New-Object System.Drawing.Point(12, 282)
 	$checkbox2.Margin = '5, 5, 5, 5'
@@ -1061,7 +1070,7 @@ namespace SAPIENTypes
 	$checkbox2.add_CheckedChanged($checkbox2_CheckedChanged)
 	#
 	# checkbox1
-	#
+	#.Enabled = $False
 	$checkbox1.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
 	$checkbox1.Location = New-Object System.Drawing.Point(12, 240)
 	$checkbox1.Margin = '5, 5, 5, 5'
