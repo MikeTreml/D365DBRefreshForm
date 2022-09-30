@@ -1,4 +1,4 @@
-WriteLog "Installing PowerShell modules d365fo.tools and dbatools" -ForegroundColor Yellow
+
 Write-Host "Installing PowerShell modules d365fo.tools and dbatools" -ForegroundColor Yellow
 
 Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope AllUsers
@@ -22,4 +22,4 @@ foreach ($module in $modules2Install)
   }
   $mainprogressbaroverlay.PerformStep()
 }
-
+Write-Host "Done Installing PowerShell modules d365fo.tools and dbatools" -ForegroundColor Green
