@@ -39,7 +39,7 @@ function Switch-D365ActiveDatabase {
     $SqlParamsSource = @{ DatabaseServer = $DatabaseServer; DatabaseName = $SourceDatabaseName;
         SqlUser = $SqlUser; SqlPwd = $SqlPwd
     }
-
+    write-host $DatabaseName
     $SqlCommand = Get-SqlCommand @SqlParamsSource -TrustedConnection $UseTrustedConnection
 
     $SqlCommand.CommandText = "SELECT COUNT(1) FROM dbo.USERINFO WHERE ID = 'Admin'"
@@ -66,26 +66,31 @@ function Switch-D365ActiveDatabase {
     $SqlParams = @{ DatabaseServer = $DatabaseServer; DatabaseName = "master";
         SqlUser = $SqlUser; SqlPwd = $SqlPwd
     }
-
+write-host $DatabaseName
     $SqlCommand = Get-SqlCommand @SqlParams -TrustedConnection $UseTrustedConnection
 
     
     $commandText = ("Declare @Command as nvarchar(2000) set @Command =' ALTER DATABASE ['+ @SourceName + '] SET SINGLE_USER WITH ROLLBACK IMMEDIATE; ALTER DATABASE ['+ @SourceName +'] MODIFY NAME = ['+ @DestinationName +']; ALTER DATABASE ['+ @DestinationName + '] SET MULTI_USER;' exec (@Command)") -join [Environment]::NewLine
- 
+ write-host $commandText
     
     $sqlCommand.CommandText = $commandText
-
+    write-host $DatabaseName
     $null = $sqlCommand.Parameters.AddWithValue("@DestinationName", $DatabaseName)
     $null = $sqlCommand.Parameters.AddWithValue("@SourceName", $SourceDatabaseName)
     $null = $sqlCommand.Parameters.AddWithValue("@ToBeName", $dbToBeName)
-
+    write-host $DatabaseName
+    write-host $SourceDatabaseName
+    write-host $dbToBeName
+    write-host $null
+    write-host $commandText
     try {
         Write-PSFMessage -Level InternalComment -Message "Executing a script against the database." -Target (Get-SqlString $SqlCommand)
         Write-PSFMessage -Level Verbose -Message "Switching out the $DatabaseName database with: $SourceDatabaseName." -Target (Get-SqlString $SqlCommand)
 
         $sqlCommand.Connection.Open()
-
+        write-host $null
         $null = $sqlCommand.ExecuteNonQuery()
+        write-host $null
     }
     catch {
         $messageString = "Something went wrong while <c='em'>switching</c> out the AXDB database."
