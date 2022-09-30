@@ -4,8 +4,9 @@ $mainprogressbaroverlay.Maximum = 10
 $mainprogressbaroverlay.Step = 1
 $mainprogressbaroverlay.Value = 0
 $mainprogressbaroverlay.Visible = $True
-$NewDB = 'AxDB' 
+
 [string]$dt = get-date -Format "yyyyMMdd" 
+$NewDB = 'AxDB_' $dt
 count-checkbox
 
 WriteLog "Stopping D365FO environment"
