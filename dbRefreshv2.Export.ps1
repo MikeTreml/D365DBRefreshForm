@@ -470,7 +470,12 @@ namespace SAPIENTypes
 	{
 		Param ([string]$LogString)
 		$Stamp = (Get-Date).toString("yyyy/MM/dd HH:mm:ss")
-		Write-Host "$LogString ($Stamp)" -ForegroundColor Yellow
+		if ($LogString -contains "Done") { 
+			Write-Host "$LogString ($Stamp)" -ForegroundColor Green
+		}
+		else{
+			Write-Host "$LogString ($Stamp)" -ForegroundColor Yellow
+		}
 		$labellog.Text = "$LogString ($Stamp)"
 		$LogMessage = "$Stamp - $LogString"
 		Add-content $LogFile -value $LogMessage 
