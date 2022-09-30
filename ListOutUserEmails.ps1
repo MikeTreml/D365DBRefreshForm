@@ -1,4 +1,3 @@
-Write-host "List Out User Email Addresses" -ForegroundColor Yellow
 Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "
 select ID, Name, NetworkAlias, NETWORKDOMAIN, Enable from userInfo
 where NETWORKALIAS not like '%@contosoax7.onmicrosoft.com'
