@@ -70,7 +70,7 @@ function Switch-D365ActiveDatabase {
     $SqlCommand = Get-SqlCommand @SqlParams -TrustedConnection $UseTrustedConnection
 
     
-    $commandText = (Get-Content "$script:ModuleRoot\switch-database-tier1-missing-AxDB.sql") -join [Environment]::NewLine
+    $commandText = ("Declare @Command as nvarchar(2000) set @Command =' ALTER DATABASE ['+ @SourceName + '] SET SINGLE_USER WITH ROLLBACK IMMEDIATE; ALTER DATABASE ['+ @SourceName +'] MODIFY NAME = ['+ @DestinationName +']; ALTER DATABASE ['+ @DestinationName + '] SET MULTI_USER;' exec (@Command)") -join [Environment]::NewLine
  
     
     $sqlCommand.CommandText = $commandText
