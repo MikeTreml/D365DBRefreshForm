@@ -52,14 +52,14 @@ $mainprogressbaroverlay.PerformStep()
 WriteLog "Done Stopping D365FO environment"
 Write-Host "Done Stopping D365FO environment" -ForegroundColor Green
 
-
-WriteLog "truncate"
-Write-Host "truncate" -ForegroundColor Yellow
-Clear-D365BacpacTableData -Path "D:\Temp\AxDB.bacpac" -Table "dbo.BATCHHISTORY", "BATCHJOBHISTORY", "SYSSERVERCONFIG", "SYSSERVERSESSIONS", "SYSCORPNETPRINTERS", "SYSCLIENTSESSIONS", "BATCHSERVERCONFIG", "BATCHSERVERGROUP" -ClearFromSource -Verbose
-$mainprogressbaroverlay.PerformStep()
-WriteLog "Done truncate"
-Write-Host "Done truncate" -ForegroundColor Green
-
+#if ($checkboxTruncateBatchTables.Checked){
+	#WriteLog "truncate"
+	#Write-Host "truncate" -ForegroundColor Yellow
+	#Clear-D365BacpacTableData -Path "D:\Temp\AxDB.bacpac" -Table "dbo.BATCHHISTORY", "BATCHJOBHISTORY", "SYSSERVERCONFIG", "SYSSERVERSESSIONS", "SYSCORPNETPRINTERS", "SYSCLIENTSESSIONS", "BATCHSERVERCONFIG", "BATCHSERVERGROUP" -ClearFromSource -Verbose
+	#$mainprogressbaroverlay.PerformStep()
+	#WriteLog "Done truncate"
+	#Write-Host "Done truncate" -ForegroundColor Green
+#}
 
 WriteLog "Enable-D365Exception"
 Write-Host  "Enable-D365Exception" -ForegroundColor Yellow
