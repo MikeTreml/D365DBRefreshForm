@@ -1,4 +1,3 @@
- WriteLog "Truncate Batch Tables"
  Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "
   TRUNCATE TABLE SYSSERVERCONFIG
   TRUNCATE TABLE SYSSERVERSESSIONS
