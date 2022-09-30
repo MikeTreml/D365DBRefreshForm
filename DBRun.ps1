@@ -95,13 +95,17 @@ WriteLog "Done Import-D365Bacpac"
 #WriteLog "Stopping D365FO environment and Switching Databases" 
 
 
-
-WriteLog "Switch-D365ActiveDatabase"
-Switch-D365ActiveDatabase -NewDatabaseName $NewDB -Verbose
-$mainprogressbaroverlay.PerformStep()
-WriteLog "Done Switch-D365ActiveDatabase"
-
-
+if(Get-SqlDatabase -ServerInstance localhost -Name "AxDB"){
+	WriteLog "Switch-D365ActiveDatabase"
+	Switch-D365ActiveDatabase -NewDatabaseName $NewDB -Verbose
+	$mainprogressbaroverlay.PerformStep()
+	WriteLog "Done Switch-D365ActiveDatabase"
+}
+else{
+	WriteLog "set-D365ActiveDatabase"
+	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/Set-D365ActiveDatabase.ps1)
+	WriteLog "Done set-D365ActiveDatabase"
+}
 ### Manual remove is a better option
 #WriteLog "Remove-D365Database"
 #Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose
