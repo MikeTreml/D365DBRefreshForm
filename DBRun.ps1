@@ -98,15 +98,28 @@ WriteLog "Done Import-D365Bacpac"
 
 if(Get-SqlDatabase -ServerInstance localhost -Name "AxDB"){
 	WriteLog "Switch-D365ActiveDatabase"
-	Switch-D365ActiveDatabase -NewDatabaseName $NewDB -Verbose
-	$mainprogressbaroverlay.PerformStep()
+	#Switch-D365ActiveDatabase -NewDatabaseName $NewDB -Verbose
+	Invoke-DbaQuery -SqlInstance localhost -Database master -Query "
+ALTER DATABASE AxDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+ALTER DATABASE AxDB MODIFY NAME = AxDB_Original;
+ALTER DATABASE AxDB_Original SET MULTI_USER;
+ALTER DATABASE AxDB_20220930 SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+ALTER DATABASE AxDB_20220930 MODIFY NAME = AxDB;
+ALTER DATABASE AxDB SET MULTI_USER;
+ALTER DATABASE AxDB SET AUTO_CLOSE OFF WITH NO_WAIT"
 	WriteLog "Done Switch-D365ActiveDatabase"
 }
 else{
 	WriteLog "set-D365ActiveDatabase"
-	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/Set-D365ActiveDatabase.ps1)
+	#Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/Set-D365ActiveDatabase.ps1)
+	Invoke-DbaQuery -SqlInstance localhost -Database master -Query "
+ALTER DATABASE AxDB_20220930 SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+ALTER DATABASE AxDB_20220930 MODIFY NAME = AxDB;
+ALTER DATABASE AxDB SET MULTI_USER;
+ALTER DATABASE AxDB SET AUTO_CLOSE OFF WITH NO_WAIT"
 	WriteLog "Done set-D365ActiveDatabase"
 }
+$mainprogressbaroverlay.PerformStep()
 ### Manual remove is a better option
 #WriteLog "Remove-D365Database"
 #Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose
