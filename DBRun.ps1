@@ -254,7 +254,7 @@ if ($checkboxListOutUserEmails.Checked){
 	WriteLog "Done List Out User Email Addresses"
 }
 
-riteLog "Completed running"
+writeLog "Completed running"
 $mainprogressbaroverlay.Visible = $False
 
 
