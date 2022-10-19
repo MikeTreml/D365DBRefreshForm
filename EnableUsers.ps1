@@ -29,8 +29,8 @@ values('justin', 2, 1, 1, 0, 0);
 insert into securityuserrole(USER_, SECURITYROLE, ASSIGNMENTSTATUS, ASSIGNMENTMODE, VALIDFROMTZID, VALIDTOTZID)
 values('aniela', 2, 1, 1, 0, 0);"
 
-Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "Update USERINFO set ENABLE = 1 where ID != 'Guest'"  | Out-File -FilePath $Logfile
 Enable-D365User -Email "*caf2code*"
+Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "Update USERINFO set ENABLE = 1 where ID != 'Guest'"  | Out-File -FilePath $Logfile
 update-D365User -Email "*caf2code*"
 
 
