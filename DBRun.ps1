@@ -1,5 +1,5 @@
 $ErrorActionPreference = 'Inquire'
-
+$LogFile = "C:\Users\$env:UserName\Desktop\DBRefresh_$env:computername_$Stamp.log"
 $mainprogressbaroverlay.Maximum = 10
 $mainprogressbaroverlay.Step = 1
 $mainprogressbaroverlay.Value = 0
