@@ -169,7 +169,7 @@ if ($checkbox5.Checked){
 	Write-host -ForegroundColor Yellow "Starting 5"
 	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/5)
 	$mainprogressbaroverlay.PerformStep()
-	Write-host -ForegroundColor Green "Done 5"
+	Write-host -ForegroundColor Green "Done 5 "
 }
 
 if ($checkboxBackupNewlyCompleted.Checked){
