@@ -781,7 +781,7 @@ namespace SAPIENTypes
 	$button7.TabIndex = 64
 	$button7.Text = 'button7'
 	$button7.UseVisualStyleBackColor = $True
-	$button7.Visible = $False
+	$button7.Visible = $True
 	#
 	# button6
 	#
@@ -792,7 +792,7 @@ namespace SAPIENTypes
 	$button6.TabIndex = 63
 	$button6.Text = 'button6'
 	$button6.UseVisualStyleBackColor = $True
-	$button6.Visible = $False
+	$button6.Visible = $True
 	#
 	# labelFile
 	#
@@ -831,7 +831,7 @@ namespace SAPIENTypes
 	#
 	# button5
 	#
-	$button5.Enabled = $False
+	$button5.Enabled = $True
 	$button5.Location = New-Object System.Drawing.Point(38, 409)
 	$button5.Margin = '4, 4, 4, 4'
 	$button5.Name = 'button5'
@@ -843,7 +843,7 @@ namespace SAPIENTypes
 	#
 	# button4
 	#
-	$button4.Enabled = $False
+	$button4.Enabled = $True
 	$button4.Location = New-Object System.Drawing.Point(39, 367)
 	$button4.Margin = '4, 4, 4, 4'
 	$button4.Name = 'button4'
@@ -867,7 +867,7 @@ namespace SAPIENTypes
 	#
 	# button3
 	#
-	$button3.Enabled = $False
+	$button3.Enabled = $True
 	$button3.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
 	$button3.Location = New-Object System.Drawing.Point(39, 325)
 	$button3.Margin = '4, 4, 4, 4'
@@ -880,7 +880,7 @@ namespace SAPIENTypes
 	#
 	# button1
 	#
-	$button1.Enabled = $False
+	$button1.Enabled = $True
 	$button1.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
 	$button1.Location = New-Object System.Drawing.Point(40, 241)
 	$button1.Margin = '4, 4, 4, 4'
@@ -917,7 +917,7 @@ namespace SAPIENTypes
 	#
 	# button2
 	#
-	$button2.Enabled = $False
+	$button2.Enabled = $True
 	$button2.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
 	$button2.Location = New-Object System.Drawing.Point(40, 283)
 	$button2.Margin = '4, 4, 4, 4'
@@ -942,7 +942,7 @@ namespace SAPIENTypes
 	#
 	# buttonTruncateBatchTables
 	#
-	#$buttonTruncateBatchTables.Enabled = $False
+	$buttonTruncateBatchTables.Enabled = $True
 	$buttonTruncateBatchTables.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
 	$buttonTruncateBatchTables.Location = New-Object System.Drawing.Point(361, 199)
 	$buttonTruncateBatchTables.Margin = '0, 0, 0, 0'
@@ -980,7 +980,7 @@ namespace SAPIENTypes
 	#
 	# textbox1
 	#
-	$textbox1.Enabled = $False
+	$textbox1.Enabled = $True
 	$textbox1.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
 	$textbox1.Location = New-Object System.Drawing.Point(96, 116)
 	$textbox1.Margin = '5, 5, 5, 5'
@@ -1024,7 +1024,7 @@ namespace SAPIENTypes
 	#
 	# checkbox5
 	#
-	$checkbox5.Enabled = $False
+	$checkbox5.Enabled = $True
 	$checkbox5.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
 	$checkbox5.Location = New-Object System.Drawing.Point(12, 408)
 	$checkbox5.Margin = '5, 5, 5, 5'
@@ -1032,12 +1032,12 @@ namespace SAPIENTypes
 	$checkbox5.Size = New-Object System.Drawing.Size(33, 37)
 	$checkbox5.TabIndex = 41
 	$checkbox5.UseVisualStyleBackColor = $True
-	$checkbox5.Visible = $False
+	$checkbox5.Visible = $True
 	$checkbox5.add_CheckedChanged($checkbox5_CheckedChanged)
 	#
 	# checkbox4
 	#
-	$checkbox4.Enabled = $False
+	$checkbox4.Enabled = $True
 	$checkbox4.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
 	$checkbox4.Location = New-Object System.Drawing.Point(12, 366)
 	$checkbox4.Margin = '5, 5, 5, 5'
@@ -1045,12 +1045,12 @@ namespace SAPIENTypes
 	$checkbox4.Size = New-Object System.Drawing.Size(34, 37)
 	$checkbox4.TabIndex = 40
 	$checkbox4.UseVisualStyleBackColor = $True
-	$checkbox4.Visible = $False
+	$checkbox4.Visible = $True
 	$checkbox4.add_CheckedChanged($checkbox4_CheckedChanged)
 	#
 	# checkbox3
 	#
-	$checkbox3.Enabled = $False
+	$checkbox3.Enabled = $True
 	$checkbox3.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
 	$checkbox3.Location = New-Object System.Drawing.Point(12, 324)
 	$checkbox3.Margin = '5, 5, 5, 5'
@@ -1058,12 +1058,12 @@ namespace SAPIENTypes
 	$checkbox3.Size = New-Object System.Drawing.Size(33, 37)
 	$checkbox3.TabIndex = 39
 	$checkbox3.UseVisualStyleBackColor = $True
-	$checkbox3.Visible = $False
+	$checkbox3.Visible = $True
 	$checkbox3.add_CheckedChanged($checkbox3_CheckedChanged)
 	#
 	# checkbox2
 	#
-	$checkbox2.Enabled = $False
+	$checkbox2.Enabled = $True
 	$checkbox2.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
 	$checkbox2.Location = New-Object System.Drawing.Point(12, 282)
 	$checkbox2.Margin = '5, 5, 5, 5'
@@ -1071,11 +1071,11 @@ namespace SAPIENTypes
 	$checkbox2.Size = New-Object System.Drawing.Size(34, 37)
 	$checkbox2.TabIndex = 38
 	$checkbox2.UseVisualStyleBackColor = $True
-	$checkbox2.Visible = $False
+	$checkbox2.Visible = $True
 	$checkbox2.add_CheckedChanged($checkbox2_CheckedChanged)
 	#
 	# checkbox1
-	#.Enabled = $False
+	$checkbox1.Enabled = $True
 	$checkbox1.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
 	$checkbox1.Location = New-Object System.Drawing.Point(12, 240)
 	$checkbox1.Margin = '5, 5, 5, 5'
@@ -1083,7 +1083,7 @@ namespace SAPIENTypes
 	$checkbox1.Size = New-Object System.Drawing.Size(34, 37)
 	$checkbox1.TabIndex = 37
 	$checkbox1.UseVisualStyleBackColor = $True
-	$checkbox1.Visible = $False
+	$checkbox1.Visible = $True
 	$checkbox1.add_CheckedChanged($checkbox1_CheckedChanged)
 	#
 	# labellog
