@@ -1,7 +1,7 @@
 $ErrorActionPreference = 'Inquire'
 $Stamp = (Get-Date).toString("yyyy-MM-dd")
 $LogFile = "C:\Users\$env:UserName\Desktop\DBRefresh_$Stamp"
-#Start-Transcript -OutputDirectory $LogFile
+Start-Transcript -Path $LogFile
 $mainprogressbaroverlay.Maximum = 10
 $mainprogressbaroverlay.Step = 1
 $mainprogressbaroverlay.Value = 0
@@ -12,9 +12,13 @@ $NewDB = 'AxDB_'+$dt
 count-checkbox
 
 Write-host -ForegroundColor Yellow "Stopping D365FO environment"
+Stop-Transcript
+Start-Transcript -Path $LogFile
 Install-D365foDbatools
+Stop-Transcript
+Start-Transcript -Path $LogFile
 $mainprogressbaroverlay.PerformStep()
-Write-host -ForegroundColor Green "Done Stopping D365FO environment"
+Write-host "Done Stopping D365FO environment"
 
 
 if ($txtLink.Text -ne ''){
@@ -41,7 +45,8 @@ elseif ($txtFile.Text -ne ''){
 	$NewDB = $($f.BaseName).Replace(' ', '_') + $('_') + $dt; #'AxDB_CTS1005BU2'  #Temporary Database name for new AxDB. Use a file name or any meaningful name.
 }
 $mainprogressbaroverlay.PerformStep()
-
+Stop-Transcript
+Start-Transcript -Path $LogFile
 ## Stop D365FO instance.
 Write-host -ForegroundColor Yellow "Stopping D365FO environment"
 Stop-D365Environment -All -Kill -Verbose
