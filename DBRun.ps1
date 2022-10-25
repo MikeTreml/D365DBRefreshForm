@@ -1,6 +1,6 @@
 $ErrorActionPreference = 'Inquire'
 $Stamp = (Get-Date).toString("yyyy-MM-dd")
-$LogFile = "C:\Users\$env:UserName\Desktop\DBRefresh_$env:computername $Stamp.txt"
+$LogFile = "C:\Users\$env:UserName\Desktop\DBRefresh_$Stamp.txt"
 Write-host $LogFile
 Start-Transcript -Path $LogFile
 $mainprogressbaroverlay.Maximum = 10
