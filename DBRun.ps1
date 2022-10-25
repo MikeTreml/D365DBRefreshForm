@@ -135,13 +135,7 @@ WriteLog "Done Starting D365FO environment. Then open UI and refresh Data Entiti
 
 
 
-if ($checkbox1.Checked){
 
-	WriteLog "Starting 1"
-	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/1)
-	$mainprogressbaroverlay.PerformStep()
-	WriteLog "Done 1"
-}
 
 if ($checkbox2.Checked){
 
@@ -253,6 +247,14 @@ if ($checkboxListOutUserEmails.Checked){
 	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/ListOutUserEmails.ps1)
 	$mainprogressbaroverlay.PerformStep()
 	WriteLog "Done List Out User Email Addresses"
+}
+
+if ($checkbox1.Checked){
+
+	WriteLog "Starting Remove-D365Database"
+	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/Remove-D365Database)
+	$mainprogressbaroverlay.PerformStep()
+	WriteLog "Done Remove-D365Database"
 }
 
 writeLog "Completed running"
