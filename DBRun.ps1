@@ -87,7 +87,7 @@ $mainprogressbaroverlay.PerformStep()
 Write-host -ForegroundColor Green "Done Unblock-File"
 
 
-Write-host -ForegroundColor Yellow "Import-D365Bacpac"
+Write-host -ForegroundColor Yellow "Import-D365Bacpac "
 Import-D365Bacpac -ImportModeTier1 -BacpacFile $f.FullName -NewDatabaseName $NewDB -ShowOriginalProgress
 $mainprogressbaroverlay.PerformStep()
 Write-host -ForegroundColor Green "Done Import-D365Bacpac"
