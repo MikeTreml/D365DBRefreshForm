@@ -1,5 +1,6 @@
 $ErrorActionPreference = 'Inquire'
 $LogFile = "C:\Users\$env:UserName\Desktop\DBRefresh_$env:computername_$Stamp.log"
+Start-Transcript -OutputDirectory $LogFile
 $mainprogressbaroverlay.Maximum = 10
 $mainprogressbaroverlay.Step = 1
 $mainprogressbaroverlay.Value = 0
@@ -256,5 +257,7 @@ if ($checkboxListOutUserEmails.Checked){
 
 writeLog "Completed running"
 $mainprogressbaroverlay.Visible = $False
+
+Stop-Transcript
 
 
