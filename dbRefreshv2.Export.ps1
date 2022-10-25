@@ -610,7 +610,7 @@ namespace SAPIENTypes
 	}
 	
 	$button1_Click={
-		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/1)
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/Remove-D365Database)
 		
 	}
 	
@@ -887,7 +887,7 @@ namespace SAPIENTypes
 	$button1.Name = 'button1'
 	$button1.Size = New-Object System.Drawing.Size(256, 32)
 	$button1.TabIndex = 55
-	$button1.Text = '1'
+	$button1.Text = 'Remove Old Database'
 	$button1.UseVisualStyleBackColor = $True
 	$button1.add_Click($button1_Click)
 	#
