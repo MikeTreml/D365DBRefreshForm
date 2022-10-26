@@ -445,7 +445,7 @@ namespace SAPIENTypes
 	#endregion
 	$f = ''
 	$Stamp = (Get-Date).toString("yyyy-MM-dd")
-	$Logfile = "C:\Users\$env:UserName\DBRefresh_$env:computername_$Stamp.log"
+	#$Logfile = "C:\Users\$env:UserName\DBRefresh_$env:computername_$Stamp.log"
 	$txtLink_TextChanged = {
 		$txtFile.Text = ''
 	}
