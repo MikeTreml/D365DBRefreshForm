@@ -610,7 +610,7 @@ namespace SAPIENTypes
 	}
 	
 	$button1_Click={
-		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/Remove-D365Database)
+		Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose
 		
 	}
 	
