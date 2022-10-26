@@ -1,7 +1,7 @@
 $ErrorActionPreference = 'Inquire'
 $Stamp = (Get-Date).toString("yyyy-MM-dd")
 $LogFile = "C:\Users\$env:UserName\Desktop\DBRefresh_$Stamp"
-#Start-Transcript -Path $LogFile
+
 $mainprogressbaroverlay.Maximum = 10
 $mainprogressbaroverlay.Step = 1
 $mainprogressbaroverlay.Value = 0
@@ -17,7 +17,7 @@ Install-D365foDbatools
 
 $mainprogressbaroverlay.PerformStep()
 Write-host "Done Stopping D365FO environment"
-
+Start-Transcript -Path $LogFile -Append -IncludeInvocationHeader
 
 if ($txtLink.Text -ne ''){
 	#If you are going to download BACPAC file from the LCS Asset Library, please use in this section
