@@ -26,7 +26,7 @@ if ($txtLink.Text -ne ''){
 	$TempFolder = 'D:\temp\' # 'c:\temp\'  #$env:TEMP
 	#region Download bacpac from LCS
 	if ($BacpacSasLinkFromLCS.StartsWith('http'))	{
-       		Write-host -ForegroundColor Yellow "Downloading BACPAC from the LCS Asset library"
+       		Write-host -ForegroundColor Yellow "Downloading BACPAC from the LCS Asset library "
 		New-Item -Path $TempFolder -ItemType Directory -Force -Verbose
 		$TempFileName = Join-path $TempFolder -ChildPath "$NewDB.bacpac"
         	Write-host -ForegroundColor Yellow "..Downloading file" $TempFileName
@@ -255,7 +255,7 @@ if ($checkboxListOutUserEmails.Checked){
 if ($checkbox1.Checked){
 
 	Write-host -ForegroundColor Yellow "Starting Remove-D365Database"
-	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/Remove-D365Database)
+	Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose
 	$mainprogressbaroverlay.PerformStep()
 	Write-host -ForegroundColor Green "Done Remove-D365Database"
 }
