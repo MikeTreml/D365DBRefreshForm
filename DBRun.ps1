@@ -255,7 +255,9 @@ if ($checkboxListOutUserEmails.Checked){
 if ($checkbox1.Checked){
 
 	Write-host -ForegroundColor Yellow "Starting Remove-D365Database"
+	Stop-D365Environment -All -Kill -Verbose
 	Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose
+	Start-D365Environment -All
 	$mainprogressbaroverlay.PerformStep()
 	Write-host -ForegroundColor Green "Done Remove-D365Database"
 }
