@@ -12,13 +12,13 @@ $NewDB = 'AxDB_'+$dt
 count-checkbox
 
 Write-host -ForegroundColor Yellow "Stopping D365FO environment"
-
+Stop-D365Environment -All -Kill -Verbose
 Install-D365foDbatools
 
 $mainprogressbaroverlay.PerformStep()
 Write-host "Done Stopping D365FO environment"
-Stop-Transcript
-Start-Transcript -Path $LogFile" - prep" -Append -IncludeInvocationHeader
+
+Start-Transcript -Path $LogFile -Append -IncludeInvocationHeader
 
 if ($txtLink.Text -ne ''){
 	#If you are going to download BACPAC file from the LCS Asset Library, please use in this section
@@ -44,9 +44,6 @@ elseif ($txtFile.Text -ne ''){
 	$NewDB = $($f.BaseName).Replace(' ', '_') + $('_') + $dt; #'AxDB_CTS1005BU2'  #Temporary Database name for new AxDB. Use a file name or any meaningful name.
 }
 $mainprogressbaroverlay.PerformStep()
-
-Stop-Transcript
-Start-Transcript -Path $LogFile" SQL Prep" -Append -IncludeInvocationHeader
 
 Write-host -ForegroundColor Yellow "Stopping D365FO environment"
 Stop-D365Environment -All -Kill -Verbose
@@ -75,9 +72,6 @@ Write-host -ForegroundColor Yellow "Unblock-File"
 $f | Unblock-File
 $mainprogressbaroverlay.PerformStep()
 Write-host -ForegroundColor Green "Done Unblock-File"
-
-Stop-Transcript
-Start-Transcript -Path $LogFile" Import" -Append -IncludeInvocationHeader
 
 Write-host -ForegroundColor Yellow "Import-D365Bacpac "
 Import-D365Bacpac -ImportModeTier1 -BacpacFile $f.FullName -NewDatabaseName $NewDB -ShowOriginalProgress
