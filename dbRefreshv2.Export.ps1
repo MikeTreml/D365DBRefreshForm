@@ -508,10 +508,6 @@ namespace SAPIENTypes
 		if ($checkboxTruncateBatchTables.Checked) { $mainprogressbaroverlay.Maximum += 1 }
 	}
 	
-	function Install-D365foDbatools
-	{
-		Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/D365tools.ps1)
-	}
 	
 	
 	$buttonRun_Click = {
@@ -536,30 +532,7 @@ namespace SAPIENTypes
 		}
 	}
 	
-	$buttonSQLStatus_Click={
-		#TODO: Place custom script here
-		
-		[string]$dt = get-date -Format "yyyyMMdd"
-		$oldFile = Get-Item 'G:\MSSQL_DATA\AxDB*Primary.mdf' -Exclude AxDB*$dt*Primary.mdf
-		$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
-		$sqlprogressbaroverlay1.Maximum = (Get-Item $oldFile).length/1MB
-		$sqlprogressbaroverlay1.Value = 0
-		#[System.Windows.MessageBox]::Show($oldFile)
-		#[System.Windows.MessageBox]::Show($sqlprogressbaroverlay.Maximum)
-		#[System.Windows.MessageBox]::Show(($newFile).length/1MB)
-		$counter = 0
-		while ($sqlprogressbaroverlay1.Value -lt $sqlprogressbaroverlay1.Maximum)
-		{
-			$counter += 1
-			$labelSysAdmin.Text = $counter
-			if ($newFile -ne '')
-			{
-				$newFile = Get-Item G:\MSSQL_DATA\AxDB*$dt*Primary.mdf
-				$sqlprogressbaroverlay1.Value = ($newFile).length/1MB
-			}
-			Start-Sleep -Seconds 30;
-		}
-	}
+	
 	
 	
 	$buttonAdminEmailAdd_Click={
