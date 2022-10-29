@@ -13,7 +13,7 @@ count-checkbox
 
 Write-host -ForegroundColor Yellow "Stopping D365FO environment"
 Stop-D365Environment -All -Kill -Verbose
-Install-D365foDbatools
+Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/D365tools.ps1)
 
 $mainprogressbaroverlay.PerformStep()
 Write-host "Done Stopping D365FO environment"
