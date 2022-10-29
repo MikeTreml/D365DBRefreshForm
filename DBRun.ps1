@@ -17,7 +17,8 @@ Install-D365foDbatools
 
 $mainprogressbaroverlay.PerformStep()
 Write-host "Done Stopping D365FO environment"
-Start-Transcript -Path $LogFile -Append -IncludeInvocationHeader
+Stop-Transcript
+Start-Transcript -Path $LogFile" - prep" -Append -IncludeInvocationHeader
 
 if ($txtLink.Text -ne ''){
 	#If you are going to download BACPAC file from the LCS Asset Library, please use in this section
@@ -44,34 +45,23 @@ elseif ($txtFile.Text -ne ''){
 }
 $mainprogressbaroverlay.PerformStep()
 
-## Stop D365FO instance.
+Stop-Transcript
+Start-Transcript -Path $LogFile" SQL Prep" -Append -IncludeInvocationHeader
+
 Write-host -ForegroundColor Yellow "Stopping D365FO environment"
 Stop-D365Environment -All -Kill -Verbose
 $mainprogressbaroverlay.PerformStep()
 Write-host -ForegroundColor Green "Done Stopping D365FO environment"
-
-
-#if ($checkboxTruncateBatchTables.Checked){
-	#Write-host -ForegroundColor Yellow "truncate"
-	#Clear-D365BacpacTableData -Path "D:\Temp\AxDB.bacpac" -Table "dbo.BATCHHISTORY", "BATCHJOBHISTORY", "SYSSERVERCONFIG", "SYSSERVERSESSIONS", "SYSCORPNETPRINTERS", "SYSCLIENTSESSIONS", "BATCHSERVERCONFIG", "BATCHSERVERGROUP" -ClearFromSource -Verbose
-	#$mainprogressbaroverlay.PerformStep()
-	#Write-host -ForegroundColor Green "Done truncate"
-
-#}
 
 Write-host -ForegroundColor Yellow "Enable-D365Exception"
 Enable-D365Exception -Verbose
 $mainprogressbaroverlay.PerformStep()
 Write-host -ForegroundColor Green "Done Enable-D365Exception"
 
-
-
 Write-host -ForegroundColor Yellow "Installing modern SqlPackage"
 Invoke-D365InstallSqlPackage -Verbose 
 $mainprogressbaroverlay.PerformStep()
 Write-host -ForegroundColor Green "Done Installing modern SqlPackage"
-
-
 
 Write-host -ForegroundColor Yellow "Checking SQL file"
 If (-not (Test-DbaPath -SqlInstance localhost -Path $($f.FullName))){
@@ -81,64 +71,33 @@ If (-not (Test-DbaPath -SqlInstance localhost -Path $($f.FullName))){
 $mainprogressbaroverlay.PerformStep()
 Write-host -ForegroundColor Green "Done Checking SQL file"
 
-
 Write-host -ForegroundColor Yellow "Unblock-File"
 $f | Unblock-File
 $mainprogressbaroverlay.PerformStep()
 Write-host -ForegroundColor Green "Done Unblock-File"
 
+Stop-Transcript
+Start-Transcript -Path $LogFile" Import" -Append -IncludeInvocationHeader
 
 Write-host -ForegroundColor Yellow "Import-D365Bacpac "
 Import-D365Bacpac -ImportModeTier1 -BacpacFile $f.FullName -NewDatabaseName $NewDB -ShowOriginalProgress
 $mainprogressbaroverlay.PerformStep()
 Write-host -ForegroundColor Green "Done Import-D365Bacpac"
 
-
-## Stopping enviroment again before switch
-#Write-host -ForegroundColor Yellow "Stopping D365FO environment and Switching Databases" 
-#Stop-D365Environment -All -Kill -Verbose
-#Write-host -ForegroundColor Yellow "Stopping D365FO environment and Switching Databases" 
-
+Stop-Transcript
 
 if(Get-SqlDatabase -ServerInstance localhost -Name "AxDB"){
 	Write-host -ForegroundColor Yellow "Switch-D365ActiveDatabase"
+	Stop-D365Environment -All -Kill -Verbose
 	Switch-D365ActiveDatabase -NewDatabaseName $NewDB -Verbose
-#	Invoke-DbaQuery -SqlInstance localhost -Database master -Query "
-#ALTER DATABASE AxDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-#ALTER DATABASE AxDB MODIFY NAME = AxDB_Original;
-#ALTER DATABASE AxDB_Original SET MULTI_USER;
-#ALTER DATABASE '$NewDB' SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-#ALTER DATABASE '$NewDB' MODIFY NAME = AxDB;
-#ALTER DATABASE AxDB SET MULTI_USER;
-#ALTER DATABASE AxDB SET AUTO_CLOSE OFF WITH NO_WAIT"
 	Write-host -ForegroundColor Green "Done Switch-D365ActiveDatabase"
 }
 else{
 	Write-host -ForegroundColor Yellow "set-D365ActiveDatabase"
-	#Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/Set-D365ActiveDatabase.ps1)
-	Invoke-DbaQuery -SqlInstance localhost -Database master -Query "
-ALTER DATABASE '$NewDB' SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-ALTER DATABASE '$NewDB' MODIFY NAME = AxDB;
-ALTER DATABASE AxDB SET MULTI_USER;
-ALTER DATABASE AxDB SET AUTO_CLOSE OFF WITH NO_WAIT"
+	Invoke-DbaQuery -SqlInstance localhost -Database master -Query "ALTER DATABASE '$NewDB' SET SINGLE_USER WITH ROLLBACK IMMEDIATE ALTER DATABASE '$NewDB' MODIFY NAME = AxDB ALTER DATABASE AxDB SET MULTI_USER ALTER DATABASE AxDB SET AUTO_CLOSE OFF WITH NO_WAIT"
 	Write-host -ForegroundColor Green "Done set-D365ActiveDatabase"
 }
 $mainprogressbaroverlay.PerformStep()
-### Manual remove is a better option
-#Write-host -ForegroundColor Yellow "Remove-D365Database"
-#Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose
-#Write-host -ForegroundColor Green "Done Remove-D365Database"
-
-
-
-Write-host -ForegroundColor Yellow "Starting D365FO environment. Then open UI and refresh Data Entities." 
-Start-D365Environment
-$mainprogressbaroverlay.PerformStep()
-Write-host -ForegroundColor Green "Done Starting D365FO environment. Then open UI and refresh Data Entities." 
-
-
-
-
 
 if ($checkbox2.Checked){
 
@@ -255,9 +214,7 @@ if ($checkboxListOutUserEmails.Checked){
 if ($checkbox1.Checked){
 
 	Write-host -ForegroundColor Yellow "Starting Remove-D365Database"
-	Stop-D365Environment -All -Kill -Verbose
-	Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose
-	Start-D365Environment -All
+	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/Remove-D365Database.ps1)
 	$mainprogressbaroverlay.PerformStep()
 	Write-host -ForegroundColor Green "Done Remove-D365Database"
 }
@@ -265,6 +222,7 @@ if ($checkbox1.Checked){
 Write-host -ForegroundColor Yellow "Completed running"
 $mainprogressbaroverlay.Visible = $False
 
-#Stop-Transcript
+Start-D365Environment -All
+Stop-Transcript
 
 
