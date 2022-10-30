@@ -1,6 +1,6 @@
 $Stamp = (Get-Date).toString("yyyy-MM-dd")
 $LogFile = "C:\Users\$env:UserName\Desktop\DBRefresh_$Stamp"
-Start-Transcript -Path $LogFile -Append -IncludeInvocationHeader
+Start-Transcript -Path $LogFile -Append -UseMinimalHeader -Force
 
 ## Run Database Sync
 Invoke-D365DBSync -ShowOriginalProgress -Verbose
