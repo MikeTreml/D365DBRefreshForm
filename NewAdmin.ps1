@@ -1,6 +1,6 @@
 $Stamp = (Get-Date).toString("yyyy-MM-dd")
-$LogFile = "C:\Users\$env:UserName\Desktop\DBRefresh_$Stamp"
-Start-Transcript -Path $LogFile -Append -UseMinimalHeader -Force
+$LogFile = "C:\Users\$env:UserName\Desktop\DBRefresh_$Stamp.txt"
+Start-Transcript -Path $LogFile -Append -Force
 
 ## Promote user as admin and set default tenant  (Optional)
 Set-D365Admin -Verbose -AdminSignInName textboxAdminEmailAddress.Text
