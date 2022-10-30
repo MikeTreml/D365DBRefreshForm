@@ -1,6 +1,7 @@
 $ErrorActionPreference = 'Inquire'
 $Stamp = (Get-Date).toString("yyyy-MM-dd")
 $LogFile = "C:\Users\$env:UserName\Desktop\DBRefresh_$Stamp"
+Start-Transcript -Path $LogFile -Append -UseMinimalHeader -Force
 
 $mainprogressbaroverlay.Maximum = 10
 $mainprogressbaroverlay.Step = 1
@@ -18,7 +19,7 @@ Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTre
 $mainprogressbaroverlay.PerformStep()
 Write-host "Done Stopping D365FO environment"
 
-Start-Transcript -Path $LogFile -Append -IncludeInvocationHeader
+
 
 if ($txtLink.Text -ne ''){
 	#If you are going to download BACPAC file from the LCS Asset Library, please use in this section
@@ -78,7 +79,7 @@ Import-D365Bacpac -ImportModeTier1 -BacpacFile $f.FullName -NewDatabaseName $New
 $mainprogressbaroverlay.PerformStep()
 Write-host -ForegroundColor Green "Done Import-D365Bacpac"
 
-Stop-Transcript
+
 
 if(Get-SqlDatabase -ServerInstance localhost -Name "AxDB"){
 	Write-host -ForegroundColor Yellow "Switch-D365ActiveDatabase"
@@ -213,10 +214,6 @@ if ($checkbox1.Checked){
 	Write-host -ForegroundColor Green "Done Remove-D365Database"
 }
 
+Start-D365Environment -All
 Write-host -ForegroundColor Yellow "Completed running"
 $mainprogressbaroverlay.Visible = $False
-
-Start-D365Environment -All
-Stop-Transcript
-
-
