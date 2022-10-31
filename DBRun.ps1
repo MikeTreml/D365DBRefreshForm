@@ -134,7 +134,7 @@ if ($checkboxBackupNewlyCompleted.Checked){
 	Write-host -ForegroundColor Green "Done Backup AxDB"
 }
 
-if ($checkboxCleanUpPowerBISettin.Checked){
+if ($checkboxCleanUpPowerBI.Checked){
 
 	Write-host -ForegroundColor Yellow "Starting Cleaning up Power BI settings"
 	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/CleanPowerBI.ps1)
@@ -142,7 +142,7 @@ if ($checkboxCleanUpPowerBISettin.Checked){
 	Write-host -ForegroundColor Green "Done Cleaning up Power BI settings"
 }
 
-if ($checkboxEnableSQLChangeTrack.Checked){
+if ($checkboxEnableSQLTracking.Checked){
 
 	Write-host -ForegroundColor Yellow "Starting SQL Tracking"
 	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/SQLTracking.ps1)
@@ -166,7 +166,7 @@ if ($checkboxTruncateBatchTables.Checked){
 	Write-host -ForegroundColor Green "Done truncate Batch"
 }
 
-if ($checkboxPutAllBatchJobsOnHol.Checked){
+if ($checkboxPauseBatchJobs.Checked){
 
 	Write-host -ForegroundColor Yellow "Starting hold batch jobs"
 	Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/BatchHold.ps1)
@@ -174,7 +174,7 @@ if ($checkboxPutAllBatchJobsOnHol.Checked){
 	Write-host -ForegroundColor Green "Done hold batch jobs"
 }
 
-if ($checkboxEnableUsersExceptGue.Checked){
+if ($checkboxEnableUsers.Checked){
 
 	Write-host -ForegroundColor Yellow "Starting Enable Users"
 	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/EnableUsers.ps1)
