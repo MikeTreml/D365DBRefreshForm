@@ -1,5 +1,5 @@
 $Stamp = (Get-Date).toString("yyyy-MM-dd")
-$LogFile = "C:\Users\$env:UserName\Desktop\DBRefresh_$Stamp.txt"
+$LogFile = "C:\Users\$env:UserName\Desktop\DBRefresh_$Stamp\D365tools.txt"
 Start-Transcript -Path $LogFile -Append -Force
 
 Write-Host "Installing PowerShell modules d365fo.tools and dbatools" -ForegroundColor Yellow
