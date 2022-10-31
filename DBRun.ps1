@@ -174,6 +174,14 @@ if ($checkboxPutAllBatchJobsOnHol.Checked){
 	Write-host -ForegroundColor Green "Done hold batch jobs"
 }
 
+if ($checkboxEnableUsersExceptGue.Checked){
+
+	Write-host -ForegroundColor Yellow "Starting Enable Users"
+	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/EnableUsers.ps1)
+	$mainprogressbaroverlay.PerformStep()
+	Write-host -ForegroundColor Green "Done Enable Users"
+}
+
 if ($checkboxRunDatabaseSync.Checked){
 
 	Write-host -ForegroundColor Yellow "Starting DB sync"
@@ -188,14 +196,6 @@ if ($checkboxSetDBRecoveryModel.Checked){
 	Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/SetDBRecoveryModel.ps1)
 	$mainprogressbaroverlay.PerformStep()
 	Write-host -ForegroundColor Green "Done"
-}
-
-if ($checkboxEnableUsersExceptGue.Checked){
-
-	Write-host -ForegroundColor Yellow "Starting Enable Users"
-	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/EnableUsers.ps1)
-	$mainprogressbaroverlay.PerformStep()
-	Write-host -ForegroundColor Green "Done Enable Users"
 }
 
 if ($checkboxListOutUserEmails.Checked){
