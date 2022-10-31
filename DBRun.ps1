@@ -1,4 +1,4 @@
-$ErrorActionPreference = 'Inquire'
+$ErrorActionPreference = 'Continue'
 $Stamp = (Get-Date).toString("yyyy-MM-dd")
 $LogFile = "C:\Users\$env:UserName\Desktop\DBRefresh_$Stamp\DB Refresh.txt"
 Start-Transcript -Path $LogFile -Append -Force
