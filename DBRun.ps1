@@ -8,7 +8,7 @@ $mainprogressbaroverlay.Step = 1
 $mainprogressbaroverlay.Value = 0
 $mainprogressbaroverlay.Visible = $True
 
-[string]$dt = get-date -Format "yyyyMMdd" 
+[string]$dt = get-date -Format "yyyyMMdd_hhmm" 
 $NewDB = 'AxDB_'+$dt
 count-checkbox
 
