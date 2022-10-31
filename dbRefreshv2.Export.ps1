@@ -1051,6 +1051,7 @@ namespace SAPIENTypes
 	#
 	# checkbox1
 	$checkbox1.Enabled = $True
+	$checkbox1.CheckState = 'Checked'
 	$checkbox1.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '10')
 	$checkbox1.Location = New-Object System.Drawing.Point(12, 240)
 	$checkbox1.Margin = '5, 5, 5, 5'
@@ -1094,7 +1095,7 @@ namespace SAPIENTypes
 	#
 	# checkboxTruncateBatchTables
 	#
-	$checkboxTruncateBatchTables.Checked = $True
+	$checkboxTruncateBatchTables.Checked = $False
 	$checkboxTruncateBatchTables.CheckState = 'Checked'
 	$checkboxTruncateBatchTables.Font = [System.Drawing.Font]::new('Microsoft Sans Serif', '12')
 	$checkboxTruncateBatchTables.Location = New-Object System.Drawing.Point(333, 203)
