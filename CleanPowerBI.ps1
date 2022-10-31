@@ -1,5 +1,5 @@
 $Stamp = (Get-Date).toString("yyyy-MM-dd")
-$LogFile = "C:\Users\$env:UserName\Desktop\DBRefresh_$Stamp PowerBI clean.txt"
+$LogFile = "C:\Users\$env:UserName\Desktop\DBRefresh_$Stamp\PowerBIClean.txt"
 Start-Transcript -Path $LogFile -Append -Force
 
 ## Clean up Power BI settings
