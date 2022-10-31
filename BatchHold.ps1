@@ -1,5 +1,5 @@
 $Stamp = (Get-Date).toString("yyyy-MM-dd")
-$LogFile = "C:\Users\$env:UserName\Desktop\DBRefresh_$Stamp.txt"
+$LogFile = "C:\Users\$env:UserName\Desktop\DBRefresh_$Stamp Batch Hold.txt"
 Start-Transcript -Path $LogFile -Append -Force
 
 ## Put on hold all Batch Jobs
