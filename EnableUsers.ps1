@@ -1,5 +1,5 @@
 $Stamp = (Get-Date).toString("yyyy-MM-dd")
-$LogFile = "C:\Users\$env:UserName\Desktop\DBRefresh_$Stamp.txt"
+$LogFile = "C:\Users\$env:UserName\Desktop\DBRefresh_$Stamp\EnableUsers.txt"
 Start-Transcript -Path $LogFile -Append -Force
 
 Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "INSERT INTO [AxDB].[dbo].[USERINFO]([ID],[NAME],[ENABLE],[COMPANY],[NETWORKDOMAIN],[NETWORKALIAS],[ENABLEDONCE],[LANGUAGE],[HELPLANGUAGE],[PREFERREDTIMEZONE],[ACCOUNTTYPE],[DEFAULTPARTITION],[EXTERNALIDTYPE],[INTERACTIVELOGON])
