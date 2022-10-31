@@ -1,5 +1,5 @@
 $Stamp = (Get-Date).toString("yyyy-MM-dd")
-$LogFile = "C:\Users\$env:UserName\Desktop\DBRefresh_$Stamp.txt"
+$LogFile = "C:\Users\$env:UserName\Desktop\DBRefresh_$Stamp\SQLTracking.txt"
 Start-Transcript -Path $LogFile -Append -Force
 
 ## Enable SQL Change Tracking
