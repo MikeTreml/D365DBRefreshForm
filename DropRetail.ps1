@@ -1,5 +1,4 @@
-Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "
-DECLARE @schemaCrt INT
+Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "DECLARE @schemaCrt INT
 DECLARE @schemaAx INT
 DECLARE @schemaExt INT
 DECLARE @schemaCdx INT
