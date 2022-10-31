@@ -14,7 +14,28 @@ count-checkbox
 
 Write-host -ForegroundColor Yellow "Stopping D365FO environment"
 Stop-D365Environment -All -Kill -Verbose
-Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/D365tools.ps1)
+#Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/D365tools.ps1)
+Write-Host "Installing PowerShell modules d365fo.tools and dbatools" -ForegroundColor Yellow
+
+Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope AllUsers
+Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+$modules2Install = @('d365fo.tools', 'dbatools')
+foreach ($module in $modules2Install)
+{
+  Write-Host  "..working on module $module"
+  if ($null -eq $(Get-Command -Module $module))
+  {
+    Write-Host  "....installing module $module" -ForegroundColor Gray
+    Install-Module -Name $module -SkipPublisherCheck -Scope AllUsers -Verbose
+  }
+  else
+  {
+    Write-Host  "....updating module" $module -ForegroundColor Gray
+    Update-Module -Name $module -Verbose
+  }
+  $mainprogressbaroverlay.PerformStep()
+}
+Write-Host "Done Installing PowerShell modules d365fo.tools and dbatools" -ForegroundColor Green
 
 $mainprogressbaroverlay.PerformStep()
 Write-host "Done Stopping D365FO environment"
@@ -97,7 +118,7 @@ $mainprogressbaroverlay.PerformStep()
 if ($checkbox2.Checked){
 
 	Write-host -ForegroundColor Yellow "Starting 2"
-	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/2)
+	#Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/2)
 	$mainprogressbaroverlay.PerformStep()
 	Write-host -ForegroundColor Green "Done 2"
 }
@@ -105,7 +126,7 @@ if ($checkbox2.Checked){
 if ($checkbox3.Checked){
 
 	Write-host -ForegroundColor Yellow "Starting 3"
-	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/3)
+	#Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/3)
 	$mainprogressbaroverlay.PerformStep()
 	Write-host -ForegroundColor Green "Done 3"
 }
@@ -113,7 +134,7 @@ if ($checkbox3.Checked){
 if ($checkbox4.Checked){
 
 	Write-host -ForegroundColor Yellow "Starting 4"
-	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/4)
+	#Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/4)
 	$mainprogressbaroverlay.PerformStep()
 	Write-host -ForegroundColor Green "Done 4"
 }
@@ -121,7 +142,7 @@ if ($checkbox4.Checked){
 if ($checkbox5.Checked){
 
 	Write-host -ForegroundColor Yellow "Starting 5"
-	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/5)
+	#Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/5)
 	$mainprogressbaroverlay.PerformStep()
 	Write-host -ForegroundColor Green "Done 5 "
 }
@@ -129,7 +150,9 @@ if ($checkbox5.Checked){
 if ($checkboxBackupNewlyCompleted.Checked){
 
 	Write-host -ForegroundColor Yellow "Starting Backup AxDB"
-	Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/BackUpDB.ps1)
+	#Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/BackUpDB.ps1)
+	$labelInfo = ""
+	Invoke-DbaQuery -Verbose -SqlInstance localhost -Database AxDB -Type Full -CompressBackup -BackupFileName "dbname-$NewDB-backuptype-timestamp.bak" -ReplaceInName | Out-File -FilePath $Logfile
 	$mainprogressbaroverlay.PerformStep()
 	Write-host -ForegroundColor Green "Done Backup AxDB"
 }
@@ -137,7 +160,9 @@ if ($checkboxBackupNewlyCompleted.Checked){
 if ($checkboxCleanUpPowerBI.Checked){
 
 	Write-host -ForegroundColor Yellow "Starting Cleaning up Power BI settings"
-	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/CleanPowerBI.ps1)
+	#Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/CleanPowerBI.ps1)
+	## Clean up Power BI settings
+	Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "UPDATE PowerBIConfig set CLIENTID = '', APPLICATIONKEY = '', REDIRECTURL = ''"  | Out-File -FilePath $Logfile
 	$mainprogressbaroverlay.PerformStep()
 	Write-host -ForegroundColor Green "Done Cleaning up Power BI settings"
 }
@@ -145,7 +170,9 @@ if ($checkboxCleanUpPowerBI.Checked){
 if ($checkboxEnableSQLTracking.Checked){
 
 	Write-host -ForegroundColor Yellow "Starting SQL Tracking"
-	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/SQLTracking.ps1)
+	#Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/SQLTracking.ps1)
+	## Enable SQL Change Tracking
+	Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "ALTER DATABASE AxDB SET CHANGE_TRACKING = ON (CHANGE_RETENTION = 6 DAYS, AUTO_CLEANUP = ON)" | Out-File -FilePath $Logfile
 	$mainprogressbaroverlay.PerformStep()
 	Write-host -ForegroundColor Green "Done SQL Tracking"
 }
@@ -153,7 +180,9 @@ if ($checkboxEnableSQLTracking.Checked){
 if ($checkboxPromoteNewAdmin.Checked){
 
 	Write-host -ForegroundColor Yellow "Starting New Admin"
-	Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/NewAdmin.ps1)
+	#Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/NewAdmin.ps1)
+	## Promote user as admin and set default tenant  (Optional)
+	Set-D365Admin -Verbose -AdminSignInName textboxAdminEmailAddress.Text
 	$mainprogressbaroverlay.PerformStep()
 	Write-host -ForegroundColor Green "Done New Admin"
 }
@@ -161,7 +190,36 @@ if ($checkboxPromoteNewAdmin.Checked){
 if ($checkboxTruncateBatchTables.Checked){
 
 	Write-host -ForegroundColor Yellow "Starting truncate Batch"
-	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/TruncateBatch.ps1)
+	#Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/TruncateBatch.ps1)
+	Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "TRUNCATE TABLE SYSSERVERCONFIG
+	TRUNCATE TABLE SYSSERVERSESSIONS
+	TRUNCATE TABLE SYSCORPNETPRINTERS
+	TRUNCATE TABLE SYSCLIENTSESSIONS
+	TRUNCATE TABLE BATCHSERVERCONFIG
+	TRUNCATE TABLE BATCHSERVERGROUP
+	TRUNCATE TABLE BatchHistory
+	TRUNCATE TABLE BatchJobHistory
+	TRUNCATE TABLE DMFSTAGINGVALIDATIONLOG
+	TRUNCATE TABLE DMFSTAGINGEXECUTIONERRORS
+	TRUNCATE TABLE DMFSTAGINGLOGDETAIL
+	TRUNCATE TABLE DMFSTAGINGLOG 
+	TRUNCATE TABLE DMFDEFINITIONGROUPEXECUTIONHISTORY
+	TRUNCATE TABLE DMFEXECUTION
+	TRUNCATE TABLE DMFDEFINITIONGROUPEXECUTION" 
+
+	Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "declare @t table 
+	(id bigint identity(1,1), sqlQuery nvarchar(500))
+	declare @maxid bigint, @i	bigint, @sqlquery nvarchar(500)
+	insert into @t (sqlQuery)
+	select ' truncate table ' + name from sysobjects where name like '%staging'
+	select @maxid = MAX(id) from @t
+	set @i=1
+	while (@i<=@maxid)
+	BEGIN
+	select @sqlquery = sqlQuery from @t where id = @i
+	exec(@sqlQuery)
+	set @i=@i+1
+	END"
 	$mainprogressbaroverlay.PerformStep()
 	Write-host -ForegroundColor Green "Done truncate Batch"
 }
@@ -169,7 +227,10 @@ if ($checkboxTruncateBatchTables.Checked){
 if ($checkboxPauseBatchJobs.Checked){
 
 	Write-host -ForegroundColor Yellow "Starting hold batch jobs"
-	Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/BatchHold.ps1)
+	#Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/BatchHold.ps1)
+	## Put on hold all Batch Jobs
+	Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "UPDATE BatchJob SET STATUS = 0 WHERE STATUS IN (1,2,5,7)  --Set any waiting, executing, ready, or canceling batches to withhold."
+	#Invoke-D365SqlScript -Verbose -DatabaseServer localhost -DatabaseName AxDB -Command "UPDATE BatchJob SET STATUS = 0 WHERE STATUS IN (1,2,5,7) | Out-File -FilePath $Logfile
 	$mainprogressbaroverlay.PerformStep()
 	Write-host -ForegroundColor Green "Done hold batch jobs"
 }
@@ -177,7 +238,48 @@ if ($checkboxPauseBatchJobs.Checked){
 if ($checkboxEnableUsers.Checked){
 
 	Write-host -ForegroundColor Yellow "Starting Enable Users"
-	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/EnableUsers.ps1)
+	#Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/EnableUsers.ps1)
+	Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "INSERT INTO [AxDB].[dbo].[USERINFO]([ID],[NAME],[ENABLE],[COMPANY],[NETWORKDOMAIN],[NETWORKALIAS],[ENABLEDONCE],[LANGUAGE],[HELPLANGUAGE],[PREFERREDTIMEZONE],[ACCOUNTTYPE],[DEFAULTPARTITION],[EXTERNALIDTYPE],[INTERACTIVELOGON])
+	VALUES ('aniela','aniela',1,'','https://sts.windows.net/caf2code.com/','aniela@caf2code.com',1,'en-us','en-us',29,2,1,1,1)
+	INSERT INTO [AxDB].[dbo].[USERINFO]([ID],[NAME],[ENABLE],[COMPANY],[NETWORKDOMAIN],[NETWORKALIAS],[ENABLEDONCE],[LANGUAGE],[HELPLANGUAGE],[PREFERREDTIMEZONE],[ACCOUNTTYPE],[DEFAULTPARTITION],[EXTERNALIDTYPE],[INTERACTIVELOGON])
+	VALUES	('mike','mike',1,'','https://sts.windows.net/caf2code.com/','mike@caf2code.com',1,'en-us','en-us',29,2,1,1,1)
+	INSERT INTO [AxDB].[dbo].[USERINFO]([ID],[NAME],[ENABLE],[COMPANY],[NETWORKDOMAIN],[NETWORKALIAS],[ENABLEDONCE],[LANGUAGE],[HELPLANGUAGE],[PREFERREDTIMEZONE],[ACCOUNTTYPE],[DEFAULTPARTITION],[EXTERNALIDTYPE],[INTERACTIVELOGON])
+	VALUES	('benbreeden','benbreeden',1,'','https://sts.windows.net/caf2code.com/','benbreeden@caf2code.com',1,'en-us','en-us',29,2,1,1,1)
+	INSERT INTO [AxDB].[dbo].[USERINFO]([ID],[NAME],[ENABLE],[COMPANY],[NETWORKDOMAIN],[NETWORKALIAS],[ENABLEDONCE],[LANGUAGE],[HELPLANGUAGE],[PREFERREDTIMEZONE],[ACCOUNTTYPE],[DEFAULTPARTITION],[EXTERNALIDTYPE],[INTERACTIVELOGON])
+	VALUES	('Brittany','Brittany',1,'','https://sts.windows.net/caf2code.com/','Brittany@caf2code.com',1,'en-us','en-us',29,2,1,1,1)
+	INSERT INTO [AxDB].[dbo].[USERINFO]([ID],[NAME],[ENABLE],[COMPANY],[NETWORKDOMAIN],[NETWORKALIAS],[ENABLEDONCE],[LANGUAGE],[HELPLANGUAGE],[PREFERREDTIMEZONE],[ACCOUNTTYPE],[DEFAULTPARTITION],[EXTERNALIDTYPE],[INTERACTIVELOGON])
+	VALUES	('d.ki21','d.ki21',1,'','https://sts.windows.net/caf2code.com/','d.ki21@caf2code.com',1,'en-us','en-us',29,2,1,1,1)
+	INSERT INTO [AxDB].[dbo].[USERINFO]([ID],[NAME],[ENABLE],[COMPANY],[NETWORKDOMAIN],[NETWORKALIAS],[ENABLEDONCE],[LANGUAGE],[HELPLANGUAGE],[PREFERREDTIMEZONE],[ACCOUNTTYPE],[DEFAULTPARTITION],[EXTERNALIDTYPE],[INTERACTIVELOGON])
+	VALUES	('L.FL21','L.FL21',1,'','https://sts.windows.net/caf2code.com/','L.FL21@caf2code.com',1,'en-us','en-us',29,2,1,1,1)
+	INSERT INTO [AxDB].[dbo].[USERINFO]([ID],[NAME],[ENABLE],[COMPANY],[NETWORKDOMAIN],[NETWORKALIAS],[ENABLEDONCE],[LANGUAGE],[HELPLANGUAGE],[PREFERREDTIMEZONE],[ACCOUNTTYPE],[DEFAULTPARTITION],[EXTERNALIDTYPE],[INTERACTIVELOGON])
+	VALUES	('laurenwooll','laurenwooll',1,'','https://sts.windows.net/caf2code.com/','laurenwooll@caf2code.com',1,'en-us','en-us',29,2,1,1,1)
+	INSERT INTO [AxDB].[dbo].[USERINFO]([ID],[NAME],[ENABLE],[COMPANY],[NETWORKDOMAIN],[NETWORKALIAS],[ENABLEDONCE],[LANGUAGE],[HELPLANGUAGE],[PREFERREDTIMEZONE],[ACCOUNTTYPE],[DEFAULTPARTITION],[EXTERNALIDTYPE],[INTERACTIVELOGON])
+	VALUES	('m.ri21','m.ri21',1,'','https://sts.windows.net/caf2code.com/','m.ri21@caf2code.com',1,'en-us','en-us',29,2,1,1,1)
+	INSERT INTO [AxDB].[dbo].[USERINFO]([ID],[NAME],[ENABLE],[COMPANY],[NETWORKDOMAIN],[NETWORKALIAS],[ENABLEDONCE],[LANGUAGE],[HELPLANGUAGE],[PREFERREDTIMEZONE],[ACCOUNTTYPE],[DEFAULTPARTITION],[EXTERNALIDTYPE],[INTERACTIVELOGON])
+	VALUES	('mac','mac',1,'','https://sts.windows.net/caf2code.com/','mac@caf2code.com',1,'en-us','en-us',29,2,1,1,1)
+	INSERT INTO [AxDB].[dbo].[USERINFO]([ID],[NAME],[ENABLE],[COMPANY],[NETWORKDOMAIN],[NETWORKALIAS],[ENABLEDONCE],[LANGUAGE],[HELPLANGUAGE],[PREFERREDTIMEZONE],[ACCOUNTTYPE],[DEFAULTPARTITION],[EXTERNALIDTYPE],[INTERACTIVELOGON])
+	VALUES	('r.qu21','r.qu21',1,'','https://sts.windows.net/caf2code.com/','r.qu21@caf2code.com',1,'en-us','en-us',29,2,1,1,1)
+	INSERT INTO [AxDB].[dbo].[USERINFO]([ID],[NAME],[ENABLE],[COMPANY],[NETWORKDOMAIN],[NETWORKALIAS],[ENABLEDONCE],[LANGUAGE],[HELPLANGUAGE],[PREFERREDTIMEZONE],[ACCOUNTTYPE],[DEFAULTPARTITION],[EXTERNALIDTYPE],[INTERACTIVELOGON])
+	VALUES	('aniela','aniela',1,'','https://sts.windows.net/caf2code.com/','aniela@caf2code.com',1,'en-us','en-us',29,2,1,1,1)
+	INSERT INTO [AxDB].[dbo].[USERINFO]([ID],[NAME],[ENABLE],[COMPANY],[NETWORKDOMAIN],[NETWORKALIAS],[ENABLEDONCE],[LANGUAGE],[HELPLANGUAGE],[PREFERREDTIMEZONE],[ACCOUNTTYPE],[DEFAULTPARTITION],[EXTERNALIDTYPE],[INTERACTIVELOGON])
+	VALUES	('justin','justin',1,'','https://sts.windows.net/caf2code.com/','justin@caf2code.com',1,'en-us','en-us',29,2,1,1,1)
+	insert into securityuserrole(USER_, SECURITYROLE, ASSIGNMENTSTATUS, ASSIGNMENTMODE, VALIDFROMTZID, VALIDTOTZID) values('mike', 2, 1, 1, 0, 0)
+	insert into securityuserrole(USER_, SECURITYROLE, ASSIGNMENTSTATUS, ASSIGNMENTMODE, VALIDFROMTZID, VALIDTOTZID) values('benbreeden', 2, 1, 1, 0, 0)
+	insert into securityuserrole(USER_, SECURITYROLE, ASSIGNMENTSTATUS, ASSIGNMENTMODE, VALIDFROMTZID, VALIDTOTZID) values('Brittany', 2, 1, 1, 0, 0)
+	insert into securityuserrole(USER_, SECURITYROLE, ASSIGNMENTSTATUS, ASSIGNMENTMODE, VALIDFROMTZID, VALIDTOTZID) values('d.ki21', 2, 1, 1, 0, 0)
+	insert into securityuserrole(USER_, SECURITYROLE, ASSIGNMENTSTATUS, ASSIGNMENTMODE, VALIDFROMTZID, VALIDTOTZID) values('L.FL21', 2, 1, 1, 0, 0)
+	insert into securityuserrole(USER_, SECURITYROLE, ASSIGNMENTSTATUS, ASSIGNMENTMODE, VALIDFROMTZID, VALIDTOTZID) values('laurenwooll', 2, 1, 1, 0, 0)
+	insert into securityuserrole(USER_, SECURITYROLE, ASSIGNMENTSTATUS, ASSIGNMENTMODE, VALIDFROMTZID, VALIDTOTZID) values('m.ri21', 2, 1, 1, 0, 0)
+	insert into securityuserrole(USER_, SECURITYROLE, ASSIGNMENTSTATUS, ASSIGNMENTMODE, VALIDFROMTZID, VALIDTOTZID) values('mac', 2, 1, 1, 0, 0)
+	insert into securityuserrole(USER_, SECURITYROLE, ASSIGNMENTSTATUS, ASSIGNMENTMODE, VALIDFROMTZID, VALIDTOTZID) values('r.qu21', 2, 1, 1, 0, 0)
+	insert into securityuserrole(USER_, SECURITYROLE, ASSIGNMENTSTATUS, ASSIGNMENTMODE, VALIDFROMTZID, VALIDTOTZID) values('justin', 2, 1, 1, 0, 0)
+	insert into securityuserrole(USER_, SECURITYROLE, ASSIGNMENTSTATUS, ASSIGNMENTMODE, VALIDFROMTZID, VALIDTOTZID) values('aniela', 2, 1, 1, 0, 0)
+	UPDATE [dbo].[USERINFO] SET [COMPANY] = 'PQI' WHERE NETWORKALIAS like '%caf2code.com'
+	Update USERINFO set ENABLE = 1 where ID != 'Guest'"
+
+	Enable-D365User -Email "*caf2code*"
+	update-D365User -Email "*caf2code*"
+
 	$mainprogressbaroverlay.PerformStep()
 	Write-host -ForegroundColor Green "Done Enable Users"
 }
@@ -185,7 +287,9 @@ if ($checkboxEnableUsers.Checked){
 if ($checkboxRunDatabaseSync.Checked){
 
 	Write-host -ForegroundColor Yellow "Starting DB sync"
-	Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/DBSync.ps1)
+	#Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/DBSync.ps1)
+	## Run Database Sync
+	Invoke-D365DBSync -ShowOriginalProgress -Verbose
 	$mainprogressbaroverlay.PerformStep()
 	Write-host -ForegroundColor Green "Done DB sync"
 }
@@ -193,7 +297,8 @@ if ($checkboxRunDatabaseSync.Checked){
 if ($checkboxSetDBRecoveryModel.Checked){
 
 	Write-host -ForegroundColor Yellow "Starting "
-	Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/SetDBRecoveryModel.ps1)
+	#Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/SetDBRecoveryModel.ps1)
+	Set-DbaDbRecoveryModel -Verbose -SqlInstance localhost -RecoveryModel Simple -Database AxDB -Confirm:$false
 	$mainprogressbaroverlay.PerformStep()
 	Write-host -ForegroundColor Green "Done"
 }
@@ -201,7 +306,15 @@ if ($checkboxSetDBRecoveryModel.Checked){
 if ($checkboxListOutUserEmails.Checked){
 
 	Write-host -ForegroundColor Yellow "Starting List Out User Email Addresses"
-	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/ListOutUserEmails.ps1)
+	#Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/ListOutUserEmails.ps1)
+	Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "
+	select ID, Name, NetworkAlias, NETWORKDOMAIN, Enable from userInfo
+	where NETWORKALIAS not like '%@contosoax7.onmicrosoft.com'
+	and NETWORKALIAS not like '%@capintegration01.onmicrosoft.com'
+	and NETWORKALIAS not like '%@devtesttie.ccsctp.net'
+	and NETWORKALIAS not like '%@DAXMDSRunner.com'
+	and NETWORKALIAS not like '%@dynamics.com'
+	and NETWORKALIAS != ''" | Out-File -FilePath $Logfile
 	$mainprogressbaroverlay.PerformStep()
 	Write-host -ForegroundColor Green "Done List Out User Email Addresses"
 }
@@ -209,7 +322,9 @@ if ($checkboxListOutUserEmails.Checked){
 if ($checkbox1.Checked){
 
 	Write-host -ForegroundColor Yellow "Starting Remove-D365Database"
-	Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/Remove-D365Database.ps1)
+	#Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/Remove-D365Database.ps1)
+	Stop-D365Environment -All -Kill -Verbose
+	Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose
 	$mainprogressbaroverlay.PerformStep()
 	Write-host -ForegroundColor Green "Done Remove-D365Database"
 }
