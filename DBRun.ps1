@@ -26,12 +26,12 @@ foreach ($module in $modules2Install)
   if ($null -eq $(Get-Command -Module $module))
   {
     Write-Host  "....installing module $module" -ForegroundColor Gray
-    Install-Module -Name $module -SkipPublisherCheck -Scope AllUsers -Verbose
+    Install-Module -Name $module -SkipPublisherCheck -Scope AllUsers -Verbose -force
   }
   else
   {
     Write-Host  "....updating module" $module -ForegroundColor Gray
-    Update-Module -Name $module -Verbose
+    Update-Module -Name $module -Verbose -force
   }
   $mainprogressbaroverlay.PerformStep()
 }
@@ -40,7 +40,7 @@ Write-Host "Done Installing PowerShell modules d365fo.tools and dbatools" -Foreg
 $mainprogressbaroverlay.PerformStep()
 Write-host "Done Stopping D365FO environment"
 
-
+Stop-D365Environment -All -Kill -Verbose
 
 if ($txtLink.Text -ne ''){
 	#If you are going to download BACPAC file from the LCS Asset Library, please use in this section
