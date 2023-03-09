@@ -1,8 +1,4 @@
-$Stamp = (Get-Date).toString("yyyy-MM-dd")
-$LogFile = "C:\Users\$env:UserName\Desktop\DBRefresh_$Stamp\D365tools.txt"
-Start-Transcript -Path $LogFile -Append -Force
-
-Write-Host "Installing PowerShell modules d365fo.tools and dbatools" -ForegroundColor Yellow
+Write-Host "Installing PowerShell modules d365fo.tools and dbatools "(Get-Date).toString("yyyy-MM-dd hh:mm:ss")  -ForegroundColor Yellow
 
 Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope AllUsers
 Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
@@ -22,6 +18,5 @@ foreach ($module in $modules2Install)
   }
   $mainprogressbaroverlay.PerformStep()
 }
-Write-Host "Done Installing PowerShell modules d365fo.tools and dbatools" -ForegroundColor Green
+Write-Host "Done Installing PowerShell modules d365fo.tools and dbatools  "(Get-Date).toString("yyyy-MM-dd hh:mm:ss")  -ForegroundColor Green
 
-Stop-Transcript
