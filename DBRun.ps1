@@ -1,7 +1,3 @@
-$ErrorActionPreference = 'Continue'
-$Stamp = (Get-Date).toString("yyyy-MM-dd")
-$LogFile = "C:\Users\$env:UserName\Desktop\DBRefresh_$Stamp.txt"
-Start-Transcript -Path $LogFile -Append -Force
 
 $mainprogressbaroverlay.Maximum = 10
 $mainprogressbaroverlay.Step = 1
@@ -12,10 +8,10 @@ $mainprogressbaroverlay.Visible = $True
 $NewDB = 'AxDB_'+$dt
 count-checkbox
 
-Write-host -ForegroundColor Yellow "Stopping D365FO environment"
+Write-host -ForegroundColor Yellow "Stopping D365FO environment "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 Stop-D365Environment -All -Kill -Verbose
 #Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/D365tools.ps1)
-Write-Host "Installing PowerShell modules d365fo.tools and dbatools" -ForegroundColor Yellow
+Write-Host "Installing PowerShell modules d365fo.tools and dbatools "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") -ForegroundColor Yellow
 
 Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope AllUsers
 Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
@@ -35,10 +31,10 @@ foreach ($module in $modules2Install)
   }
   $mainprogressbaroverlay.PerformStep()
 }
-Write-Host "Done Installing PowerShell modules d365fo.tools and dbatools" -ForegroundColor Green
+Write-Host "Done Installing PowerShell modules d365fo.tools and dbatools "(Get-Date).toString("yyyy-MM-dd hh:mm:ss")  -ForegroundColor Green
 
 $mainprogressbaroverlay.PerformStep()
-Write-host "Done Stopping D365FO environment"
+Write-host "Done Stopping D365FO environment "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 
 Stop-D365Environment -All -Kill -Verbose
 
@@ -49,7 +45,7 @@ if ($txtLink.Text -ne ''){
 	$TempFolder = 'D:\temp\' # 'c:\temp\'  #$env:TEMP
 	#region Download bacpac from LCS
 	if ($BacpacSasLinkFromLCS.StartsWith('http'))	{
-       		Write-host -ForegroundColor Yellow "Downloading BACPAC from the LCS Asset library "
+       		Write-host -ForegroundColor Yellow "Downloading BACPAC from the LCS Asset library  "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 		New-Item -Path $TempFolder -ItemType Directory -Force -Verbose
 		$TempFileName = Join-path $TempFolder -ChildPath "$NewDB.bacpac"
         	Write-host -ForegroundColor Yellow "..Downloading file" $TempFileName
@@ -67,129 +63,129 @@ elseif ($txtFile.Text -ne ''){
 }
 $mainprogressbaroverlay.PerformStep()
 
-Write-host -ForegroundColor Yellow "Stopping D365FO environment"
+Write-host -ForegroundColor Yellow "Stopping D365FO environment "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 Stop-D365Environment -All -Kill -Verbose
 $mainprogressbaroverlay.PerformStep()
-Write-host -ForegroundColor Green "Done Stopping D365FO environment"
+Write-host -ForegroundColor Green "Done Stopping D365FO environment "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 
-Write-host -ForegroundColor Yellow "Enable-D365Exception"
+Write-host -ForegroundColor Yellow "Enable-D365Exception "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 Enable-D365Exception -Verbose
 $mainprogressbaroverlay.PerformStep()
-Write-host -ForegroundColor Green "Done Enable-D365Exception"
+Write-host -ForegroundColor Green "Done Enable-D365Exception "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 
-Write-host -ForegroundColor Yellow "Installing modern SqlPackage"
+Write-host -ForegroundColor Yellow "Installing modern SqlPackage "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 Invoke-D365InstallSqlPackage -Verbose 
 $mainprogressbaroverlay.PerformStep()
-Write-host -ForegroundColor Green "Done Installing modern SqlPackage"
+Write-host -ForegroundColor Green "Done Installing modern SqlPackage "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 
-Write-host -ForegroundColor Yellow "Checking SQL file"
+Write-host -ForegroundColor Yellow "Checking SQL file "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 If (-not (Test-DbaPath -SqlInstance localhost -Path $($f.FullName))){
 	Write-Warning "Database file $($f.FullName) could not be found by SQL Server. Try to move it to C:\Temp or D:\Temp"
 	throw "Database file $($f.FullName) could not be found by SQL Server. Try to move it to C:\Temp or D:\Temp"
 }
 $mainprogressbaroverlay.PerformStep()
-Write-host -ForegroundColor Green "Done Checking SQL file"
+Write-host -ForegroundColor Green "Done Checking SQL file "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 
-Write-host -ForegroundColor Yellow "Unblock-File"
+Write-host -ForegroundColor Yellow "Unblock-File "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 $f | Unblock-File
 $mainprogressbaroverlay.PerformStep()
-Write-host -ForegroundColor Green "Done Unblock-File"
+Write-host -ForegroundColor Green "Done Unblock-File "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 
-Write-host -ForegroundColor Yellow "Import-D365Bacpac "
+Write-host -ForegroundColor Yellow "Import-D365Bacpac "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 Import-D365Bacpac -ImportModeTier1 -BacpacFile $f.FullName -NewDatabaseName $NewDB -ShowOriginalProgress
 $mainprogressbaroverlay.PerformStep()
-Write-host -ForegroundColor Green "Done Import-D365Bacpac"
+Write-host -ForegroundColor Green "Done Import-D365Bacpac "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 
 
 
 if(Get-SqlDatabase -ServerInstance localhost -Name "AxDB"){
-	Write-host -ForegroundColor Yellow "Switch-D365ActiveDatabase"
+	Write-host -ForegroundColor Yellow "Switch-D365ActiveDatabase "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 	Stop-D365Environment -All -Kill -Verbose
 	Switch-D365ActiveDatabase -NewDatabaseName $NewDB -Verbose
-	Write-host -ForegroundColor Green "Done Switch-D365ActiveDatabase"
+	Write-host -ForegroundColor Green "Done Switch-D365ActiveDatabase "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 }
 else{
-	Write-host -ForegroundColor Yellow "set-D365ActiveDatabase"
+	Write-host -ForegroundColor Yellow "set-D365ActiveDatabase "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 	Invoke-DbaQuery -SqlInstance localhost -Database master -Query "ALTER DATABASE '$NewDB' SET SINGLE_USER WITH ROLLBACK IMMEDIATE ALTER DATABASE '$NewDB' MODIFY NAME = AxDB ALTER DATABASE AxDB SET MULTI_USER ALTER DATABASE AxDB SET AUTO_CLOSE OFF WITH NO_WAIT"
-	Write-host -ForegroundColor Green "Done set-D365ActiveDatabase"
+	Write-host -ForegroundColor Green "Done set-D365ActiveDatabase "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 }
 $mainprogressbaroverlay.PerformStep()
 
 if ($checkbox2.Checked){
 
-	Write-host -ForegroundColor Yellow "Starting 2"
+	Write-host -ForegroundColor Yellow "Starting 2 "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 	#Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/2)
 	$mainprogressbaroverlay.PerformStep()
-	Write-host -ForegroundColor Green "Done 2"
+	Write-host -ForegroundColor Green "Done 2 "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 }
 
 if ($checkbox3.Checked){
 
-	Write-host -ForegroundColor Yellow "Starting 3"
+	Write-host -ForegroundColor Yellow "Starting 3 "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 	#Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/3)
 	$mainprogressbaroverlay.PerformStep()
-	Write-host -ForegroundColor Green "Done 3"
+	Write-host -ForegroundColor Green "Done 3 "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 }
 
 if ($checkbox4.Checked){
 
-	Write-host -ForegroundColor Yellow "Starting 4"
+	Write-host -ForegroundColor Yellow "Starting 4 "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 	#Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/4)
 	$mainprogressbaroverlay.PerformStep()
-	Write-host -ForegroundColor Green "Done 4"
+	Write-host -ForegroundColor Green "Done 4 "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 }
 
 if ($checkbox5.Checked){
 
-	Write-host -ForegroundColor Yellow "Starting 5"
+	Write-host -ForegroundColor Yellow "Starting 5 "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 	#Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/5)
 	$mainprogressbaroverlay.PerformStep()
-	Write-host -ForegroundColor Green "Done 5 "
+	Write-host -ForegroundColor Green "Done 5  "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 }
 
 if ($checkboxBackupNewlyCompleted.Checked){
 
-	Write-host -ForegroundColor Yellow "Starting Backup AxDB"
+	Write-host -ForegroundColor Yellow "Starting Backup AxDB "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 	#Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/BackUpDB.ps1)
 	$labelInfo = ""
 	Invoke-DbaQuery -Verbose -SqlInstance localhost -Database AxDB -Type Full -CompressBackup -BackupFileName "dbname-$NewDB-backuptype-timestamp.bak" -ReplaceInName | Out-File -FilePath $Logfile
 	$mainprogressbaroverlay.PerformStep()
-	Write-host -ForegroundColor Green "Done Backup AxDB"
+	Write-host -ForegroundColor Green "Done Backup AxDB "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 }
 
 if ($checkboxCleanUpPowerBI.Checked){
 
-	Write-host -ForegroundColor Yellow "Starting Cleaning up Power BI settings"
+	Write-host -ForegroundColor Yellow "Starting Cleaning up Power BI settings "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 	#Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/CleanPowerBI.ps1)
 	## Clean up Power BI settings
 	Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "UPDATE PowerBIConfig set CLIENTID = '', APPLICATIONKEY = '', REDIRECTURL = ''"  | Out-File -FilePath $Logfile
 	$mainprogressbaroverlay.PerformStep()
-	Write-host -ForegroundColor Green "Done Cleaning up Power BI settings"
+	Write-host -ForegroundColor Green "Done Cleaning up Power BI settings "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 }
 
 if ($checkboxEnableSQLTracking.Checked){
 
-	Write-host -ForegroundColor Yellow "Starting SQL Tracking"
+	Write-host -ForegroundColor Yellow "Starting SQL Tracking "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 	#Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/SQLTracking.ps1)
 	## Enable SQL Change Tracking
 	Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "ALTER DATABASE AxDB SET CHANGE_TRACKING = ON (CHANGE_RETENTION = 6 DAYS, AUTO_CLEANUP = ON)" | Out-File -FilePath $Logfile
 	$mainprogressbaroverlay.PerformStep()
-	Write-host -ForegroundColor Green "Done SQL Tracking"
+	Write-host -ForegroundColor Green "Done SQL Tracking "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 }
 
 if ($checkboxPromoteNewAdmin.Checked){
 
-	Write-host -ForegroundColor Yellow "Starting New Admin"
+	Write-host -ForegroundColor Yellow "Starting New Admin "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 	#Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/NewAdmin.ps1)
 	## Promote user as admin and set default tenant  (Optional)
 	Set-D365Admin -Verbose -AdminSignInName textboxAdminEmailAddress.Text
 	$mainprogressbaroverlay.PerformStep()
-	Write-host -ForegroundColor Green "Done New Admin"
+	Write-host -ForegroundColor Green "Done New Admin "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 }
 
 if ($checkboxTruncateBatchTables.Checked){
 
-	Write-host -ForegroundColor Yellow "Starting truncate Batch"
+	Write-host -ForegroundColor Yellow "Starting truncate Batch "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 	#Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/TruncateBatch.ps1)
 	Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "TRUNCATE TABLE SYSSERVERCONFIG
 	TRUNCATE TABLE SYSSERVERSESSIONS
@@ -221,23 +217,23 @@ if ($checkboxTruncateBatchTables.Checked){
 	set @i=@i+1
 	END"
 	$mainprogressbaroverlay.PerformStep()
-	Write-host -ForegroundColor Green "Done truncate Batch"
+	Write-host -ForegroundColor Green "Done truncate Batch "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 }
 
 if ($checkboxPauseBatchJobs.Checked){
 
-	Write-host -ForegroundColor Yellow "Starting hold batch jobs"
+	Write-host -ForegroundColor Yellow "Starting hold batch jobs "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 	#Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/BatchHold.ps1)
 	## Put on hold all Batch Jobs
 	Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "UPDATE BatchJob SET STATUS = 0 WHERE STATUS IN (1,2,5,7)  --Set any waiting, executing, ready, or canceling batches to withhold."
 	#Invoke-D365SqlScript -Verbose -DatabaseServer localhost -DatabaseName AxDB -Command "UPDATE BatchJob SET STATUS = 0 WHERE STATUS IN (1,2,5,7) | Out-File -FilePath $Logfile
 	$mainprogressbaroverlay.PerformStep()
-	Write-host -ForegroundColor Green "Done hold batch jobs"
+	Write-host -ForegroundColor Green "Done hold batch jobs "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 }
 
 if ($checkboxEnableUsers.Checked){
 
-	Write-host -ForegroundColor Yellow "Starting Enable Users"
+	Write-host -ForegroundColor Yellow "Starting Enable Users "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 	#Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/EnableUsers.ps1)
 	Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "INSERT INTO [AxDB].[dbo].[USERINFO]([ID],[NAME],[ENABLE],[COMPANY],[NETWORKDOMAIN],[NETWORKALIAS],[ENABLEDONCE],[LANGUAGE],[HELPLANGUAGE],[PREFERREDTIMEZONE],[ACCOUNTTYPE],[DEFAULTPARTITION],[EXTERNALIDTYPE],[INTERACTIVELOGON])
 	VALUES ('aniela','aniela',1,'','https://sts.windows.net/caf2code.com/','aniela@caf2code.com',1,'en-us','en-us',29,2,1,1,1)
@@ -281,54 +277,53 @@ if ($checkboxEnableUsers.Checked){
 	update-D365User -Email "*caf2code*"
 
 	$mainprogressbaroverlay.PerformStep()
-	Write-host -ForegroundColor Green "Done Enable Users"
+	Write-host -ForegroundColor Green "Done Enable Users "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 }
 
 if ($checkboxRunDatabaseSync.Checked){
 
-	Write-host -ForegroundColor Yellow "Starting DB sync"
+	Write-host -ForegroundColor Yellow "Starting DB sync "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 	#Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/DBSync.ps1)
 	## Run Database Sync
 	Invoke-D365DBSync -ShowOriginalProgress -Verbose
 	$mainprogressbaroverlay.PerformStep()
-	Write-host -ForegroundColor Green "Done DB sync"
+	Write-host -ForegroundColor Green "Done DB sync "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 }
 
 if ($checkboxSetDBRecoveryModel.Checked){
 
-	Write-host -ForegroundColor Yellow "Starting "
+	Write-host -ForegroundColor Yellow "Starting "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 	#Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/SetDBRecoveryModel.ps1)
 	Set-DbaDbRecoveryModel -Verbose -SqlInstance localhost -RecoveryModel Simple -Database AxDB -Confirm:$false
 	$mainprogressbaroverlay.PerformStep()
-	Write-host -ForegroundColor Green "Done"
+	Write-host -ForegroundColor Green "Done "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 }
 
 if ($checkboxListOutUserEmails.Checked){
 
-	Write-host -ForegroundColor Yellow "Starting List Out User Email Addresses"
+	Write-host -ForegroundColor Yellow "Starting List Out User Email Addresses "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 	#Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/ListOutUserEmails.ps1)
-	Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "
-	select ID, Name, NetworkAlias, NETWORKDOMAIN, Enable from userInfo
+	Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "select ID, Name, NetworkAlias, NETWORKDOMAIN, Enable from userInfo
 	where NETWORKALIAS not like '%@contosoax7.onmicrosoft.com'
 	and NETWORKALIAS not like '%@capintegration01.onmicrosoft.com'
 	and NETWORKALIAS not like '%@devtesttie.ccsctp.net'
 	and NETWORKALIAS not like '%@DAXMDSRunner.com'
 	and NETWORKALIAS not like '%@dynamics.com'
-	and NETWORKALIAS != ''" | Out-File -FilePath $Logfile
+	and NETWORKALIAS != ''"
 	$mainprogressbaroverlay.PerformStep()
-	Write-host -ForegroundColor Green "Done List Out User Email Addresses"
+	Write-host -ForegroundColor Green "Done List Out User Email Addresses "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 }
 
 if ($checkbox1.Checked){
 
-	Write-host -ForegroundColor Yellow "Starting Remove-D365Database"
+	Write-host -ForegroundColor Yellow "Starting Remove-D365Database "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 	#Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/Remove-D365Database.ps1)
 	Stop-D365Environment -All -Kill -Verbose
 	Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose
 	$mainprogressbaroverlay.PerformStep()
-	Write-host -ForegroundColor Green "Done Remove-D365Database"
+	Write-host -ForegroundColor Green "Done Remove-D365Database "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 }
 
 Start-D365Environment -All
-Write-host -ForegroundColor Yellow "Completed running"
+Write-host -ForegroundColor Yellow "Completed running  "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 $mainprogressbaroverlay.Visible = $False
