@@ -1,6 +1,3 @@
-$Stamp = (Get-Date).toString("yyyy-MM-dd")
-$LogFile = "C:\Users\$env:UserName\Desktop\DBRefresh_$Stamp\TruncateBatch.txt"
-Start-Transcript -Path $LogFile -Append -Force
 
 Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "TRUNCATE TABLE SYSSERVERCONFIG
 TRUNCATE TABLE SYSSERVERSESSIONS
@@ -32,4 +29,3 @@ exec(@sqlQuery)
 set @i=@i+1
 END"
 
-Stop-Transcript 
