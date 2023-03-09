@@ -5,4 +5,4 @@ and NETWORKALIAS not like '%@capintegration01.onmicrosoft.com'
 and NETWORKALIAS not like '%@devtesttie.ccsctp.net'
 and NETWORKALIAS not like '%@DAXMDSRunner.com'
 and NETWORKALIAS not like '%@dynamics.com'
-and NETWORKALIAS != ''" | Out-File -FilePath $Logfile
+and NETWORKALIAS != ''" 
