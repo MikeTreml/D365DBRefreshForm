@@ -1,7 +1,3 @@
-$Stamp = (Get-Date).toString("yyyy-MM-dd")
-$LogFile = "C:\Users\$env:UserName\Desktop\DBRefresh_$Stamp\EnableUsers.txt"
-Start-Transcript -Path $LogFile -Append -Force
-
 Invoke-DbaQuery -SqlInstance localhost -Database AxDB -Query "INSERT INTO [AxDB].[dbo].[USERINFO]([ID],[NAME],[ENABLE],[COMPANY],[NETWORKDOMAIN],[NETWORKALIAS],[ENABLEDONCE],[LANGUAGE],[HELPLANGUAGE],[PREFERREDTIMEZONE],[ACCOUNTTYPE],[DEFAULTPARTITION],[EXTERNALIDTYPE],[INTERACTIVELOGON])
 VALUES ('aniela','aniela',1,'','https://sts.windows.net/caf2code.com/','aniela@caf2code.com',1,'en-us','en-us',29,2,1,1,1)
 INSERT INTO [AxDB].[dbo].[USERINFO]([ID],[NAME],[ENABLE],[COMPANY],[NETWORKDOMAIN],[NETWORKALIAS],[ENABLEDONCE],[LANGUAGE],[HELPLANGUAGE],[PREFERREDTIMEZONE],[ACCOUNTTYPE],[DEFAULTPARTITION],[EXTERNALIDTYPE],[INTERACTIVELOGON])
@@ -42,5 +38,3 @@ Update USERINFO set ENABLE = 1 where ID != 'Guest'"
 
 Enable-D365User -Email "*caf2code*"
 update-D365User -Email "*caf2code*"
-
-Stop-Transcript
