@@ -1,3 +1,3 @@
-Start-Process powershell -Verb runAs
-Backup-D365WebConfig
+
+Backup-D365WebConfig -verbose
 write-host web
