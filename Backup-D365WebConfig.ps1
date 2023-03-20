@@ -1,3 +1,3 @@
-$PSVersionTable.PSVersion
+$PSVersionTable
 #Backup-D365WebConfig -force
 write-host web
