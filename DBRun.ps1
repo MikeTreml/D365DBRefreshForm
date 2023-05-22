@@ -48,11 +48,13 @@ if ($txtLink.Text -ne ''){
        		Write-host -ForegroundColor Yellow "Downloading BACPAC from the LCS Asset library  "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 		New-Item -Path $TempFolder -ItemType Directory -Force -Verbose
 		$TempFileName = Join-path $TempFolder -ChildPath "$NewDB.bacpac"
+		$TempFileName2 = Join-path $TempFolder -ChildPath "$NewDB Temp.bacpac"
         	Write-host -ForegroundColor Yellow "..Downloading file" $TempFileName
 
 		Invoke-D365InstallAzCopy -Verbose
-		Invoke-D365AzCopyTransfer -SourceUri $BacpacSasLinkFromLCS -DestinationUri $TempFileName -ShowOriginalProgress -Verbose
-		Write-host -ForegroundColor Green "Done ..Downloading file" $TempFileName
+		Invoke-D365AzCopyTransfer -SourceUri $BacpacSasLinkFromLCS -DestinationUri $TempFileName2 -ShowOriginalProgress -Verbose
+		Write-host -ForegroundColor Green "Done ..Downloading file" $TempFileName2
+		Clear-D365BacpacTableData -Path "C:\Temp\AxDB.bacpac" -Table "BATCHJOBHISTORY","DOCUHISTORY" -OutputPath $TempFileName
 		$f = Get-ChildItem $TempFileName
 		$NewDB = $($f.BaseName).Replace(' ', '_')
 	}
