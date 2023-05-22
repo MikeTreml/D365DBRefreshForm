@@ -54,7 +54,7 @@ if ($txtLink.Text -ne ''){
 		Invoke-D365InstallAzCopy -Verbose
 		Invoke-D365AzCopyTransfer -SourceUri $BacpacSasLinkFromLCS -DestinationUri $TempFileName2 -ShowOriginalProgress -Verbose
 		Write-host -ForegroundColor Green "Done ..Downloading file" $TempFileName2
-		Clear-D365BacpacTableData -Path "C:\Temp\AxDB.bacpac" -Table "BATCHJOBHISTORY","DOCUHISTORY" -OutputPath $TempFileName
+		Clear-D365BacpacTableData -Path $TempFileName2 -Table "BATCHJOBHISTORY","DOCUHISTORY" -OutputPath $TempFileName
 		$f = Get-ChildItem $TempFileName
 		$NewDB = $($f.BaseName).Replace(' ', '_')
 	}
