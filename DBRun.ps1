@@ -76,7 +76,7 @@ $mainprogressbaroverlay.PerformStep()
 Write-host -ForegroundColor Green "Done Enable-D365Exception "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 
 Write-host -ForegroundColor Yellow "Installing modern SqlPackage "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
-$sqlURL = "https://go.microsoft.com/fwlink/?linkid=2236505"
+$sqlURL = "https://go.microsoft.com/fwlink/?linkid=2215400"
 Invoke-D365InstallSqlPackage -SkipExtractFromPage -Url $sqlURL
 $mainprogressbaroverlay.PerformStep()
 Write-host -ForegroundColor Green "Done Installing modern SqlPackage "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
