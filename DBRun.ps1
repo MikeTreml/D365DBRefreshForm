@@ -42,7 +42,7 @@ if ($txtLink.Text -ne ''){
 	#If you are going to download BACPAC file from the LCS Asset Library, please use in this section
 	$BacpacSasLinkFromLCS = $txtLink.Text
 	
-	$TempFolder = 'D:\temp\' # 'c:\temp\'  #$env:TEMP
+	$TempFolder = 'C:\temp\' # 'c:\temp\'  #$env:TEMP
 	#region Download bacpac from LCS
 	if ($BacpacSasLinkFromLCS.StartsWith('http'))	{
        		Write-host -ForegroundColor Yellow "Downloading BACPAC from the LCS Asset library  "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
