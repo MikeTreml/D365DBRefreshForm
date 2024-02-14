@@ -9,7 +9,7 @@ Write-host -ForegroundColor Yellow "Stopping D365FO environment "(Get-Date).toSt
 Stop-D365Environment -All -Kill -Verbose
 #Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/D365tools.ps1)
 Write-Host "Installing PowerShell modules d365fo.tools and dbatools "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") -ForegroundColor Yellow
-
+Set-DbatoolsInsecureConnection
 Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope AllUsers
 Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
 $modules2Install = @('d365fo.tools', 'dbatools')
