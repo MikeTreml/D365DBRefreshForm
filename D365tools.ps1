@@ -16,7 +16,7 @@ foreach ($module in $modules2Install)
     Write-Host  "....updating module" $module -ForegroundColor Gray
     Update-Module -Name $module -Verbose
   }
-  $mainprogressbaroverlay.PerformStep()
+  
 }
 Write-Host "Done Installing PowerShell modules d365fo.tools and dbatools  "(Get-Date).toString("yyyy-MM-dd hh:mm:ss")  -ForegroundColor Green
 
