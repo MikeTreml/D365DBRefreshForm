@@ -511,7 +511,7 @@ namespace SAPIENTypes
 	
 	
 	$buttonRun_Click = {
-	Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/DBRun.ps1)
+	Invoke-Expression $(Invoke-WebRequest  https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/DBRun.ps1 -UseBasicParsing)
 		}
 	
 	
@@ -536,49 +536,49 @@ namespace SAPIENTypes
 	
 	
 	$buttonAdminEmailAdd_Click={
-		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/NewAdmin.ps1)
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/NewAdmin.ps1 -UseBasicParsing)
 		
 	}
 	
 	
 	
 	$buttonCleanUpPowerBI_Click={
-		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/CleanPowerBI.ps1)
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/CleanPowerBI.ps1 -UseBasicParsing)
 		
 	}
 	
 	$buttonDBRecoveryModel_Click={
-		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/SetDBRecoveryModel.ps1)
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/SetDBRecoveryModel.ps1 -UseBasicParsing)
 		
 	}
 	
 	$buttonListOutUserEmails_Click={
-		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/ListOutUserEmails.ps1)
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/ListOutUserEmails.ps1 -UseBasicParsing)
 		
 	}
 	
 	$buttonEnableUsers_Click={
-		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/EnableUsers.ps1)
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/EnableUsers.ps1 -UseBasicParsing)
 		
 	}
 	
 	$buttonRunDatabaseSync_Click={
-		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/DBSync.ps1)
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/DBSync.ps1 -UseBasicParsing)
 		
 	}
 	
 	$buttonTruncateBatchTables_Click={
-		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/TruncateBatch.ps1)
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/TruncateBatch.ps1 -UseBasicParsing)
 		
 	}
 	
 	$buttonEnableSQLTracking_Click={
-		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/SQLTracking.ps1)
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/SQLTracking.ps1 -UseBasicParsing)
 		
 	}
 	
 	$buttonPauseBatchJobs_Click={
-		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/BatchHold.ps1)
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/BatchHold.ps1 -UseBasicParsing)
 		
 	}
 	
@@ -586,32 +586,32 @@ namespace SAPIENTypes
 		Stop-D365Environment -All -Kill -Verbose
 		Remove-D365Database -DatabaseName 'AxDB_Original' -Verbose
 		Start-D365Environment -All
-		#Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/Remove-D365Database)
+		#Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/Remove-D365Database -UseBasicParsing)
 	}
 	
 	$button2_Click={
-		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/2)
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/2 -UseBasicParsing)
 		
 	}
 	
 	$button3_Click={
-		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/3)
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/3 -UseBasicParsing)
 		
 	}
 	
 	$button4_Click={
-		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/4)
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/4 -UseBasicParsing)
 		
 	}
 	
 	$button5_Click={
-		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/5)
+		Invoke-Expression $(Invoke-WebRequest https://raw.githubusercontent.com/MikeTreml/D365DBRefreshForm/main/5 -UseBasicParsing)
 		
 	}
 	
 	
 	$buttonAddSysAdminUser_Click={
-		Invoke-Expression $(Invoke-WebRequest  )
+		Invoke-Expression $(Invoke-WebRequest   -UseBasicParsing)
 	}
 	
 
