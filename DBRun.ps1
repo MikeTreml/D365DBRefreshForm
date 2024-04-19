@@ -2,7 +2,8 @@
 
 
 [string]$dt = get-date -Format "yyyyMMdd_hhmm" 
-$NewDB = 'AxDB_'+$dt
+$NewDB = 'AxDB_' + $dt
+$NewDB = $NewDB -replace '\u202A', ''
 
 Write-host -ForegroundColor Yellow "Stopping D365FO environment "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 Stop-D365Environment -All -Kill -Verbose
@@ -33,8 +34,10 @@ Stop-D365Environment -All -Kill -Verbose
 
 if ($txtLink.Text -ne ''){
     $TempFolder = 'D:\temp\' 
+    $TempFolder = $TempFolder -replace '\u202A', ''
     if (!(Test-Path $TempFolder)) {
         $TempFolder = 'C:\temp\'  # If D:\temp\ doesn't exist, use C:\temp\
+	$TempFolder = $TempFolder -replace '\u202A', ''
     }
     Write-host -ForegroundColor Yellow "Downloading BACPAC from the LCS Asset library  "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
     New-Item -Path $TempFolder -ItemType Directory -Force -Verbose
@@ -47,6 +50,7 @@ if ($txtLink.Text -ne ''){
     
     $f = Get-ChildItem $TempFileName
     $NewDB = $($f.BaseName).Replace(' ', '_')
+    $NewDB = $NewDB -replace '\u202A', ''
 }
 
 
@@ -74,6 +78,7 @@ Write-host -ForegroundColor Yellow "Checking SQL file "(Get-Date).toString("yyyy
 Write-host -ForegroundColor Green "Done Checking SQL file "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
 
 Write-host -ForegroundColor Yellow "Unblock-File "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
+$f = $f -replace '\u202A', ''
 $f | Unblock-File
 
 Write-host -ForegroundColor Green "Done Unblock-File "(Get-Date).toString("yyyy-MM-dd hh:mm:ss") 
